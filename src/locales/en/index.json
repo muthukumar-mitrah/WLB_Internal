@@ -1,0 +1,203 @@
+{
+  "common": {
+    "buttons": {
+      "continue": "Continue",
+      "next": "Next",
+      "previous": "Previous",
+      "skip": "Skip",
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "logIn": "Log in",
+      "getStarted": "Get Started",
+      "createAccount": "Create account",
+      "maybeLater": "Maybe later!",
+      "useAnotherEmail": "Use another email",
+      "doThisLater": "I'll do this later! Let me in",
+      "takePhoto": "Take Photo",
+      "chooseGallery": "Choose Gallery"
+    },
+    "or": "Or",
+    "orContinueWith": "Or Continue with",
+    "privacyPolicy": "Read our privacy & policy"
+  },
+
+  "validation": {
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
+    "passwordRequired": "Password is required",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordWeak": "Password must include uppercase, lowercase, number, and special character",
+    "phoneRequired": "Phone number is required",
+    "phoneInvalid": "Please enter a valid phone number",
+    "nameRequired": "Name is required",
+    "nameInvalid": "Name must be 2-50 alphabetic characters",
+    "fieldRequired": "This field is required",
+    "firstNameInvalid": "Please enter a valid first name",
+    "usernameTooShort": "Username must be at least 3 characters",
+    "passwordComplex": "Password must contain at least 8 characters, uppercase, lowercase, number and special character"
+  },
+
+  "auth": {
+    "signUp": {
+      "heading": "Join the community",
+      "subheading": "Start your journey with support that\nactually works",
+      "emailPlaceholder": "Example@gmail.com",
+      "alreadyHaveAccount": "Already have account? "
+    },
+    "login": {
+      "heading": "Welcome Back",
+      "subheading": "Sign in to continue your weight loss journey.",
+      "emailPlaceholder": "Enter your email",
+      "dontHaveAccount": "Don't have an account? "
+    },
+    "loginPassword": {
+      "heading": "Enter Your Password",
+      "subheadingWithName": "Welcome back, {{name}}!",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot Password?"
+    },
+    "setupProfile": {
+      "heading": "Set up your profile",
+      "subheading": "This helps us personalize your experience",
+      "firstNameLabel": "First name",
+      "firstNamePlaceholder": "Jaclyn",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "e.g. johnfit123",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "referralLabel": "Referral Code (Optional)",
+      "referralPlaceholder": "Enter code",
+      "alreadyHaveAccount": "Already have account? "
+    },
+    "social": {
+      "apple": "Apple",
+      "google": "Google",
+      "facebook": "Facebook"
+    },
+    "common": {
+      "alreadyHaveAccount": "Already have account? ",
+      "dontHaveAccount": "Don't have an account? ",
+      "logIn": "Log in"
+    }
+  },
+
+  "basicInfo": {
+    "heading": "Let's get a quick sense of you",
+    "genderLabel": "Gender",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderOther": "Other",
+    "countryLabel": "Country",
+    "countryPlaceholder": "Select your Country",
+    "heightLabel": "Height",
+    "weightLabel": "Your current weight",
+    "dobLabel": "Date of birth",
+    "unitFeet": "Feet",
+    "unitMeters": "Meters",
+    "unitKg": "Kg",
+    "unitLbs": "lbs"
+  },
+
+  "uploadImage": {
+    "heading": "Upload Your Image",
+    "subtitle": "Upload a photo of yourself holding\nyour valid ID for verifications",
+    "hint": "People who upload a photo get 85% more support",
+    "tapToUpload": "Tap to upload photo",
+    "uploadHint": "PNG or JPG (max. 800x600px)",
+    "uploading": "Uploading Photo...",
+    "skip": "Skip"
+  },
+
+  "modals": {
+    "accountCreated": {
+      "title": "Account Created!",
+      "subtitle": "Let's continue setting up your profile"
+    },
+    "uploadProfilePhoto": {
+      "title": "Upload Profile Photo",
+      "subtitle": "Choose how you would like to select your photo",
+      "takePhoto": "Take Photo",
+      "takePhotoDesc": "Use camera to capture",
+      "chooseGallery": "Choose Gallery",
+      "chooseGalleryDesc": "Select from library"
+    },
+    "selectCountry": {
+      "title": "Select Country"
+    }
+  },
+
+  "survey": {
+    "welcome": {
+      "title": "Find your ideal buddy",
+      "subtitle": "Please take this quick survey and we'll match you\nwith someone who actually helps you succeed.",
+      "skip": "Skip"
+    },
+    "q1": {
+      "question": "What's your main goal right now?",
+      "loseWeight": "Lose weight",
+      "stayConsistent": "Stay consistent / build habits",
+      "getHealthier": "Get healthier overall",
+      "maintainWeight": "Maintain my current weight"
+    },
+    "q2": {
+      "question": "How many pounds do you want to lose?",
+      "unit": "lbs"
+    },
+    "q3": {
+      "question": "How committed are you right now?",
+      "veryCommitted": "Very committed – I'm all in",
+      "prettyCommitted": "Pretty committed – I'm serious but flexible",
+      "gettingStarted": "Getting started – still figuring things out"
+    },
+    "q4": {
+      "question": "What kind of buddy do you want?",
+      "mentor": "A mentor - guides me",
+      "partner": "A partner - we're equals",
+      "cheerleader": "A cheerleader - encourages me"
+    },
+    "q5": {
+      "question": "How do you want your buddy to communicate?",
+      "supportive": "Supportive",
+      "balanced": "Balanced",
+      "direct": "Direct"
+    },
+    "q6": {
+      "question": "How often do you want to check in?",
+      "daily": "Daily",
+      "fewTimes": "A few times\na week",
+      "onceWeek": "Once a week"
+    },
+    "q7": {
+      "question": "Do you have a gender preference?",
+      "noPreference": "No preference",
+      "male": "Male",
+      "female": "Female"
+    },
+    "q8": {
+      "question": "What age range do you prefer?"
+    },
+    "q9": {
+      "title": "Let's personalize your match",
+      "q1": "How motivated are you to lose weight right now?",
+      "q1Left": "Low",
+      "q1Right": "Extremely motivated",
+      "q2": "How consistent are you with healthy habits?",
+      "q2Left": "Struggle to stay consistent",
+      "q2Right": "Very consistent",
+      "q3": "How much accountability do you want from a buddy?",
+      "q3Left": "Just light support",
+      "q3Right": "Strong accountability",
+      "q4": "How comfortable are you sharing honestly about your progress (good or bad)?",
+      "q4Left": "Prefer to keep things private",
+      "q4Right": "Very open and transparent",
+      "q5": "How important is daily or frequent check-in for you?",
+      "q5Left": "Not important",
+      "q5Right": "Extremely important",
+      "q6": "How much emotional support do you want in your journey?",
+      "q6Left": "Not important",
+      "q6Right": "Very important"
+    }
+  }
+}
