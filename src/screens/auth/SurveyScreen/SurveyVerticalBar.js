@@ -17,53 +17,141 @@
  *  rowHeight      {number}  height of a single option row in px
  *  rowGap         {number}  vertical gap between rows in px
  */
-import React, { memo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { memo, useRef, useMemo, useEffect } from 'react';
+import { View, StyleSheet, PanResponder, Animated } from 'react-native';
 import { useTheme } from '../../../theme';
 
 // ─── Layout constants ─────────────────────────────────────────────────────────
-const CIRCLE = 22;   // thumb diameter
-const C_BORDER = 3;    // white border ring width
-const C_GLOW = 8;    // extra radius of the semi-transparent glow layer
-const TRI_W = 7;    // half-height of the left-pointing triangle
-const TRI_H = 9;    // horizontal depth of the left-pointing triangle
-const TRI_GAP = 4;    // horizontal gap between triangle tip → circle left edge
-const LINE_W = 2;    // vertical line stroke width
-const TICK_COUNT = 30;     // total number of guide lines
-const TICK_SMALL_W = 7;      // minor tick width (extends right of line)
-const TICK_LARGE_W = 14;     // major tick width (every 5th tick)
-const TICK_H = 1;      // thickness of each tick in px
-// BAR_W = circle-center + line half-width + largest tick + padding
+const CIRCLE = 24;
+const C_BORDER = 3;
+const C_GLOW = 8;
+const TRI_W = 7;
+const TRI_H = 9;
+const TRI_GAP = 4;
+const LINE_W = 3;
+const TICK_COUNT = 30;
+const TICK_SMALL_W = 7;
+const TICK_LARGE_W = 14;
+const TICK_H = 1;
 const BAR_W = CIRCLE / 2 + LINE_W / 2 + TICK_LARGE_W + 6;
 
-const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap }) => {
+const COLOR_SELECTED   = '#D1D5DB';
+const COLOR_UNSELECTED = '#3890F4';
+const TICK_COLOR       = '#BCC5D6';
+
+const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, onSelect }) => {
   const { colors } = useTheme();
 
-  /* vertical centre of each option row inside the wrapper */
-  const centers = Array.from({ length: itemCount }, (_, i) =>
-    i * (rowHeight + rowGap) + rowHeight / 2,
+  /* vertical centre of each option row */
+  const centers = useMemo(
+    () => Array.from({ length: itemCount }, (_, i) => i * (rowHeight + rowGap) + rowHeight / 2),
+    [itemCount, rowHeight, rowGap],
   );
 
   const firstCenter = centers[0];
   const lastCenter = centers[itemCount - 1];
-  const selCenter = centers[Math.max(0, Math.min(selectedIndex, itemCount - 1))];
-
-  const circleR = CIRCLE / 2;
   const totalH = itemCount * rowHeight + (itemCount - 1) * rowGap;
-  const lineX = CIRCLE / 2; // line centre aligns with circle centre; ticks go right
+  const lineX = CIRCLE / 2;
 
-  /* evenly spaced tick Y positions across the full bar height */
-  const ticks = Array.from({ length: TICK_COUNT }, (_, i) =>
-    (i / (TICK_COUNT - 1)) * totalH,
+  const thumbY = useRef(new Animated.Value(centers[selectedIndex] ?? firstCenter)).current;
+  const currentY = useRef(centers[selectedIndex] ?? firstCenter);
+  const dragStartY = useRef(0);
+
+  useEffect(() => {
+    const target = centers[Math.max(0, Math.min(selectedIndex, itemCount - 1))];
+    currentY.current = target;
+    Animated.spring(thumbY, {
+      toValue: target,
+      useNativeDriver: false,
+      tension: 120,
+      friction: 8,
+    }).start();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedIndex]);
+
+  // ─── Find nearest option ───────────────────────────────────────────────────
+  const snapToNearest = (y) => {
+    let best = 0;
+    let bestDist = Math.abs(centers[0] - y);
+    for (let i = 1; i < centers.length; i++) {
+      const d = Math.abs(centers[i] - y);
+      if (d < bestDist) { bestDist = d; best = i; }
+    }
+    return best;
+  };
+
+  // ─── PanResponder ─────────────────────────────────────────────────────────
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder:  () => true,
+
+      onPanResponderGrant: () => {
+        // Stop any running spring and record where we currently are
+        thumbY.stopAnimation(val => {
+          currentY.current = val;
+          dragStartY.current = val;
+        });
+      },
+
+      onPanResponderMove: (_, gs) => {
+        const nextY = Math.max(firstCenter, Math.min(lastCenter, dragStartY.current + gs.dy));
+        currentY.current = nextY;
+        thumbY.setValue(nextY);       // direct set — no re-render, perfectly smooth
+      },
+
+      onPanResponderRelease: (_, gs) => {
+        const finalY = Math.max(firstCenter, Math.min(lastCenter, dragStartY.current + gs.dy));
+        const snappedIndex = snapToNearest(finalY);
+        const snappedY = centers[snappedIndex];
+
+        // Spring-snap to nearest option
+        Animated.spring(thumbY, {
+          toValue: snappedY,
+          useNativeDriver: false,
+          tension: 140,
+          friction: 9,
+        }).start();
+
+        currentY.current = snappedY;
+        if (onSelect) onSelect(snappedIndex);
+      },
+
+      onPanResponderTerminate: () => {
+        // Snap back to wherever we last were
+        const snappedIndex = snapToNearest(currentY.current);
+        Animated.spring(thumbY, {
+          toValue: centers[snappedIndex],
+          useNativeDriver: false,
+          tension: 140,
+          friction: 9,
+        }).start();
+        if (onSelect) onSelect(snappedIndex);
+      },
+    }),
+  ).current;
+
+  // ─── Derived animated values for the two line segments ────────────────────
+  const topLineH    = thumbY;   // blue segment: 0 → thumbY
+  const bottomLineH = thumbY.interpolate({
+    inputRange:  [firstCenter, lastCenter],
+    outputRange: [totalH - firstCenter, totalH - lastCenter],
+    extrapolate: 'clamp',
+  });
+  const bottomLineTop = thumbY; // gray segment starts at thumbY
+
+  /* evenly spaced tick positions */
+  const ticks = useMemo(
+    () => Array.from({ length: TICK_COUNT }, (_, i) => (i / (TICK_COUNT - 1)) * totalH),
+    [totalH],
   );
 
   return (
     <View style={[styles.wrapper, { height: totalH, width: BAR_W }]}>
 
-      {/* ── Background ruler lines — right of vertical line, 4 small then 1 large ── */}
+      {/* ── Tick marks (ruler) ── */}
       {ticks.map((y, i) => {
-        const isMajor = (i + 1) % 5 === 0;   // every 5th tick is the large one
-        const tickW = isMajor ? TICK_LARGE_W : TICK_SMALL_W;
+        const isMajor = (i + 1) % 5 === 0;
         return (
           <View
             key={`tick-${i}`}
@@ -71,73 +159,70 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap })
               styles.tick,
               {
                 top: y - TICK_H / 2,
-                left: lineX + LINE_W / 2,  // starts at right edge of vertical line
-                width: tickW,
-                marginLeft: 15
+                left: lineX + LINE_W / 2 + 15,
+                width: isMajor ? TICK_LARGE_W : TICK_SMALL_W,
               },
             ]}
           />
         );
       })}
 
-      {/* ── Vertical line: spans full height (top of first option → bottom of last) ── */}
-      <View
+      {/* ── Blue segment: 0 → thumb ── */}
+      <Animated.View
         style={[
           styles.line,
           {
-            left: lineX - LINE_W / 2,
-            top: 0,
-            height: totalH,
-            backgroundColor: colors.primary,
+            left:            lineX - LINE_W / 2,
+            top:             0,
+            height:          topLineH,
+            backgroundColor: COLOR_SELECTED,
           },
         ]}
       />
 
-      {/* ── Thumb: ◄ triangle (left) + glow + circle ── */}
-      {/*
-       * thumbOuter is positioned so the circle centre aligns with selCenter.
-       * flexDirection:'row' places the triangle to the LEFT of the circle.
-       * It extends to the left of the wrapper boundary (overflow:visible).
-       */}
-      <View
+      {/* ── Gray segment: thumb → bottom ── */}
+      <Animated.View
+        style={[
+          styles.line,
+          {
+            left:            lineX - LINE_W / 2,
+            top:             bottomLineTop,
+            height:          bottomLineH,
+            backgroundColor: COLOR_UNSELECTED,
+          },
+        ]}
+      />
+
+      {/* ── Draggable thumb (Animated.View for smooth transform) ── */}
+      <Animated.View
         style={[
           styles.thumbOuter,
           {
-            // Vertically: circle centre = selCenter
-            top: selCenter - CIRCLE / 2,
-            // Horizontally: circle left edge aligned to lineX
+            transform: [{ translateY: Animated.add(thumbY, new Animated.Value(-CIRCLE / 2)) }],
             left: lineX - CIRCLE / 2 - TRI_H - TRI_GAP,
           },
         ]}
+        hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
+        {...panResponder.panHandlers}
       >
         {/* Left-pointing triangle ◄ */}
-        <View
-          style={[
-            styles.triangle,
-            { borderRightColor: colors.primary },
-          ]}
-        />
+        <View style={[styles.triangle, { borderRightColor: '#21548E' }]} />
 
-        {/* Glow halo behind circle (absolute, centred on circle) */}
-        <View
-          style={[
-            styles.glow,
-            { backgroundColor: `${colors.primary}45` },
-          ]}
-        />
+        {/* Glow halo */}
+        <View style={[styles.glow, { backgroundColor: `${COLOR_SELECTED}40` }]} />
 
-        {/* Filled circle with white border ring */}
+        {/* Filled circle */}
         <View
           style={[
             styles.circle,
             {
-              backgroundColor: colors.primary,
+              backgroundColor: '#21548E',
               borderColor: colors.white,
-              shadowColor: colors.primary,
+              shadowColor: '#21548E',
             },
           ]}
         />
-      </View>
+      </Animated.View>
     </View>
   );
 });
@@ -148,33 +233,27 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'visible',
   },
-
   line: {
     position: 'absolute',
     width: LINE_W,
     borderRadius: LINE_W / 2,
     zIndex: 5,
   },
-
   tick: {
     position: 'absolute',
-    // width is set inline (TICK_SMALL_W or TICK_LARGE_W)
     height: TICK_H,
     borderRadius: TICK_H / 2,
-    backgroundColor: '#BCC5D6',
+    backgroundColor: TICK_COLOR,
     zIndex: 1,
   },
-
-  // Thumb container — row layout: ◄ triangle on left, circle on right
   thumbOuter: {
     position: 'absolute',
+    top: 0,
     flexDirection: 'row',
     alignItems: 'center',
     zIndex: 20,
     overflow: 'visible',
   },
-
-  // Left-pointing triangle ◄  (borderRight = the visible face, pointing left)
   triangle: {
     width: 0,
     height: 0,
@@ -184,10 +263,9 @@ const styles = StyleSheet.create({
     borderRightWidth: TRI_H,
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
-    // borderRightColor set inline (colours from theme)
     marginRight: TRI_GAP,
   },
-
+  
   glow: {
     position: 'absolute',
     // In the row, circle starts at (TRI_H + TRI_GAP); glow is centred on circle

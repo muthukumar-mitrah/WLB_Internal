@@ -76,6 +76,7 @@ const lightColors = {
   textTertiary: palette.gray400,
   textInverse: palette.white,
   textDisabled: palette.gray300,
+  textBlack: palette.black,
 
   // Border
   border: palette.gray200,

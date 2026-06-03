@@ -29,19 +29,22 @@ const CURRENT_QUESTION = 6;
 // 1 = active (blue), 0 = inactive (light gray)
 const PATTERNS = {
   daily: [
-    [1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
   ],
   fewTimes: [
-    [1, 0, 0, 1, 0, 0, 0],
-    [0, 1, 0, 0, 1, 0, 1],
-    [0, 0, 1, 0, 0, 1, 0],
+    [1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 1],
   ],
   onceWeek: [
-    [0, 0, 1, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 1, 0, 0],
+    [0, 1, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0],
   ],
 };
 
@@ -60,8 +63,8 @@ const CheckInCard = memo(({ option, isSelected, onPress, colors, borderRadius })
         styles.card,
         {
           borderRadius: borderRadius.lg,
-          borderColor: isSelected ? colors.primary : colors.border,
-          backgroundColor: isSelected ? `${colors.primary}0D` : colors.white, // Very light blue if selected
+          borderColor: isSelected ? '#3685C6' : colors.border,
+          backgroundColor: isSelected ? `#EBF3F9` : colors.white, // Very light blue if selected
         }
       ]}
     >
@@ -72,14 +75,14 @@ const CheckInCard = memo(({ option, isSelected, onPress, colors, borderRadius })
               <View
                 key={cIdx}
                 style={[
-                  styles.cell,
+                styles.cell,
                   {
                     backgroundColor: cell === 1
-                      ? colors.primary
-                      : '#E5E7EB' // light gray for empty
+                      ? '#A3C7E5'
+                      : '#F5F5F5' // light gray for empty
                   },
-                  cell === 1 && !isSelected && { opacity: 0.5 },
-                  cell === 1 && isSelected && { opacity: 1 },
+                  cell === 1 && { opacity: 0.5 },
+                  cell === 1 && { opacity: 1 },
                 ]}
               />
             ))}
@@ -190,7 +193,7 @@ const SurveyQ6Screen = ({ navigation }) => {
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
-          variant="outline"
+          variant="gray"
           size="lg"
           style={baseStyles.halfBtn}
         />
@@ -217,8 +220,8 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     borderWidth: 1.5,
-    paddingVertical: 16,
-    paddingHorizontal: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
@@ -243,7 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
   },
   cardTextContainer: {
-    marginTop: 14,
+    marginTop: 5,
     minHeight: 36, // height to fit two lines
     justifyContent: 'center',
     alignItems: 'center',

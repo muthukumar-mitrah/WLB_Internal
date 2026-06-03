@@ -14,11 +14,18 @@
       "useAnotherEmail": "Use another email",
       "doThisLater": "I'll do this later! Let me in",
       "takePhoto": "Take Photo",
-      "chooseGallery": "Choose Gallery"
+      "chooseGallery": "Choose Gallery",
+      "continueToApp": "Continue to App"
     },
     "or": "Or",
     "orContinueWith": "Or Continue with",
-    "privacyPolicy": "Read our privacy & policy"
+    "privacyPolicy": "Read our privacy & policy",
+    "happyDanceTime": "Happy Dance Time",
+    "matchedYouPossibleBuddies": "Robi matched you with these possible Buddies",
+    "robiAlsoFoundYouAGreatBuddy": "Robi also found you a great AI Buddy",
+    "meetYourAiBuddy": "Meet your new AI Buddy",
+    "hereIsWhereYouWillFindEmma": "Here's where you'll find Emma",
+    "hereYouCanExploreYourRealBuddyMatches": "Here you can explore your real Buddy matches"
   },
 
   "validation": {

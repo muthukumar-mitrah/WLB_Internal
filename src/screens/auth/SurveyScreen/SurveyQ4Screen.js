@@ -21,7 +21,7 @@ import { ROUTES } from '../../../constants';
 import { useSurvey } from '../../../context/SurveyContext';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useTranslation } from '../../../i18n/useTranslation';
-import { createSurveyStyles, q1OptionStyles } from './styles';
+import { radioOptionStyles, createSurveyStyles } from './styles';
 
 const TOTAL_QUESTIONS  = 9;
 const CURRENT_QUESTION = 4;
@@ -38,27 +38,27 @@ const OptionRow = memo(({ label, selected, onPress, colors, borderRadius }) => (
     onPress={onPress}
     activeOpacity={0.7}
     style={[
-      q1OptionStyles.row,
+      radioOptionStyles.row,
       {
         borderRadius: borderRadius.lg,
-        borderColor: selected ? colors.primary : colors.border,
-        backgroundColor: selected ? colors.primarySurface : colors.background,
+        borderColor: selected ? '#3685C6' : colors.border,
+        backgroundColor: selected ? '#EBF3F9' : colors.background,
       },
     ]}
   >
     <AppText
       variant="bodyMedium"
-      color={selected ? colors.primary : colors.textSecondary}
-      style={q1OptionStyles.label}
+      color={colors.textSecondary}
+      style={radioOptionStyles.label}
     >
       {label}
     </AppText>
     <View
       style={[
-        q1OptionStyles.radio,
+        selected ? radioOptionStyles.radio : '',
         {
-          borderColor: selected ? colors.primary : colors.border,
-          backgroundColor: selected ? colors.primary : colors.background,
+          borderColor: selected ? '#3179B4' : colors.border,
+          backgroundColor: selected ? '#3179B4' : colors.background,
         },
       ]}
     >
@@ -134,7 +134,7 @@ const SurveyQ4Screen = ({ navigation }) => {
           {t('survey.q4.question')}
         </AppText>
 
-        <View>
+        <View style={{marginTop: 20}}>
           {BUDDY_OPTIONS.map(option => (
             <OptionRow
               key={option.value}
@@ -153,7 +153,7 @@ const SurveyQ4Screen = ({ navigation }) => {
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
-          variant="outline"
+          variant="gray"
           size="lg"
           style={styles.halfBtn}
         />

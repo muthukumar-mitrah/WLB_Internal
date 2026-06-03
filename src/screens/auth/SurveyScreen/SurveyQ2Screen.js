@@ -26,6 +26,10 @@ import { createSurveyStyles, createQ2ExtraStyles } from './styles';
 const TOTAL_QUESTIONS = 9;
 const CURRENT_QUESTION = 2;
 const DEFAULT_POUNDS = 25;
+const MIN_POUNDS = 0;
+const MAX_POUNDS = 75;
+
+const clampPounds = value => Math.max(MIN_POUNDS, Math.min(value, MAX_POUNDS));
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 const SurveyQ2Screen = ({ navigation }) => {
@@ -42,7 +46,7 @@ const SurveyQ2Screen = ({ navigation }) => {
     [colors, spacing],
   );
 
-  const [pounds, setPounds] = useState(surveyData.poundsToLose ?? DEFAULT_POUNDS);
+  const [pounds, setPounds] = useState(clampPounds(surveyData.poundsToLose ?? DEFAULT_POUNDS));
 
   const handleValueChange = useCallback(val => setPounds(val), []);
 
@@ -84,36 +88,30 @@ const SurveyQ2Screen = ({ navigation }) => {
       </View>
 
       {/* ═══ BOTTOM SECTION — white ═══ */}
-      <View style={[styles.bottomSection, { overflow: 'hidden' }]}>
+      <View style={[styles.bottomSection, styles.bottomSectionClip]}>
         {/* Question + value display (padded) */}
         <View style={styles.bottomContent}>
-          <AppText variant="h3" color={colors.textPrimary} style={styles.question}>
+          <AppText variant="h3" color={colors.textPrimary} style={[styles.question, {bottom:0}]}>
             {t('survey.q2.question')}
           </AppText>
-
-          <View style={styles.valueWrapper}>
-            <View style={styles.valueBubble}>
-              <AppText variant="h2" color={colors.primary} style={styles.valueNumber}>
-                {pounds}
-              </AppText>
-              <AppText variant="caption" color={colors.primary} style={styles.valueUnit}>
-                {t('survey.q2.unit')}
-              </AppText>
-            </View>
-          </View>
         </View>
 
         {/* Ruler Picker — full width, no horizontal padding */}
-        <RulerPicker
-          min={5}
-          max={200}
-          step={1}
-          value={pounds}
-          onValueChange={handleValueChange}
-          itemWidth={12}
-          majorTickInterval={10}
-          renderLabel={val => String(val)}
-        />
+        <View style={styles.sliderWrapper}>
+          <RulerPicker
+            interaction="thumb"
+            showValueLabel
+            valueUnit={t('survey.q2.unit')}
+            min={MIN_POUNDS}
+            max={MAX_POUNDS}
+            step={1}
+            value={pounds}
+            onValueChange={handleValueChange}
+            majorTickInterval={10}
+            labelInterval={10}
+            renderLabel={val => String(val)}
+          />
+        </View>
 
         {/* Push buttons to the bottom */}
         <View style={styles.spacer} />
@@ -124,7 +122,7 @@ const SurveyQ2Screen = ({ navigation }) => {
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
-          variant="outline"
+          variant="gray"
           size="lg"
           style={styles.halfBtn}
         />

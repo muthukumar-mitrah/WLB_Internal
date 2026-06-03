@@ -20,6 +20,11 @@ import SurveyQ6Screen from '../screens/auth/SurveyScreen/SurveyQ6Screen';
 import SurveyQ7Screen from '../screens/auth/SurveyScreen/SurveyQ7Screen';
 import SurveyQ8Screen from '../screens/auth/SurveyScreen/SurveyQ8Screen';
 import SurveyQ9Screen from '../screens/auth/SurveyScreen/SurveyQ9Screen';
+import MatchLoadingScreen from '../screens/auth/SurveyScreen/MatchLoadingScreen';
+import MatchResultScreen from '../screens/auth/SurveyScreen/MatchResultScreen';
+import AiBuddyScreen from '../screens/auth/SurveyScreen/AiBuddyScreen';
+import FindEmmaScreen from '../screens/auth/SurveyScreen/FindEmmaScreen';
+import ExploreMatchesScreen from '../screens/auth/SurveyScreen/ExploreMatchesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +48,11 @@ const AuthNavigator = () => (
     <Stack.Screen name={ROUTES.SURVEY_Q7} component={SurveyQ7Screen} />
     <Stack.Screen name={ROUTES.SURVEY_Q8} component={SurveyQ8Screen} />
     <Stack.Screen name={ROUTES.SURVEY_Q9} component={SurveyQ9Screen} />
+    <Stack.Screen name={ROUTES.MATCH_LOADING} component={MatchLoadingScreen} options={{ animation: 'fade' }} />
+    <Stack.Screen name={ROUTES.MATCH_RESULT} component={MatchResultScreen} options={{ animation: 'slide_from_right' }} />
+    <Stack.Screen name={ROUTES.AI_BUDDY} component={AiBuddyScreen} options={{ animation: 'slide_from_right' }} />
+    <Stack.Screen name={ROUTES.FIND_EMMA} component={FindEmmaScreen} options={{ animation: 'slide_from_right' }} />
+    <Stack.Screen name={ROUTES.EXPLORE_MATCHES} component={ExploreMatchesScreen} options={{ animation: 'slide_from_right' }} />
     <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
     <Stack.Screen name={ROUTES.LOGIN_PASSWORD} component={LoginPasswordScreen} />
     {/* Add ForgotPassword etc. here */}

@@ -21,7 +21,7 @@ import { ROUTES } from '../../../constants';
 import { useSurvey } from '../../../context/SurveyContext';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useTranslation } from '../../../i18n/useTranslation';
-import { createSurveyStyles, q1OptionStyles } from './styles';
+import { createSurveyStyles, createQ1OptionStyles } from './styles';
 
 const TOTAL_QUESTIONS  = 9;
 const CURRENT_QUESTION = 1;
@@ -34,37 +34,25 @@ const GOAL_OPTIONS = [
 ];
 
 // ─── Option Row ───────────────────────────────────────────────────────────────
-const OptionRow = memo(({ label, selected, onPress, colors, borderRadius }) => (
+const OptionRow = memo(({ label, selected, onPress, optStyles }) => (
   <TouchableOpacity
     onPress={onPress}
     activeOpacity={0.7}
     style={[
-      q1OptionStyles.row,
-      {
-        borderRadius: borderRadius.lg,
-        borderColor: selected ? colors.primary : colors.border,
-        backgroundColor: colors.background,
-      },
+      selected ? optStyles.rowSelected : optStyles.rowDefault,
     ]}
   >
     <AppText
-      variant="bodyMedium"
-      color={selected ? colors.textPrimary : colors.textSecondary}
-      style={q1OptionStyles.label}
+      style={[
+        optStyles.label,
+        { color: selected ? '#1A1A1A' : '#374151' },
+      ]}
     >
       {label}
     </AppText>
-    <View
-      style={[
-        q1OptionStyles.radio,
-        {
-          borderColor: selected ? colors.primary : colors.border,
-          backgroundColor: selected ? colors.primary : colors.background,
-        },
-      ]}
-    >
-      {selected && <Icon name="checkmark" size={12} color={colors.white} />}
-    </View>
+    {selected && (
+      <Icon name="checkmark-circle" size={22} color="#3179B4" />
+    )}
   </TouchableOpacity>
 ));
 
@@ -77,6 +65,11 @@ const SurveyQ1Screen = ({ navigation }) => {
   const styles = useMemo(
     () => StyleSheet.create({ ...createSurveyStyles({ colors, spacing }) }),
     [colors, spacing],
+  );
+
+  const optStyles = useMemo(
+    () => StyleSheet.create({ ...createQ1OptionStyles({ colors }) }),
+    [colors],
   );
 
   const selectedGoal = surveyData.mainGoal;
@@ -131,15 +124,14 @@ const SurveyQ1Screen = ({ navigation }) => {
           {t('survey.q1.question')}
         </AppText>
 
-        <View>
+        <View style={{ marginTop: 10 }}>
           {GOAL_OPTIONS.map(option => (
             <OptionRow
               key={option.value}
               label={t(option.labelKey)}
               selected={selectedGoal === option.value}
               onPress={() => handleSelect(option.value)}
-              colors={colors}
-              borderRadius={borderRadius}
+              optStyles={optStyles}
             />
           ))}
         </View>
@@ -150,7 +142,7 @@ const SurveyQ1Screen = ({ navigation }) => {
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
-          variant="outline"
+          variant="gray"
           size="lg"
           style={styles.halfBtn}
         />

@@ -60,6 +60,11 @@ const ROUTES = {
   SURVEY_Q7: 'SurveyQ7',
   SURVEY_Q8: 'SurveyQ8',
   SURVEY_Q9: 'SurveyQ9',
+  MATCH_LOADING: 'MatchLoading',
+  MATCH_RESULT: 'MatchResult',
+  AI_BUDDY: 'AiBuddy',
+  FIND_EMMA: 'FindEmma',
+  EXPLORE_MATCHES: 'ExploreMatches',
 
   // Main
   MAIN: 'Main',

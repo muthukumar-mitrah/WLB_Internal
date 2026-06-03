@@ -1,34 +1,8 @@
 /**
  * styles.js — Shared survey screen styles
- *
- * All survey question screens (Q1, Q2, Q3, …) use the two-section layout:
- *
- *   ┌───────────────────────────────────┐
- *   │  TOP SECTION  (50 % of screen)    │  ← backgroundSecondary
- *   │  Header + Illustration (flex:1)   │
- *   ├───────────────────────────────────┤
- *   │  BOTTOM SECTION  (flex: 1)        │  ← white
- *   │  Question + screen content        │
- *   ├───────────────────────────────────┤
- *   │  BOTTOM BUTTONS (fixed)           │
- *   └───────────────────────────────────┘
- *
- * NOT included here:
- *   - SurveyProgressBar styles  → SurveyProgressBar.js
- *   - SurveyVerticalBar styles  → SurveyVerticalBar.js
- *
- * Usage in a screen:
- *   import { createSurveyStyles, q1OptionStyles } from './styles';
- *
- *   const styles = useMemo(
- *     () => StyleSheet.create({
- *       ...createSurveyStyles({ colors, spacing }),
- *       ...createQ2ExtraStyles({ colors, spacing }),  // if needed
- *     }),
- *     [colors, spacing],
- *   );
  */
 import { Dimensions, StyleSheet } from 'react-native';
+import { fontFamily } from '../../../theme/fonts';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 export { SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -94,7 +68,11 @@ export const createSurveyStyles = ({ colors, spacing }) => ({
 
   /* Question text */
   question: {
-    marginBottom: spacing[5],
+    fontFamily: fontFamily.headingSemiBold,
+    fontWeight: 500,
+    fontSize: 18,
+    lineHeight: 20,
+    bottom: 15
   },
 
   /* Bottom nav buttons */
@@ -102,17 +80,41 @@ export const createSurveyStyles = ({ colors, spacing }) => ({
     flexDirection: 'row',
     paddingHorizontal: spacing[5],
     paddingBottom: spacing[5],
-    paddingTop: spacing[3],
+    paddingTop: spacing[6],
     gap: spacing[3],
-    borderTopWidth: 1,
-    borderTopColor: colors.divider,
     backgroundColor: colors.background,
   },
   halfBtn: { flex: 1 },
 });
 
 // ─── 2. Q1 — option row static styles ────────────────────────────────────────
-export const q1OptionStyles = StyleSheet.create({
+export const createQ1OptionStyles = ({ colors }) => ({
+  rowDefault: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    height: 48,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    marginBottom: 10,
+    backgroundColor: '#FAFAFA',
+  },
+  rowSelected: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    height: 48,
+    borderWidth: 1.5,
+    borderColor: '#3685C6',
+    backgroundColor: '#EBF3F9',
+    marginBottom: 10,
+  },
+  label: { flex: 1 },
+});
+
+export const radioOptionStyles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -124,8 +126,8 @@ export const q1OptionStyles = StyleSheet.create({
   },
   label: { flex: 1, marginRight: 12 },
   radio: {
-    width: 22,
-    height: 22,
+    width: 18,
+    height: 18,
     borderRadius: 11,
     borderWidth: 2,
     alignItems: 'center',
@@ -135,6 +137,12 @@ export const q1OptionStyles = StyleSheet.create({
 
 // ─── 3. Q2 — value-display extras ────────────────────────────────────────────
 export const createQ2ExtraStyles = ({ colors, spacing }) => ({
+  bottomSectionClip: {
+    overflow: 'hidden',
+  },
+  sliderWrapper: {
+    paddingHorizontal: spacing[3],
+  },
   valueWrapper: {
     alignItems: 'center',
     paddingTop: spacing[4],
@@ -153,6 +161,7 @@ export const createQ2ExtraStyles = ({ colors, spacing }) => ({
 // ─── 4. Q3 — options list layout + option-row static styles ──────────────────
 export const createQ3ExtraStyles = ({ spacing }) => ({
   optionsRow: {
+    marginTop: 20,
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: spacing[3],

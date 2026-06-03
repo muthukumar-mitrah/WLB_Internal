@@ -108,7 +108,7 @@ const SurveyQ5Screen = ({ navigation }) => {
         contentContainerStyle={styles.bottomContent}
         showsVerticalScrollIndicator={false}
       >
-        <AppText variant="h3" color={colors.textPrimary} style={[styles.question, { textAlign: 'center' }]}>
+        <AppText variant="h3" color={colors.textPrimary} style={[styles.question, { textAlign: 'center', fontSize: 18 }]}>
           {t('survey.q5.question')}
         </AppText>
 
@@ -126,7 +126,7 @@ const SurveyQ5Screen = ({ navigation }) => {
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
-          variant="outline"
+          variant="gray"
           size="lg"
           style={styles.halfBtn}
         />

@@ -1,12 +1,7 @@
 /**
  * SurveyQ9Screen — "Let's personalize your match"
- * Survey screen 9 of 9
- *
- * Displays 6 rating-type questions in scrollable cards.
- * Each card has: question text, 5 star rating, slider bar, left/right labels.
- * Star rating and slider are synced — user can tap a star or drag the slider.
  */
-import React, { memo, useCallback, useMemo, useState, useRef } from 'react';
+import React, { memo, useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -23,13 +18,17 @@ import { AppText, Button, SafeContainer } from '../../../components/common';
 import { useSurvey } from '../../../context/SurveyContext';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useTranslation } from '../../../i18n/useTranslation';
+import { ROUTES } from '../../../constants';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const TOTAL_QUESTIONS = 9;
 const CURRENT_QUESTION = 9;
 
-// ─── 6 personalization questions ──────────────────────────────────────────────
+const TRIANGLE_W = 6;   // half-base width
+const TRIANGLE_H = 8;   // height
+const TRIANGLE_GAP = 2; // gap between triangle base and thumb top
+
 const PERSONALIZATION_QUESTIONS = [
   {
     id: 'motivation',
@@ -72,20 +71,73 @@ const PERSONALIZATION_QUESTIONS = [
   },
 ];
 
-// ─── Star constants ───────────────────────────────────────────────────────────
 const STAR_COUNT = 5;
 const STAR_SIZE = 30;
-const STAR_GAP = 8;
 
-// ─── Slider constants ────────────────────────────────────────────────────────
-const CARD_PADDING_H = 20;
-const SLIDER_MARGIN_TOP = 14;
-const THUMB_SIZE = 18;
+// Outer card padding (applied to card itself)
+const CARD_H_PAD = 20;
+// ratingWrapper inner horizontal padding
+const WRAPPER_H_PAD = 16;
+
+// Screen horizontal padding from scroll view (spacing[5] ≈ 20 each side)
+const SCROLL_H_PAD = 20;
+
+// CONTENT_W = inner width of ratingWrapper = the width shared by both stars and slider
+// Screen - scroll padding*2 - card padding*2 - wrapper padding*2
+const CONTENT_W = SCREEN_WIDTH - SCROLL_H_PAD * 2 - CARD_H_PAD * 2 - WRAPPER_H_PAD * 2;
+
 const TRACK_HEIGHT = 4;
+const THUMB_SIZE = 20;
+const THUMB_BORDER = 3;
+const GLOW_SIZE = THUMB_SIZE + 10;
+
+// ─── Coordinate helpers ───────────────────────────────────────────────────────
+// The thumb travels in [0, CONTENT_W - THUMB_SIZE].
+// At star index i (0-based), the thumb's LEFT EDGE is at:
+const THUMB_TRAVEL = CONTENT_W - THUMB_SIZE;
+
+// Centre of the thumb when at star index i:
+//   centreX(i) = i / (STAR_COUNT-1) * THUMB_TRAVEL  +  THUMB_SIZE/2
+// We define starX as the LEFT EDGE x (what Animated.Value holds):
+const starX = (starIdx) =>
+  (starIdx / (STAR_COUNT - 1)) * THUMB_TRAVEL;
+
+// Centre-x of the thumb at star index i (used to position each star icon):
+const starCentreX = (starIdx) => starX(starIdx) + THUMB_SIZE / 2;
+
+// Half the distance between two adjacent star snap positions on the track:
+const HALF_STEP = THUMB_TRAVEL / (STAR_COUNT - 1) / 2;
+
+// Convert raw x (thumb left-edge) → star index, allowing value=0 (all-gray).
+// If x < HALF_STEP (halfway between "beyond left" and star 1 centre), → 0 stars.
+const xToValue = (x) => {
+  if (x < HALF_STEP) return 0;           // all-gray zone
+  return Math.round((x / THUMB_TRAVEL) * (STAR_COUNT - 1)) + 1; // 1..5
+};
+
+// Thumb left-edge x for a given value (0 = leftmost / all-gray).
+const valueToX = (value) => {
+  if (value <= 0) return 0;
+  return starX(value - 1);
+};
 
 // ─── Single Star ──────────────────────────────────────────────────────────────
-const Star = memo(({ filled, onPress, size = STAR_SIZE }) => (
-  <TouchableOpacity onPress={onPress} activeOpacity={0.7} hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }} style={{ flex: 1, justifyContent: 'space-evenly' }}>
+const Star = memo(({ filled, onPress, centreX, size = STAR_SIZE }) => (
+  <TouchableOpacity
+    onPress={onPress}
+    activeOpacity={0.7}
+    hitSlop={{ top: 10, bottom: 10, left: 8, right: 8 }}
+    style={[
+      cardStyles.starBtn,
+      {
+        // Absolutely position the star so its centre aligns with starCentreX
+        position: 'absolute',
+        left: centreX - size / 2,
+        width: size,
+        height: size,
+      },
+    ]}
+  >
     <Icon
       name={filled ? 'star' : 'star-outline'}
       size={size}
@@ -94,135 +146,141 @@ const Star = memo(({ filled, onPress, size = STAR_SIZE }) => (
   </TouchableOpacity>
 ));
 
-// ─── Rating Slider Card ──────────────────────────────────────────────────────
+// ─── Rating Slider Card ───────────────────────────────────────────────────────
 const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValueChange, colors }) => {
-  const trackWidth = SCREEN_WIDTH - 40 - (CARD_PADDING_H * 4); // 40 = screen horizontal padding
-  const thumbOffset = useRef(new Animated.Value(((value - 1) / (STAR_COUNT - 1)) * (trackWidth - THUMB_SIZE))).current;
+  // thumbX drives both the thumb and the triangle (left-edge position).
+  const thumbX = useRef(new Animated.Value(valueToX(value))).current;
+  const currentValue = useRef(value);
+  const dragStartX = useRef(0);
+  const isDragging = useRef(false);
 
-  const updateFromPosition = useCallback((x) => {
-    const clampedX = Math.max(0, Math.min(x, trackWidth - THUMB_SIZE));
-    const ratio = clampedX / (trackWidth - THUMB_SIZE);
-    const starValue = Math.round(ratio * (STAR_COUNT - 1)) + 1;
-    onValueChange(starValue);
-    // Snap to star position
-    const snappedX = ((starValue - 1) / (STAR_COUNT - 1)) * (trackWidth - THUMB_SIZE);
-    Animated.spring(thumbOffset, {
-      toValue: snappedX,
+  // Sync when parent value changes (e.g. initial mount, external reset).
+  useEffect(() => {
+    if (!isDragging.current) {
+      currentValue.current = value;
+      thumbX.setValue(valueToX(value));
+    }
+  }, [value]);
+
+  // Snap to the resolved value and notify parent.
+  const snapToValue = useCallback((newValue) => {
+    const clamped = Math.max(0, Math.min(newValue, STAR_COUNT));
+    currentValue.current = clamped;
+    onValueChange(clamped);
+    Animated.spring(thumbX, {
+      toValue: valueToX(clamped),
       useNativeDriver: false,
       friction: 8,
-      tension: 100,
+      tension: 120,
     }).start();
-  }, [trackWidth, onValueChange, thumbOffset]);
+  }, [onValueChange, thumbX]);
 
   const panResponder = useMemo(() =>
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
+
       onPanResponderGrant: () => {
-        thumbOffset.setOffset(thumbOffset._value);
-        thumbOffset.setValue(0);
+        isDragging.current = true;
+        dragStartX.current = valueToX(currentValue.current);
       },
-      onPanResponderMove: (_, gesture) => {
-        const newX = thumbOffset._offset + gesture.dx;
-        const clampedX = Math.max(0, Math.min(newX, trackWidth - THUMB_SIZE));
-        thumbOffset.setOffset(0);
-        thumbOffset.setValue(clampedX);
+
+      onPanResponderMove: (_, gestureState) => {
+        // Smooth continuous movement — no snapping during drag.
+        const nextX = Math.max(0, Math.min(dragStartX.current + gestureState.dx, THUMB_TRAVEL));
+        thumbX.setValue(nextX);
       },
-      onPanResponderRelease: (_, gesture) => {
-        const currentVal = thumbOffset._value;
-        thumbOffset.flattenOffset();
-        updateFromPosition(currentVal);
+
+      onPanResponderRelease: (_, gestureState) => {
+        isDragging.current = false;
+        const rawX = Math.max(0, Math.min(dragStartX.current + gestureState.dx, THUMB_TRAVEL));
+        snapToValue(xToValue(rawX));
+      },
+
+      onPanResponderTerminate: (_, gestureState) => {
+        isDragging.current = false;
+        const rawX = Math.max(0, Math.min(dragStartX.current + gestureState.dx, THUMB_TRAVEL));
+        snapToValue(xToValue(rawX));
       },
     }),
-    [trackWidth, thumbOffset, updateFromPosition]);
+    [snapToValue, thumbX],
+  );
 
-  const handleStarPress = useCallback((starIndex) => {
-    const newValue = starIndex + 1;
-    onValueChange(newValue);
-    const snappedX = ((newValue - 1) / (STAR_COUNT - 1)) * (trackWidth - THUMB_SIZE);
-    Animated.spring(thumbOffset, {
-      toValue: snappedX,
-      useNativeDriver: false,
-      friction: 8,
-      tension: 100,
-    }).start();
-  }, [onValueChange, trackWidth, thumbOffset]);
+  const handleStarPress = useCallback((starIdx) => {
+    // Tapping star i → value = i+1 (1-based), thumb snaps to starX(i).
+    snapToValue(starIdx + 1);
+  }, [snapToValue]);
 
-  // Filled track width (animated)
-  const filledWidth = thumbOffset.interpolate({
-    inputRange: [0, trackWidth - THUMB_SIZE],
-    outputRange: [THUMB_SIZE / 2, trackWidth - THUMB_SIZE / 2],
+  // Blue filled track: from left=0 to thumb centre.
+  const filledWidth = thumbX.interpolate({
+    inputRange: [0, THUMB_TRAVEL],
+    outputRange: [THUMB_SIZE / 2, THUMB_TRAVEL + THUMB_SIZE / 2],
     extrapolate: 'clamp',
   });
 
+  // Pre-compute star centres so each star is absolutely positioned.
+  const starCentres = useMemo(
+    () => Array.from({ length: STAR_COUNT }, (_, i) => starCentreX(i)),
+    [],
+  );
+
   return (
     <View style={[cardStyles.card, { borderColor: colors.border, backgroundColor: colors.backgroundSecondary }]}>
-      {/* Question text */}
+      {/* Question */}
       <AppText variant="bodyMedium" color={colors.textPrimary} style={cardStyles.questionText}>
         {index + 1}. {question}
       </AppText>
+
       <View style={cardStyles.ratingWrapper}>
-        {/* Stars */}
+        {/* ── Stars row (same width as slider, stars absolutely positioned) ── */}
         <View style={cardStyles.starsRow}>
-          {Array.from({ length: STAR_COUNT }).map((_, i) => (
+          {starCentres.map((cx, i) => (
             <Star
               key={i}
               filled={i < value}
               onPress={() => handleStarPress(i)}
+              centreX={cx}
+              size={STAR_SIZE}
             />
           ))}
         </View>
 
-        {/* Slider */}
-        <View style={[cardStyles.sliderContainer, { width: trackWidth }]}>
-          {/* Background track */}
+        {/* ── Slider ── */}
+        <View style={cardStyles.sliderOuter}>
+          {/* Gray base track (full width, faint) */}
           <View
             style={[
               cardStyles.track,
-              {
-                backgroundColor: colors.primary,
-                width: trackWidth,
-              },
+              { backgroundColor: colors.primary },
             ]}
           />
 
-          {/* Filled track */}
+          {/* Blue filled track */}
           <Animated.View
             style={[
               cardStyles.filledTrack,
-              {
-                backgroundColor: colors.primary,
-                width: filledWidth,
-              },
+              { backgroundColor: colors.primary, width: filledWidth },
             ]}
           />
 
           {/* Thumb */}
           <Animated.View
             style={[
-              cardStyles.thumbContainer,
-              {
-                transform: [{ translateX: thumbOffset }],
-              },
+              cardStyles.indicatorWrapper,
+              { left: -(GLOW_SIZE / 2 - THUMB_SIZE / 2), transform: [{ translateX: thumbX }] },
             ]}
             {...panResponder.panHandlers}
           >
+            <View style={[cardStyles.triangle, { borderBottomColor: colors.primary }]} />
+
+            <View style={[cardStyles.glow, { backgroundColor: `${colors.primary}30` }]} />
+
             <View
               style={[
-                cardStyles.thumbOuter,
-                { backgroundColor: `${colors.primary}30` },
+                cardStyles.thumb,
+                { backgroundColor: colors.primary, borderColor: colors.white },
               ]}
-            >
-              <View
-                style={[
-                  cardStyles.thumb,
-                  {
-                    backgroundColor: colors.primary,
-                    borderColor: colors.white,
-                  },
-                ]}
-              />
-            </View>
+            />
           </Animated.View>
         </View>
       </View>
@@ -250,20 +308,19 @@ const SurveyQ9Screen = ({ navigation }) => {
   const [ratings, setRatings] = useState(() => {
     const initial = {};
     PERSONALIZATION_QUESTIONS.forEach(q => {
-      initial[q.id] = initialRatings[q.id] || q.defaultValue || 3;
+      initial[q.id] = initialRatings[q.id] ?? (q.defaultValue ?? 3);
     });
     return initial;
   });
 
-  const handleRatingChange = useCallback((questionId, value) => {
-    setRatings(prev => ({ ...prev, [questionId]: value }));
+  const handleRatingChange = useCallback((questionId, val) => {
+    setRatings(prev => ({ ...prev, [questionId]: val }));
   }, []);
 
   const handleNext = useCallback(() => {
     setSurveyAnswer('personalizationRatings', ratings);
-    // TODO: Navigate to next screen or finish
-    // navigation.navigate(ROUTES.SURVEY_COMPLETE);
-  }, [ratings, setSurveyAnswer]);
+    navigation.navigate(ROUTES.MATCH_LOADING);
+  }, [ratings, setSurveyAnswer, navigation]);
 
   const handlePrevious = useCallback(() => {
     setSurveyAnswer('personalizationRatings', ratings);
@@ -298,10 +355,10 @@ const SurveyQ9Screen = ({ navigation }) => {
         contentContainerStyle={[screenStyles.scrollContent, { paddingHorizontal: spacing[5], paddingBottom: spacing[5] }]}
         showsVerticalScrollIndicator={false}
       >
-        {PERSONALIZATION_QUESTIONS.map((q, index) => (
+        {PERSONALIZATION_QUESTIONS.map((q, idx) => (
           <RatingCard
             key={q.id}
-            index={index}
+            index={idx}
             question={t(q.questionKey)}
             leftLabel={t(q.leftLabelKey)}
             rightLabel={t(q.rightLabelKey)}
@@ -317,7 +374,7 @@ const SurveyQ9Screen = ({ navigation }) => {
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
-          variant="outline"
+          variant="gray"
           size="lg"
           style={screenStyles.halfBtn}
         />
@@ -380,7 +437,7 @@ const cardStyles = StyleSheet.create({
   card: {
     borderWidth: 1.2,
     borderRadius: 16,
-    paddingHorizontal: CARD_PADDING_H,
+    paddingHorizontal: CARD_H_PAD,
     paddingTop: 20,
     paddingBottom: 18,
     marginBottom: 14,
@@ -391,55 +448,104 @@ const cardStyles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: 16,
   },
-  starsRow: {
-    flexDirection: 'row',
-    gap: STAR_GAP,
-    marginBottom: SLIDER_MARGIN_TOP,
+
+  ratingWrapper: {
+    backgroundColor: '#E5E7EB',
+    paddingTop: 18,
+    paddingBottom: 14,
+    paddingHorizontal: WRAPPER_H_PAD,
+    borderRadius: 14,
+    alignItems: 'flex-start',   // children use explicit width = CONTENT_W
   },
-  sliderContainer: {
-    height: THUMB_SIZE + 12,
+
+  // ── Stars
+  starsRow: {
+    width: CONTENT_W,
+    height: STAR_SIZE,
+    marginBottom: 16,
+    position: 'relative', 
+  },
+  starBtn: {
+    alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  // ── Slider 
+  sliderOuter: {
+    width: CONTENT_W,
+    height: TRIANGLE_H + TRIANGLE_GAP + THUMB_SIZE + 6,
     position: 'relative',
   },
   track: {
     position: 'absolute',
+    top: TRIANGLE_H + TRIANGLE_GAP + (THUMB_SIZE - TRACK_HEIGHT) / 2,
     left: 0,
+    width: CONTENT_W,
     height: TRACK_HEIGHT,
     borderRadius: TRACK_HEIGHT / 2,
     opacity: 0.15,
   },
+
   filledTrack: {
     position: 'absolute',
+    top: TRIANGLE_H + TRIANGLE_GAP + (THUMB_SIZE - TRACK_HEIGHT) / 2,
     left: 0,
     height: TRACK_HEIGHT,
     borderRadius: TRACK_HEIGHT / 2,
   },
-  thumbContainer: {
+
+  indicatorWrapper: {
     position: 'absolute',
-    width: THUMB_SIZE + 16,
-    height: THUMB_SIZE + 16,
+    top: 0,
+    width: GLOW_SIZE,
+    height: TRIANGLE_H + TRIANGLE_GAP + THUMB_SIZE + 6,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: -(16 / 2),
+    justifyContent: 'flex-start', // triangle at top, thumb stacked below
   },
-  thumbOuter: {
-    width: THUMB_SIZE + 12,
-    height: THUMB_SIZE + 12,
-    borderRadius: (THUMB_SIZE + 12) / 2,
-    alignItems: 'center',
-    justifyContent: 'center',
+
+  triangle: {
+    width: 0,
+    height: 0,
+    borderStyle: 'solid',
+    borderLeftWidth: TRIANGLE_W,
+    borderRightWidth: TRIANGLE_W,
+    borderBottomWidth: TRIANGLE_H,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    marginBottom: TRIANGLE_GAP,
+    zIndex: 20,
   },
+
+  // Glow halo — absolute, centred behind the thumb
+  glow: {
+    position: 'absolute',
+    top: TRIANGLE_H + TRIANGLE_GAP + (THUMB_SIZE - GLOW_SIZE) / 2,
+    left: (GLOW_SIZE - GLOW_SIZE) / 2, // 0
+    width: GLOW_SIZE,
+    height: GLOW_SIZE,
+    borderRadius: GLOW_SIZE / 2,
+  },
+
+  // Thumb circle
   thumb: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
     borderRadius: THUMB_SIZE / 2,
-    borderWidth: 3,
+    borderWidth: THUMB_BORDER,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 30,
   },
+
+  // ── Labels
   labelsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginTop: 6,
+    marginTop: 8,
   },
   labelText: {
     fontSize: 11,
@@ -448,22 +554,6 @@ const cardStyles = StyleSheet.create({
   },
   rightLabelText: {
     textAlign: 'right',
-  },
-  ratingWrapper: {
-    backgroundColor: '#E5E7EB',
-    paddingVertical: 18,
-    paddingHorizontal: 16,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  starsRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: STAR_GAP,
-    marginBottom: 16,
-    width: '100%',
   },
 });
 

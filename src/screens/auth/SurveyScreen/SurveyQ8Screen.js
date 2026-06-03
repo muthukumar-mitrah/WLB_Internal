@@ -106,7 +106,7 @@ const SurveyQ8Screen = ({ navigation }) => {
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
-          variant="outline"
+          variant="gray"
           size="lg"
           style={styles.halfBtn}
         />

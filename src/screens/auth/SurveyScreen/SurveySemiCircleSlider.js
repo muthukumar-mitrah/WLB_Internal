@@ -15,8 +15,8 @@ const RADIUS = SCREEN_WIDTH * 0.42;
 const TRACK_WIDTH = 10;
 const TOTAL_TICKS = 72;
 
-const THUMB_SIZE = 22;
-const GLOW_SIZE = 36;
+const THUMB_SIZE = 26;
+const GLOW_SIZE = 28;
 
 const SurveySemiCircleSlider = ({
   options,
@@ -77,7 +77,7 @@ const SurveySemiCircleSlider = ({
           styles.semiCircle,
           {
             width: RADIUS * 2 + 60,
-            height: RADIUS - 5,
+            height: 100,
           },
         ]}
       >
@@ -125,7 +125,6 @@ const SurveySemiCircleSlider = ({
                 styles.thumbContainer,
                 {
                   transform: [{ translateY: -RADIUS }],
-                  bottom: -10
                 },
               ]}
             >
@@ -180,7 +179,7 @@ const SurveySemiCircleSlider = ({
                   styles.labelBtn,
                   {
                     left: x - 60,
-                    top: y - 4,
+                    top: y - 6,
                   },
                 ]}
                 onPress={() => onSelect(index)}
@@ -259,28 +258,30 @@ const styles = StyleSheet.create({
 
   thumbContainer: {
     position: 'absolute',
-    width: 40,
-    height: 40,
-    left: -20,
+    width: GLOW_SIZE,
+    height: THUMB_SIZE + 14,
+    left: -(GLOW_SIZE / 2),
+    top: -(THUMB_SIZE + 2),
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
 
   pointer: {
-    position: 'absolute',
-    top: 4,
     width: 0,
     height: 0,
-    borderLeftWidth: 6,
-    borderRightWidth: 6,
-    borderBottomWidth: 9,
+    borderLeftWidth: 7,
+    borderRightWidth: 7,
+    borderBottomWidth: 11,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
+    marginBottom: 3,
     zIndex: 20,
   },
 
   glow: {
     position: 'absolute',
+    bottom: 0,
     width: GLOW_SIZE,
     height: GLOW_SIZE,
     borderRadius: GLOW_SIZE / 2,

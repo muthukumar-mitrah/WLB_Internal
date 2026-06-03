@@ -48,14 +48,14 @@ const OptionRow = memo(({ label, selected, onPress, colors, borderRadius, isLast
         height: ROW_HEIGHT,
         marginBottom: isLast ? 0 : ROW_GAP,
         borderRadius: borderRadius.lg,
-        borderColor: selected ? colors.primary : colors.border,
-        backgroundColor: selected ? colors.primarySurface : colors.background,
+        borderColor: selected ? '#3685C6' : colors.border,
+        backgroundColor: selected ? '#EBF3F9' : colors.background,
       },
     ]}
   >
     <AppText
       variant="bodyMedium"
-      color={selected ? colors.primary : colors.textSecondary}
+      color={colors.textSecondary}
       numberOfLines={2}
     >
       {label}
@@ -156,6 +156,7 @@ const SurveyQ3Screen = ({ navigation }) => {
             itemCount={COMMITMENT_OPTIONS.length}
             rowHeight={ROW_HEIGHT}
             rowGap={ROW_GAP}
+            onSelect={handleSelect}
           />
         </View>
       </ScrollView>
@@ -165,7 +166,7 @@ const SurveyQ3Screen = ({ navigation }) => {
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
-          variant="outline"
+          variant="gray"
           size="lg"
           style={styles.halfBtn}
         />

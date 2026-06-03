@@ -16,6 +16,7 @@ import { useTheme } from '../../../theme';
 import { AppText, Button, SafeContainer } from '../../../components/common';
 import { ROUTES } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
+import { fontFamily } from '../../../theme/fonts';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -90,11 +91,9 @@ const WelcomeSurveyScreen = ({ navigation }) => {
 
         {/* Divider */}
         <View style={styles.dividerRow}>
-          <View style={styles.dividerLine} />
           <AppText variant="caption" color={colors.textTertiary} style={styles.dividerText}>
             {t('common.or')}
           </AppText>
-          <View style={styles.dividerLine} />
         </View>
 
         {/* Secondary CTA */}
@@ -103,7 +102,7 @@ const WelcomeSurveyScreen = ({ navigation }) => {
           onPress={handleSkip}
           activeOpacity={0.8}
         >
-          <AppText variant="bodyMedium" color={colors.textSecondary}>
+          <AppText variant="bodyMedium" color={colors.textSecondary} style={{ fontFamily: fontFamily.semiBold }}>
             {t('common.buttons.doThisLater')}
           </AppText>
         </TouchableOpacity>
@@ -155,10 +154,15 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
     title: {
       textAlign: 'center',
       marginBottom: spacing[3],
+      fontFamily: fontFamily.headingBold,
+      fontSize: 32,
+      lineHeight: 40
     },
     subtitle: {
       textAlign: 'center',
       lineHeight: 22,
+      fontFamily: fontFamily.regular,
+      fontSize: 15,
     },
 
     // CTAs
@@ -185,6 +189,9 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
     dividerText: {
       marginHorizontal: spacing[3],
       color: colors.textTertiary,
+      textAlign: 'center',
+      flex: 1,
+      justifyContent: 'center'
     },
 
     // Secondary button — light gray pill
