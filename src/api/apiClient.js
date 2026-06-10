@@ -3,11 +3,11 @@
  * Handles auth tokens, refresh, and error transformation
  */
 import axios from 'axios';
-import {STORAGE_KEYS, API_TIMEOUT, ERROR_MESSAGES} from '../constants';
+import { STORAGE_KEYS, API_TIMEOUT } from '../constants';
 import {storage} from '../utils/storage';
-
+ import {API_BASE_URL} from '@env';
 // ─── Config ──────────────────────────────────────────────────────────────────
-const BASE_URL = 'https://api.yourdomain.com/v1'; // Replace with actual URL
+const BASE_URL = API_BASE_URL;
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -48,8 +48,10 @@ apiClient.interceptors.response.use(
           const {data} = await axios.post(`${BASE_URL}/auth/refresh`, {
             refresh_token: refreshToken,
           });
-          await storage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.access_token);
-          originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
+          const newToken = data?.access_token ?? data?.token;
+          if(!newToken) throw new Error('Refresh endpoint did not return a token');
+          await storage.setItem(STORAGE_KEYS.AUTH_TOKEN, newToken);
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
           return apiClient(originalRequest);
         }
       } catch {

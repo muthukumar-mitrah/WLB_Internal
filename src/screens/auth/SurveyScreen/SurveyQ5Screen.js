@@ -45,11 +45,15 @@ const SurveyQ5Screen = ({ navigation }) => {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: spacing[4],
+        marginTop: spacing[2],
       }
     }),
     [colors, spacing],
   );
+  const isDark = useTheme().isDark;
+  const surveyQ5Image = isDark
+    ? require('../../../assets/images/survey_5_dark.png')
+    : require('../../../assets/images/survey_5.png');
 
   const initialIndex = COMM_OPTIONS.findIndex(
     o => o.value === surveyData.communicationStyle,
@@ -78,40 +82,30 @@ const SurveyQ5Screen = ({ navigation }) => {
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundSecondary} translucent={false} />
-
-      {/* ═══ TOP SECTION — light-gray background ═══ */}
-      <View style={styles.topSection}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={handlePrevious}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            style={styles.backBtn}
-          >
-            <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
-          <View style={styles.backBtn} />
-        </View>
-
-        <View style={styles.illustrationArea}>
-          <Image
-            source={require('../../../assets/images/survey_5.png')}
-            style={styles.illustration}
-            resizeMode="contain"
-          />
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={handlePrevious}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={styles.backBtn}
+        >
+          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
+        <View style={styles.backBtn} />
       </View>
-
-      {/* ═══ BOTTOM SECTION — white ═══ */}
       <ScrollView
         style={styles.bottomSection}
         contentContainerStyle={styles.bottomContent}
         showsVerticalScrollIndicator={false}
       >
-        <AppText variant="h3" color={colors.textPrimary} style={[styles.question, { textAlign: 'center', fontSize: 18 }]}>
+        <Image
+          source={surveyQ5Image}
+          style={styles.illustration}
+          resizeMode="contain"
+        />
+        <AppText variant="title" color={colors.textPrimary}>
           {t('survey.q5.question')}
         </AppText>
-
         <View style={styles.sliderContainer}>
           <SurveySemiCircleSlider
             options={translatedOptions}
@@ -120,8 +114,6 @@ const SurveyQ5Screen = ({ navigation }) => {
           />
         </View>
       </ScrollView>
-
-      {/* ═══ BOTTOM BUTTONS ═══ */}
       <View style={styles.bottomRow}>
         <Button
           title={t('common.buttons.previous')}

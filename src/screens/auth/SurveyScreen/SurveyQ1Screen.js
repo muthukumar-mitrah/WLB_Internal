@@ -23,42 +23,46 @@ import SurveyProgressBar from './SurveyProgressBar';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { createSurveyStyles, createQ1OptionStyles } from './styles';
 
-const TOTAL_QUESTIONS  = 9;
+const TOTAL_QUESTIONS = 9;
 const CURRENT_QUESTION = 1;
 
 const GOAL_OPTIONS = [
-  { value: 'lose_weight',     labelKey: 'survey.q1.loseWeight' },
+  { value: 'lose_weight', labelKey: 'survey.q1.loseWeight' },
   { value: 'stay_consistent', labelKey: 'survey.q1.stayConsistent' },
-  { value: 'get_healthier',   labelKey: 'survey.q1.getHealthier' },
+  { value: 'get_healthier', labelKey: 'survey.q1.getHealthier' },
   { value: 'maintain_weight', labelKey: 'survey.q1.maintainWeight' },
 ];
 
 // ─── Option Row ───────────────────────────────────────────────────────────────
-const OptionRow = memo(({ label, selected, onPress, optStyles }) => (
-  <TouchableOpacity
-    onPress={onPress}
-    activeOpacity={0.7}
-    style={[
-      selected ? optStyles.rowSelected : optStyles.rowDefault,
-    ]}
-  >
-    <AppText
+const OptionRow = memo(({ label, selected, onPress, optStyles }) => {
+  const { colors } = useTheme();
+
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
       style={[
-        optStyles.label,
-        { color: selected ? '#1A1A1A' : '#374151' },
+        selected ? optStyles.rowSelected : optStyles.rowDefault,
       ]}
     >
-      {label}
-    </AppText>
-    {selected && (
-      <Icon name="checkmark-circle" size={22} color="#3179B4" />
-    )}
-  </TouchableOpacity>
-));
+      <AppText
+        style={[
+          optStyles.label,
+          { color: selected ? colors.textPrimary : colors.textSecondary },
+        ]}
+      >
+        {label}
+      </AppText>
+      {selected && (
+        <Icon name="checkmark-circle" size={22} color={colors.primary} />
+      )}
+    </TouchableOpacity>
+  )
+});
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 const SurveyQ1Screen = ({ navigation }) => {
-  const { colors, spacing, borderRadius } = useTheme();
+  const { colors, spacing } = useTheme();
   const { surveyData, setSurveyAnswer } = useSurvey();
   const { t } = useTranslation();
 
@@ -66,6 +70,8 @@ const SurveyQ1Screen = ({ navigation }) => {
     () => StyleSheet.create({ ...createSurveyStyles({ colors, spacing }) }),
     [colors, spacing],
   );
+  const isDark = useTheme().isDark;
+  const surveyQ1Image = isDark ? require('../../../assets/images/survey_1_dark.png') : require('../../../assets/images/survey_1.png')
 
   const optStyles = useMemo(
     () => StyleSheet.create({ ...createQ1OptionStyles({ colors }) }),
@@ -90,40 +96,30 @@ const SurveyQ1Screen = ({ navigation }) => {
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundSecondary} translucent={false} />
-
-      {/* ═══ TOP SECTION — light-gray background ═══ */}
-      <View style={styles.topSection}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={handlePrevious}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            style={styles.backBtn}
-          >
-            <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
-          <View style={styles.backBtn} />
-        </View>
-
-        <View style={styles.illustrationArea}>
-          <Image
-            source={require('../../../assets/images/survey_1.png')}
-            style={styles.illustration}
-            resizeMode="contain"
-          />
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={handlePrevious}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={styles.backBtn}
+        >
+          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
+        <View style={styles.backBtn} />
       </View>
-
-      {/* ═══ BOTTOM SECTION — white ═══ */}
       <ScrollView
         style={styles.bottomSection}
         contentContainerStyle={styles.bottomContent}
         showsVerticalScrollIndicator={false}
       >
-        <AppText variant="h3" color={colors.textPrimary} style={styles.question}>
+        <Image
+          source={surveyQ1Image}
+          style={styles.illustration}
+          resizeMode="contain"
+        />
+        <AppText variant="title" color={colors.textPrimary}>
           {t('survey.q1.question')}
         </AppText>
-
         <View style={{ marginTop: 10 }}>
           {GOAL_OPTIONS.map(option => (
             <OptionRow
@@ -136,8 +132,6 @@ const SurveyQ1Screen = ({ navigation }) => {
           ))}
         </View>
       </ScrollView>
-
-      {/* ═══ BOTTOM BUTTONS ═══ */}
       <View style={styles.bottomRow}>
         <Button
           title={t('common.buttons.previous')}

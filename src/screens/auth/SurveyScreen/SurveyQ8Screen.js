@@ -24,8 +24,10 @@ import RulerPicker from '../../../components/common/RulerPicker';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { createSurveyStyles } from './styles';
 
-const TOTAL_QUESTIONS  = 9;
+const TOTAL_QUESTIONS = 9;
 const CURRENT_QUESTION = 8;
+const MIN_AGE = 10;
+const MAX_AGE = 100;
 
 const SurveyQ8Screen = ({ navigation }) => {
   const { colors, spacing } = useTheme();
@@ -37,8 +39,12 @@ const SurveyQ8Screen = ({ navigation }) => {
     [colors, spacing],
   );
 
-  const initialRange = surveyData.ageRange || { min: 30, max: 50 };
-  const [ageRange, setAgeRange] = useState(initialRange);
+  const [ageRange, setAgeRange] = useState(() => {
+    return {
+      min: 30,
+      max: 50,
+    };
+  });
 
   const handleValuesChange = useCallback((min, max) => {
     setAgeRange({ min, max });
@@ -54,54 +60,48 @@ const SurveyQ8Screen = ({ navigation }) => {
     navigation.goBack();
   }, [ageRange, setSurveyAnswer, navigation]);
 
+  const isDark = useTheme().isDark;
+  const surveyQ8Image = isDark
+    ? require('../../../assets/images/survey_8_dark.png')
+    : require('../../../assets/images/survey_8.png');
+
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundSecondary} translucent={false} />
-
-      {/* ═══ TOP SECTION — light-gray background ═══ */}
-      <View style={styles.topSection}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={handlePrevious}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            style={styles.backBtn}
-          >
-            <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
-          <View style={styles.backBtn} />
-        </View>
-
-        <View style={styles.illustrationArea}>
-          <Image
-            source={require('../../../assets/images/survey_8.png')}
-            style={styles.illustration}
-            resizeMode="contain"
-          />
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={handlePrevious}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={styles.backBtn}
+        >
+          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
+        <View style={styles.backBtn} />
       </View>
-
-      {/* ═══ BOTTOM SECTION — white ═══ */}
       <ScrollView
         style={styles.bottomSection}
         contentContainerStyle={styles.bottomContent}
         showsVerticalScrollIndicator={false}
       >
-        <AppText variant="h3" color={colors.textPrimary} style={styles.question}>
+        <Image
+          source={surveyQ8Image}
+          style={styles.illustration}
+          resizeMode="contain"
+        />
+        <AppText variant="title" color={colors.textPrimary}>
           {t('survey.q8.question')}
         </AppText>
 
         <RulerPicker
           mode="range"
-          minValue={ageRange.min}
-          maxValue={ageRange.max}
-          min={10}
-          max={60}
+          minValue={ageRange?.min}
+          maxValue={ageRange?.max}
+          min={MIN_AGE}
+          max={MAX_AGE}
           onValuesChange={handleValuesChange}
         />
       </ScrollView>
-
-      {/* ═══ BOTTOM BUTTONS ═══ */}
       <View style={styles.bottomRow}>
         <Button
           title={t('common.buttons.previous')}

@@ -29,23 +29,22 @@ const WelcomeSurveyScreen = ({ navigation }) => {
     () => createStyles({ colors, spacing, borderRadius }),
     [colors, spacing, borderRadius],
   );
+  const isDark = useTheme().isDark;
+  const welcomeSurveyImage = isDark
+    ? require('../../../assets/images/welcome_survey_dark.png')
+    : require('../../../assets/images/welcome_survey.png');
 
-  // "Get Started" — begin the survey question flow
   const handleGetStarted = useCallback(() => {
     navigation.navigate(ROUTES.SURVEY_Q1);
   }, [navigation]);
 
-
-  // "Skip" / "I'll do this later" — bypass survey, go to main app
   const handleSkip = useCallback(() => {
-    navigation.navigate(ROUTES.LOGIN);
+    // Naviage to further flow (e.g. home screen) without completing survey
   }, [navigation]);
 
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} translucent={false} />
-
-      {/* ── Skip button ── */}
       <View style={styles.headerRow}>
         <TouchableOpacity
           style={styles.skipBtn}
@@ -58,17 +57,13 @@ const WelcomeSurveyScreen = ({ navigation }) => {
           </AppText>
         </TouchableOpacity>
       </View>
-
-      {/* ── Hero illustration ── */}
       <View style={styles.illustrationWrapper}>
         <Image
-          source={require('../../../assets/images/welcome_survey.png')}
+          source={welcomeSurveyImage}
           style={styles.illustration}
           resizeMode="contain"
         />
       </View>
-
-      {/* ── Text content ── */}
       <View style={styles.textSection}>
         <AppText variant="h2" color={colors.textPrimary} style={styles.title}>
           {t('survey.welcome.title')}
@@ -77,10 +72,7 @@ const WelcomeSurveyScreen = ({ navigation }) => {
           {t('survey.welcome.subtitle')}
         </AppText>
       </View>
-
-      {/* ── CTAs ── */}
       <View style={styles.ctaSection}>
-        {/* Primary CTA */}
         <Button
           title={t('common.buttons.getStarted')}
           onPress={handleGetStarted}
@@ -88,15 +80,11 @@ const WelcomeSurveyScreen = ({ navigation }) => {
           size="lg"
           style={styles.primaryBtn}
         />
-
-        {/* Divider */}
         <View style={styles.dividerRow}>
           <AppText variant="caption" color={colors.textTertiary} style={styles.dividerText}>
             {t('common.or')}
           </AppText>
         </View>
-
-        {/* Secondary CTA */}
         <TouchableOpacity
           style={styles.secondaryBtn}
           onPress={handleSkip}

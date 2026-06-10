@@ -26,7 +26,6 @@ import { createSurveyStyles } from './styles';
 const TOTAL_QUESTIONS = 9;
 const CURRENT_QUESTION = 6;
 
-// 1 = active (blue), 0 = inactive (light gray)
 const PATTERNS = {
   daily: [
     [0, 0, 0, 0, 0, 0],
@@ -63,23 +62,23 @@ const CheckInCard = memo(({ option, isSelected, onPress, colors, borderRadius })
         styles.card,
         {
           borderRadius: borderRadius.lg,
-          borderColor: isSelected ? '#3685C6' : colors.border,
-          backgroundColor: isSelected ? `#EBF3F9` : colors.white, // Very light blue if selected
+          borderColor: isSelected ? colors.primarySoft : colors.border,
+          backgroundColor: isSelected ? colors.primarySurface : colors.background,
         }
       ]}
     >
-      <View style={[styles.gridContainer, { borderColor: colors.border }]}>
+      <View style={[styles.gridContainer, { borderColor: colors.border, backgroundColor: colors.background }]}>
         {option.pattern.map((row, rIdx) => (
           <View key={rIdx} style={styles.gridRow}>
             {row.map((cell, cIdx) => (
               <View
                 key={cIdx}
                 style={[
-                styles.cell,
+                  styles.cell,
                   {
                     backgroundColor: cell === 1
-                      ? '#A3C7E5'
-                      : '#F5F5F5' // light gray for empty
+                      ? colors.primarySoft
+                      : colors.backgroundTertiary
                   },
                   cell === 1 && { opacity: 0.5 },
                   cell === 1 && { opacity: 1 },
@@ -137,43 +136,38 @@ const SurveyQ6Screen = ({ navigation }) => {
     label: t(opt.labelKey)
   }));
 
+  const isDark = useTheme().isDark;
+  const surveyQ6Image = isDark
+    ? require('../../../assets/images/survey_6_dark.png')
+    : require('../../../assets/images/survey_6.png');
+
   return (
     <SafeContainer edges={['top', 'bottom']} style={baseStyles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundSecondary} translucent={false} />
-
-      {/* ═══ TOP SECTION — light-gray background ═══ */}
-      <View style={baseStyles.topSection}>
-        <View style={baseStyles.header}>
-          <TouchableOpacity
-            onPress={handlePrevious}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            style={baseStyles.backBtn}
-          >
-            <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
-          <View style={baseStyles.backBtn} />
-        </View>
-
-        <View style={baseStyles.illustrationArea}>
-          <Image
-            source={require('../../../assets/images/survey_6.png')}
-            style={baseStyles.illustration}
-            resizeMode="contain"
-          />
-        </View>
+      <View style={baseStyles.header}>
+        <TouchableOpacity
+          onPress={handlePrevious}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={baseStyles.backBtn}
+        >
+          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
+        <View style={baseStyles.backBtn} />
       </View>
-
-      {/* ═══ BOTTOM SECTION — white ═══ */}
       <ScrollView
         style={baseStyles.bottomSection}
         contentContainerStyle={baseStyles.bottomContent}
         showsVerticalScrollIndicator={false}
       >
-        <AppText variant="h3" color={colors.textPrimary} style={baseStyles.question}>
+        <Image
+          source={surveyQ6Image}
+          style={baseStyles.illustration}
+          resizeMode="contain"
+        />
+        <AppText variant="title" color={colors.textPrimary}>
           {t('survey.q6.question')}
         </AppText>
-
         <View style={styles.cardsRow}>
           {translatedOptions.map((opt, idx) => (
             <CheckInCard
@@ -187,8 +181,6 @@ const SurveyQ6Screen = ({ navigation }) => {
           ))}
         </View>
       </ScrollView>
-
-      {/* ═══ BOTTOM BUTTONS ═══ */}
       <View style={baseStyles.bottomRow}>
         <Button
           title={t('common.buttons.previous')}
@@ -213,7 +205,7 @@ const styles = StyleSheet.create({
   cardsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'stretch', // make all cards same height
+    alignItems: 'stretch',
     marginTop: 20,
     gap: 12,
   },
@@ -227,10 +219,9 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     width: '100%',
-    aspectRatio: 1.4, // nice proportion for 7x3
+    aspectRatio: 1.4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
     borderRadius: 8,
     borderWidth: 1,
     padding: 6,
@@ -247,7 +238,7 @@ const styles = StyleSheet.create({
   },
   cardTextContainer: {
     marginTop: 5,
-    minHeight: 36, // height to fit two lines
+    minHeight: 36,
     justifyContent: 'center',
     alignItems: 'center',
   },

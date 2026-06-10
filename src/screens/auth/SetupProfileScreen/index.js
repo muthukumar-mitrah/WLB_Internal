@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState, useEffect } from 'react';
+import { memo, useCallback, useMemo, useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -86,8 +86,18 @@ const SetupProfileScreen = ({ navigation, route }) => {
       return;
     }
 
+    // await signUpWithEmail({
+    //   email: email.trim(),
+    //   firstName: formData.firstName.trim(),
+    //   username: formData.username.trim(),
+    //   password: formData.password,
+    //   ...(formData.referralCode.trim()
+    //     ? { referralCode: formData.referralCode.trim() }
+    //     : {}),
+    // });
+
     setShowSuccessModal(true);
-  }, [formData, email, signUpWithEmail]);
+  }, [formData, email]);
 
   const handleLogin = useCallback(() => {
     if (navigation?.navigate) {
@@ -97,15 +107,19 @@ const SetupProfileScreen = ({ navigation, route }) => {
 
   const handleModalClose = useCallback(() => {
     setShowSuccessModal(false);
-    if (navigation?.navigate) {
+  }, [navigation]);
+
+  const handleContinue = useCallback(() => {
+    setShowSuccessModal(false);
+    setTimeout(() => {
       navigation.navigate(ROUTES.BASIC_INFO);
-    }
+    }, 100);
   }, [navigation]);
 
   return (
     <SafeContainer avoidKeyboard edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar
-        barStyle="dark-content"
+        barStyle={colors.statusBar}
         backgroundColor={colors.background}
         translucent={false}
       />
@@ -268,7 +282,7 @@ const SetupProfileScreen = ({ navigation, route }) => {
             />
             <Button
               title={t('common.buttons.continue')}
-              onPress={handleModalClose}
+              onPress={handleContinue}
               variant="primary"
               fullWidth={false}
               style={styles.modalBtnContinue}

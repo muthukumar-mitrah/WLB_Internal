@@ -23,16 +23,15 @@ import SurveyProgressBar from './SurveyProgressBar';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { radioOptionStyles, createSurveyStyles } from './styles';
 
-const TOTAL_QUESTIONS  = 9;
+const TOTAL_QUESTIONS = 9;
 const CURRENT_QUESTION = 4;
 
 const BUDDY_OPTIONS = [
-  { value: 'mentor',      labelKey: 'survey.q4.mentor' },
-  { value: 'partner',     labelKey: 'survey.q4.partner' },
+  { value: 'mentor', labelKey: 'survey.q4.mentor' },
+  { value: 'partner', labelKey: 'survey.q4.partner' },
   { value: 'cheerleader', labelKey: 'survey.q4.cheerleader' },
 ];
 
-// ─── Option Row ───────────────────────────────────────────────────────────────
 const OptionRow = memo(({ label, selected, onPress, colors, borderRadius }) => (
   <TouchableOpacity
     onPress={onPress}
@@ -41,8 +40,8 @@ const OptionRow = memo(({ label, selected, onPress, colors, borderRadius }) => (
       radioOptionStyles.row,
       {
         borderRadius: borderRadius.lg,
-        borderColor: selected ? '#3685C6' : colors.border,
-        backgroundColor: selected ? '#EBF3F9' : colors.background,
+        borderColor: selected ? colors.primary : colors.border,
+        backgroundColor: selected ? colors.backgroundSecondary : colors.background,
       },
     ]}
   >
@@ -57,8 +56,8 @@ const OptionRow = memo(({ label, selected, onPress, colors, borderRadius }) => (
       style={[
         selected ? radioOptionStyles.radio : '',
         {
-          borderColor: selected ? '#3179B4' : colors.border,
-          backgroundColor: selected ? '#3179B4' : colors.background,
+          borderColor: selected ? colors.primary : colors.border,
+          backgroundColor: selected ? colors.primary : colors.background,
         },
       ]}
     >
@@ -77,6 +76,10 @@ const SurveyQ4Screen = ({ navigation }) => {
     () => StyleSheet.create({ ...createSurveyStyles({ colors, spacing }) }),
     [colors, spacing],
   );
+  const isDark = useTheme().isDark;
+  const surveyQ4Image = isDark
+    ? require('../../../assets/images/survey_4_dark.png')
+    : require('../../../assets/images/survey_4.png');
 
   const initialIndex = BUDDY_OPTIONS.findIndex(
     o => o.value === surveyData.buddyType,
@@ -100,41 +103,31 @@ const SurveyQ4Screen = ({ navigation }) => {
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundSecondary} translucent={false} />
-
-      {/* ═══ TOP SECTION — light-gray background ═══ */}
-      <View style={styles.topSection}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={handlePrevious}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            style={styles.backBtn}
-          >
-            <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
-          <View style={styles.backBtn} />
-        </View>
-
-        <View style={styles.illustrationArea}>
-          <Image
-            source={require('../../../assets/images/survey_4.png')}
-            style={styles.illustration}
-            resizeMode="contain"
-          />
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={handlePrevious}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={styles.backBtn}
+        >
+          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
+        <View style={styles.backBtn} />
       </View>
-
-      {/* ═══ BOTTOM SECTION — white ═══ */}
       <ScrollView
         style={styles.bottomSection}
         contentContainerStyle={styles.bottomContent}
         showsVerticalScrollIndicator={false}
       >
-        <AppText variant="h3" color={colors.textPrimary} style={styles.question}>
+        <Image
+          source={surveyQ4Image}
+          style={styles.illustration}
+          resizeMode="contain"
+        />
+        <AppText variant="title" color={colors.textPrimary}>
           {t('survey.q4.question')}
         </AppText>
-
-        <View style={{marginTop: 20}}>
+        <View style={{ marginTop: 20 }}>
           {BUDDY_OPTIONS.map(option => (
             <OptionRow
               key={option.value}
@@ -147,8 +140,6 @@ const SurveyQ4Screen = ({ navigation }) => {
           ))}
         </View>
       </ScrollView>
-
-      {/* ═══ BOTTOM BUTTONS ═══ */}
       <View style={styles.bottomRow}>
         <Button
           title={t('common.buttons.previous')}

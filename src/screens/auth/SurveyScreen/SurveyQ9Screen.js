@@ -19,15 +19,16 @@ import { useSurvey } from '../../../context/SurveyContext';
 import SurveyProgressBar from './SurveyProgressBar';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { ROUTES } from '../../../constants';
+import { createSurveyStyles } from './styles';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const TOTAL_QUESTIONS = 9;
 const CURRENT_QUESTION = 9;
 
-const TRIANGLE_W = 6;   // half-base width
-const TRIANGLE_H = 8;   // height
-const TRIANGLE_GAP = 2; // gap between triangle base and thumb top
+const TRIANGLE_W = 6;
+const TRIANGLE_H = 8;
+const TRIANGLE_GAP = 2;
 
 const PERSONALIZATION_QUESTIONS = [
   {
@@ -72,56 +73,38 @@ const PERSONALIZATION_QUESTIONS = [
 ];
 
 const STAR_COUNT = 5;
-const STAR_SIZE = 30;
+const STAR_SIZE = 25;
 
-// Outer card padding (applied to card itself)
-const CARD_H_PAD = 20;
-// ratingWrapper inner horizontal padding
+const CARD_H_PAD = 12;
 const WRAPPER_H_PAD = 16;
 
-// Screen horizontal padding from scroll view (spacing[5] ≈ 20 each side)
 const SCROLL_H_PAD = 20;
 
-// CONTENT_W = inner width of ratingWrapper = the width shared by both stars and slider
-// Screen - scroll padding*2 - card padding*2 - wrapper padding*2
 const CONTENT_W = SCREEN_WIDTH - SCROLL_H_PAD * 2 - CARD_H_PAD * 2 - WRAPPER_H_PAD * 2;
 
 const TRACK_HEIGHT = 4;
 const THUMB_SIZE = 20;
 const THUMB_BORDER = 3;
 const GLOW_SIZE = THUMB_SIZE + 10;
-
-// ─── Coordinate helpers ───────────────────────────────────────────────────────
-// The thumb travels in [0, CONTENT_W - THUMB_SIZE].
-// At star index i (0-based), the thumb's LEFT EDGE is at:
 const THUMB_TRAVEL = CONTENT_W - THUMB_SIZE;
 
-// Centre of the thumb when at star index i:
-//   centreX(i) = i / (STAR_COUNT-1) * THUMB_TRAVEL  +  THUMB_SIZE/2
-// We define starX as the LEFT EDGE x (what Animated.Value holds):
 const starX = (starIdx) =>
   (starIdx / (STAR_COUNT - 1)) * THUMB_TRAVEL;
 
-// Centre-x of the thumb at star index i (used to position each star icon):
 const starCentreX = (starIdx) => starX(starIdx) + THUMB_SIZE / 2;
 
-// Half the distance between two adjacent star snap positions on the track:
 const HALF_STEP = THUMB_TRAVEL / (STAR_COUNT - 1) / 2;
 
-// Convert raw x (thumb left-edge) → star index, allowing value=0 (all-gray).
-// If x < HALF_STEP (halfway between "beyond left" and star 1 centre), → 0 stars.
 const xToValue = (x) => {
-  if (x < HALF_STEP) return 0;           // all-gray zone
+  if(x < HALF_STEP) return 0;
   return Math.round((x / THUMB_TRAVEL) * (STAR_COUNT - 1)) + 1; // 1..5
 };
 
-// Thumb left-edge x for a given value (0 = leftmost / all-gray).
 const valueToX = (value) => {
-  if (value <= 0) return 0;
+  if(value <= 0) return 0;
   return starX(value - 1);
 };
 
-// ─── Single Star ──────────────────────────────────────────────────────────────
 const Star = memo(({ filled, onPress, centreX, size = STAR_SIZE }) => (
   <TouchableOpacity
     onPress={onPress}
@@ -130,7 +113,6 @@ const Star = memo(({ filled, onPress, centreX, size = STAR_SIZE }) => (
     style={[
       cardStyles.starBtn,
       {
-        // Absolutely position the star so its centre aligns with starCentreX
         position: 'absolute',
         left: centreX - size / 2,
         width: size,
@@ -146,23 +128,19 @@ const Star = memo(({ filled, onPress, centreX, size = STAR_SIZE }) => (
   </TouchableOpacity>
 ));
 
-// ─── Rating Slider Card ───────────────────────────────────────────────────────
 const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValueChange, colors }) => {
-  // thumbX drives both the thumb and the triangle (left-edge position).
   const thumbX = useRef(new Animated.Value(valueToX(value))).current;
   const currentValue = useRef(value);
   const dragStartX = useRef(0);
   const isDragging = useRef(false);
 
-  // Sync when parent value changes (e.g. initial mount, external reset).
   useEffect(() => {
-    if (!isDragging.current) {
+    if(!isDragging.current) {
       currentValue.current = value;
       thumbX.setValue(valueToX(value));
     }
   }, [value]);
 
-  // Snap to the resolved value and notify parent.
   const snapToValue = useCallback((newValue) => {
     const clamped = Math.max(0, Math.min(newValue, STAR_COUNT));
     currentValue.current = clamped;
@@ -186,7 +164,6 @@ const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValu
       },
 
       onPanResponderMove: (_, gestureState) => {
-        // Smooth continuous movement — no snapping during drag.
         const nextX = Math.max(0, Math.min(dragStartX.current + gestureState.dx, THUMB_TRAVEL));
         thumbX.setValue(nextX);
       },
@@ -207,18 +184,15 @@ const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValu
   );
 
   const handleStarPress = useCallback((starIdx) => {
-    // Tapping star i → value = i+1 (1-based), thumb snaps to starX(i).
     snapToValue(starIdx + 1);
   }, [snapToValue]);
 
-  // Blue filled track: from left=0 to thumb centre.
   const filledWidth = thumbX.interpolate({
     inputRange: [0, THUMB_TRAVEL],
     outputRange: [THUMB_SIZE / 2, THUMB_TRAVEL + THUMB_SIZE / 2],
     extrapolate: 'clamp',
   });
 
-  // Pre-compute star centres so each star is absolutely positioned.
   const starCentres = useMemo(
     () => Array.from({ length: STAR_COUNT }, (_, i) => starCentreX(i)),
     [],
@@ -226,13 +200,11 @@ const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValu
 
   return (
     <View style={[cardStyles.card, { borderColor: colors.border, backgroundColor: colors.backgroundSecondary }]}>
-      {/* Question */}
-      <AppText variant="bodyMedium" color={colors.textPrimary} style={cardStyles.questionText}>
+      <AppText variant="bodyMedium" color={colors.textPrimary}>
         {index + 1}. {question}
       </AppText>
 
-      <View style={cardStyles.ratingWrapper}>
-        {/* ── Stars row (same width as slider, stars absolutely positioned) ── */}
+      <View style={[cardStyles.ratingWrapper, { backgroundColor: colors.background }]}>
         <View style={cardStyles.starsRow}>
           {starCentres.map((cx, i) => (
             <Star
@@ -244,26 +216,19 @@ const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValu
             />
           ))}
         </View>
-
-        {/* ── Slider ── */}
         <View style={cardStyles.sliderOuter}>
-          {/* Gray base track (full width, faint) */}
           <View
             style={[
               cardStyles.track,
               { backgroundColor: colors.primary },
             ]}
           />
-
-          {/* Blue filled track */}
           <Animated.View
             style={[
               cardStyles.filledTrack,
               { backgroundColor: colors.primary, width: filledWidth },
             ]}
           />
-
-          {/* Thumb */}
           <Animated.View
             style={[
               cardStyles.indicatorWrapper,
@@ -284,7 +249,6 @@ const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValu
           </Animated.View>
         </View>
       </View>
-      {/* Labels */}
       <View style={cardStyles.labelsRow}>
         <AppText variant="bodySmall" color={colors.textSecondary} style={cardStyles.labelText}>
           {leftLabel}
@@ -303,7 +267,6 @@ const SurveyQ9Screen = ({ navigation }) => {
   const { surveyData, setSurveyAnswer } = useSurvey();
   const { t } = useTranslation();
 
-  // Initialize ratings from surveyData or each question's default.
   const initialRatings = surveyData.personalizationRatings || {};
   const [ratings, setRatings] = useState(() => {
     const initial = {};
@@ -312,6 +275,11 @@ const SurveyQ9Screen = ({ navigation }) => {
     });
     return initial;
   });
+
+  const styles = useMemo(
+    () => StyleSheet.create({ ...createSurveyStyles({ colors, spacing }) }),
+    [colors, spacing],
+  );
 
   const handleRatingChange = useCallback((questionId, val) => {
     setRatings(prev => ({ ...prev, [questionId]: val }));
@@ -328,10 +296,8 @@ const SurveyQ9Screen = ({ navigation }) => {
   }, [ratings, setSurveyAnswer, navigation]);
 
   return (
-    <SafeContainer edges={['top', 'bottom']} style={screenStyles.container}>
+    <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} translucent={false} />
-
-      {/* ═══ HEADER ═══ */}
       <View style={[screenStyles.header, { paddingHorizontal: spacing[4], paddingTop: spacing[3], paddingBottom: spacing[2] }]}>
         <TouchableOpacity
           onPress={handlePrevious}
@@ -343,18 +309,15 @@ const SurveyQ9Screen = ({ navigation }) => {
         <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
         <View style={screenStyles.backBtn} />
       </View>
-
-      {/* ═══ TITLE ═══ */}
-      <AppText variant="h3" color={colors.textPrimary} style={screenStyles.title}>
-        {t('survey.q9.title')}
-      </AppText>
-
-      {/* ═══ SCROLLABLE CARDS ═══ */}
       <ScrollView
         style={screenStyles.scrollView}
         contentContainerStyle={[screenStyles.scrollContent, { paddingHorizontal: spacing[5], paddingBottom: spacing[5] }]}
         showsVerticalScrollIndicator={false}
       >
+        <AppText variant="title" color={colors.textPrimary} style={screenStyles.textCenter}>
+          {t('survey.q9.title')}
+        </AppText>
+
         {PERSONALIZATION_QUESTIONS.map((q, idx) => (
           <RatingCard
             key={q.id}
@@ -368,9 +331,7 @@ const SurveyQ9Screen = ({ navigation }) => {
           />
         ))}
       </ScrollView>
-
-      {/* ═══ BOTTOM BUTTONS ═══ */}
-      <View style={[screenStyles.bottomRow, { paddingHorizontal: spacing[5], paddingBottom: spacing[5], paddingTop: spacing[3], borderTopColor: colors.divider }]}>
+      <View style={[styles.bottomRow, { paddingHorizontal: spacing[5], paddingBottom: spacing[5], paddingTop: spacing[3], borderTopColor: colors.divider }]}>
         <Button
           title={t('common.buttons.previous')}
           onPress={handlePrevious}
@@ -430,6 +391,10 @@ const screenStyles = StyleSheet.create({
   halfBtn: {
     flex: 1,
   },
+  textCenter:{
+    textAlign: 'center',
+    marginBottom: 15
+  }
 });
 
 // ─── Card styles ──────────────────────────────────────────────────────────────
@@ -450,12 +415,12 @@ const cardStyles = StyleSheet.create({
   },
 
   ratingWrapper: {
-    backgroundColor: '#E5E7EB',
-    paddingTop: 18,
-    paddingBottom: 14,
+    paddingTop: 10,
+    paddingBottom: 10,
     paddingHorizontal: WRAPPER_H_PAD,
-    borderRadius: 14,
-    alignItems: 'flex-start',   // children use explicit width = CONTENT_W
+    borderRadius: 10,
+    alignItems: 'flex-start',
+    marginTop: 15
   },
 
   // ── Stars
@@ -463,7 +428,7 @@ const cardStyles = StyleSheet.create({
     width: CONTENT_W,
     height: STAR_SIZE,
     marginBottom: 16,
-    position: 'relative', 
+    position: 'relative',
   },
   starBtn: {
     alignItems: 'center',
@@ -551,9 +516,11 @@ const cardStyles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 15,
     maxWidth: '45%',
+    marginLeft:5
   },
   rightLabelText: {
     textAlign: 'right',
+    marginRight: 5
   },
 });
 

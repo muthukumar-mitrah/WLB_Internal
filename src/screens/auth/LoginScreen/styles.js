@@ -43,7 +43,7 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       alignSelf: 'flex-start',
     },
     continueBtn: {
-      marginTop: spacing[4],
+      marginTop: -spacing[1],
       borderRadius: borderRadius.md,
       paddingVertical: 14,
     },

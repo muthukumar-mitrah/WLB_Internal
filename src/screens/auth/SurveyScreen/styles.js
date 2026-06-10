@@ -2,28 +2,15 @@
  * styles.js — Shared survey screen styles
  */
 import { Dimensions, StyleSheet } from 'react-native';
-import { fontFamily } from '../../../theme/fonts';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 export { SCREEN_WIDTH, SCREEN_HEIGHT };
 
-// ─── 1. Common layout (spread into each screen's StyleSheet.create) ───────────
-/**
- * Returns a PLAIN OBJECT (not a StyleSheet) so screens can spread it.
- * Call inside useMemo and wrap with StyleSheet.create together with
- * any screen-specific properties.
- */
 export const createSurveyStyles = ({ colors, spacing }) => ({
   /* Root */
   container: {
     flex: 1,
     backgroundColor: colors.background,
-  },
-
-  /* Top section — light-gray background */
-  topSection: {
-    height: SCREEN_HEIGHT * 0.55,
-    backgroundColor: colors.backgroundSecondary,
   },
 
   /* Header row */
@@ -33,7 +20,6 @@ export const createSurveyStyles = ({ colors, spacing }) => ({
     justifyContent: 'space-between',
     paddingHorizontal: spacing[4],
     paddingTop: spacing[3],
-    paddingBottom: spacing[2],
   },
   backBtn: {
     width: 32,
@@ -42,16 +28,10 @@ export const createSurveyStyles = ({ colors, spacing }) => ({
     justifyContent: 'center',
   },
 
-  /* Illustration — fills remaining space inside topSection */
-  illustrationArea: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: spacing[2],
-  },
   illustration: {
     width: SCREEN_WIDTH * 0.88,
-    height: '100%', // fills the flex:1 illustrationArea
+    height: 310,
+    alignSelf: 'center',
   },
 
   /* Bottom section — white content area */
@@ -61,19 +41,12 @@ export const createSurveyStyles = ({ colors, spacing }) => ({
   },
   bottomContent: {
     paddingHorizontal: spacing[5],
-    paddingTop: spacing[5],
     paddingBottom: spacing[3],
     flexGrow: 1,
   },
 
   /* Question text */
-  question: {
-    fontFamily: fontFamily.headingSemiBold,
-    fontWeight: 500,
-    fontSize: 18,
-    lineHeight: 20,
-    bottom: 15
-  },
+
 
   /* Bottom nav buttons */
   bottomRow: {
@@ -85,6 +58,26 @@ export const createSurveyStyles = ({ colors, spacing }) => ({
     backgroundColor: colors.background,
   },
   halfBtn: { flex: 1 },
+
+  /* Post-match shared styles */
+  postMatchBackBtn: {
+    position: 'absolute',
+    zIndex: 10,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  postMatchFooter: {
+    paddingHorizontal: spacing[5],
+    paddingBottom: spacing[7],
+    paddingTop: spacing[3],
+    backgroundColor: colors.background,
+  },
+  postMatchCtaBtn: {
+    width: '100%',
+    borderRadius: 14,
+  },
 });
 
 // ─── 2. Q1 — option row static styles ────────────────────────────────────────
@@ -98,7 +91,7 @@ export const createQ1OptionStyles = ({ colors }) => ({
     borderWidth: 1.5,
     borderColor: colors.border,
     marginBottom: 10,
-    backgroundColor: '#FAFAFA',
+    backgroundColor:  colors.backgroundSecondary,
   },
   rowSelected: {
     flexDirection: 'row',
@@ -107,8 +100,8 @@ export const createQ1OptionStyles = ({ colors }) => ({
     borderRadius: 12,
     height: 48,
     borderWidth: 1.5,
-    borderColor: '#3685C6',
-    backgroundColor: '#EBF3F9',
+    borderColor: colors.primary,
+    backgroundColor: colors.backgroundTertiary,
     marginBottom: 10,
   },
   label: { flex: 1 },
@@ -141,7 +134,7 @@ export const createQ2ExtraStyles = ({ colors, spacing }) => ({
     overflow: 'hidden',
   },
   sliderWrapper: {
-    paddingHorizontal: spacing[3],
+    paddingHorizontal: spacing[5],
   },
   valueWrapper: {
     alignItems: 'center',

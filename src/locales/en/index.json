@@ -25,9 +25,23 @@
     "robiAlsoFoundYouAGreatBuddy": "Robi also found you a great AI Buddy",
     "meetYourAiBuddy": "Meet your new AI Buddy",
     "hereIsWhereYouWillFindEmma": "Here's where you'll find Emma",
-    "hereYouCanExploreYourRealBuddyMatches": "Here you can explore your real Buddy matches"
+    "hereYouCanExploreYourRealBuddyMatches": "Here you can explore your real Buddy matches",
+    "matchPercent": "{{percent}}% Match"
   },
-
+  "matchLoading": {
+    "stage1": "Give me a second…",
+    "stage2": "Comparing goals…",
+    "stage3": "Checking compatibility…",
+    "stage4": "Finding your best match…",
+    "subtitle": "I'm finding someone who gets you."
+  },
+  "aiBuddy": {
+    "buddyName": "Emma",
+    "buddyTag": "(Strict Coach)",
+    "buddyBio": "Emma is direct but supportive, helping you stay focused and consistent every day.",
+    "alignmentText": "You and Emma are aligned on steady progress and accountability.",
+    "infoText": "You can see why you were matched on Emma's profile. You can switch Buddies anytime."
+  },
   "validation": {
     "emailRequired": "Email is required",
     "emailInvalid": "Please enter a valid email address",
@@ -41,14 +55,37 @@
     "fieldRequired": "This field is required",
     "firstNameInvalid": "Please enter a valid first name",
     "usernameTooShort": "Username must be at least 3 characters",
-    "passwordComplex": "Password must contain at least 8 characters, uppercase, lowercase, number and special character"
+    "passwordComplex": "Password must contain at least 8 characters, uppercase, lowercase, number and special character",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordsDoNotMatch": "Passwords do not match"
   },
-
   "auth": {
     "signUp": {
       "heading": "Join the community",
       "subheading": "Start your journey with support that\nactually works",
-      "emailPlaceholder": "Example@gmail.com",
+      "emailPlaceholder": "Example@gmail.com"
+    },
+    "social": {
+      "apple": "Apple",
+      "google": "Google",
+      "facebook": "Facebook"
+    },
+    "common": {
+      "alreadyHaveAccount": "Already have account? ",
+      "dontHaveAccount": "Don't have an account? ",
+      "logIn": "Log in"
+    },
+    "setupProfile": {
+      "heading": "Set up your profile",
+      "subheading": "This helps us personalize your experience",
+      "firstNameLabel": "First name",
+      "firstNamePlaceholder": "Jaclyn",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "e.g. johnfit123",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "referralLabel": "Referral Code (Optional)",
+      "referralPlaceholder": "Enter code",
       "alreadyHaveAccount": "Already have account? "
     },
     "login": {
@@ -65,31 +102,48 @@
       "rememberMe": "Remember me",
       "forgotPassword": "Forgot Password?"
     },
-    "setupProfile": {
-      "heading": "Set up your profile",
-      "subheading": "This helps us personalize your experience",
-      "firstNameLabel": "First name",
-      "firstNamePlaceholder": "Jaclyn",
-      "usernameLabel": "Username",
-      "usernamePlaceholder": "e.g. johnfit123",
-      "passwordLabel": "Password",
-      "passwordPlaceholder": "Enter password",
-      "referralLabel": "Referral Code (Optional)",
-      "referralPlaceholder": "Enter code",
-      "alreadyHaveAccount": "Already have account? "
+    "forgotPassword": {
+      "heading": "Forgot Password?",
+      "subheading": "Enter the email address associated with your account and we'll send you a verification code to reset your password.",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Enter your email",
+      "sendResetLink": "Send Reset Link"
     },
-    "social": {
-      "apple": "Apple",
-      "google": "Google",
-      "facebook": "Facebook"
+    "verificationCode": {
+      "heading": "Check your email for code",
+      "subheadingPrefix": "We've sent a verification code to your",
+      "subheadingSuffix": "email. Please check your inbox and enter your code.",
+      "continue": "Continue",
+      "resendCode": "Resend Code"
     },
-    "common": {
-      "alreadyHaveAccount": "Already have account? ",
-      "dontHaveAccount": "Don't have an account? ",
-      "logIn": "Log in"
+    "changePassword": {
+      "heading": "Create New Password",
+      "subheading": "Your new password must be different from previous passwords.",
+      "newPasswordPlaceholder": "Enter New password",
+      "confirmPasswordPlaceholder": "Confirm New Password",
+      "resetPassword": "Reset Password",
+      "cancelBackToSignIn": "Cancel & Back to Sign In"
+    },
+    "passwordResetSuccess": {
+      "heading": "Password Reset Successful",
+      "subheading": "Your password has been successfully updated. You can now use your new password to log in.",
+      "backToSignIn": "Back to Sign In"
     }
   },
-
+  "modals": {
+    "accountCreated": {
+      "title": "Account Created!",
+      "subtitle": "Let's continue setting up your profile"
+    },
+    "uploadProfilePhoto": {
+      "title": "Upload Profile Photo",
+      "takePhoto": "Take Photo",
+      "chooseGallery": "Choose from Gallery"
+    },
+    "selectCountry": {
+      "title": "Choose your country"
+    }
+  },
   "basicInfo": {
     "heading": "Let's get a quick sense of you",
     "genderLabel": "Gender",
@@ -106,35 +160,16 @@
     "unitKg": "Kg",
     "unitLbs": "lbs"
   },
-
   "uploadImage": {
     "heading": "Upload Your Image",
     "subtitle": "Upload a photo of yourself holding\nyour valid ID for verifications",
     "hint": "People who upload a photo get 85% more support",
     "tapToUpload": "Tap to upload photo",
+    "uploadAgain": "Upload Again",
     "uploadHint": "PNG or JPG (max. 800x600px)",
     "uploading": "Uploading Photo...",
     "skip": "Skip"
   },
-
-  "modals": {
-    "accountCreated": {
-      "title": "Account Created!",
-      "subtitle": "Let's continue setting up your profile"
-    },
-    "uploadProfilePhoto": {
-      "title": "Upload Profile Photo",
-      "subtitle": "Choose how you would like to select your photo",
-      "takePhoto": "Take Photo",
-      "takePhotoDesc": "Use camera to capture",
-      "chooseGallery": "Choose Gallery",
-      "chooseGalleryDesc": "Select from library"
-    },
-    "selectCountry": {
-      "title": "Select Country"
-    }
-  },
-
   "survey": {
     "welcome": {
       "title": "Find your ideal buddy",
@@ -206,5 +241,28 @@
       "q6Left": "Not important",
       "q6Right": "Very important"
     }
+  },
+  "home": {
+    "tabs": {
+      "home": "Home",
+      "buddies": "Buddies",
+      "create": "Create",
+      "notifications": "Notification",
+      "robi": "Robi"
+    },
+    "topTabs": {
+      "trending": "Trending",
+      "wlb": "WLB",
+      "buddies": "Buddies",
+      "groups": "Groups"
+    },
+    "comingSoon": "Coming Soon"
+  },
+  "drawer": {
+    "home": "Home",
+    "profile": "Profile",
+    "settings": "Settings",
+    "theme": "Theme",
+    "logout": "Log Out"
   }
 }

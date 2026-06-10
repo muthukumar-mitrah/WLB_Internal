@@ -5,6 +5,7 @@ import {
   ScrollView,
   StatusBar,
   FlatList,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
@@ -14,7 +15,7 @@ import {
   SafeContainer,
   AppModal,
 } from '../../../components/common';
-import RulerPicker from '../../../components/common/RulerPicker';
+import SliderPicker from '../../../components/common/SliderPicker';
 import DateWheelPicker from '../../../components/common/DateWheelPicker';
 import { COUNTRIES } from '../../../constants/countries';
 import { useTranslation } from '../../../i18n/useTranslation';
@@ -22,10 +23,17 @@ import createStyles from './styles';
 import { ROUTES } from '../../../constants/index';
 
 const GENDER_KEYS = [
-  { value: 'Male',   labelKey: 'basicInfo.genderMale' },
+  { value: 'Male', labelKey: 'basicInfo.genderMale' },
   { value: 'Female', labelKey: 'basicInfo.genderFemale' },
-  { value: 'Other',  labelKey: 'basicInfo.genderOther' },
+  { value: 'Other', labelKey: 'basicInfo.genderOther' },
 ];
+
+const codeToFlag = (code = '') =>
+  code
+    .toUpperCase()
+    .split('')
+    .map(ch => String.fromCodePoint(0x1f1e6 + ch.charCodeAt(0) - 65))
+    .join('');
 
 const BasicInfoScreen = ({ navigation }) => {
   const { colors, spacing, borderRadius } = useTheme();
@@ -35,42 +43,52 @@ const BasicInfoScreen = ({ navigation }) => {
     [colors, spacing, borderRadius]
   );
 
-  // Form State
   const [gender, setGender] = useState('Male');
   const [country, setCountry] = useState('');
-
   const [height, setHeight] = useState(1.45);
   const [heightUnit, setHeightUnit] = useState('m');
-
   const [weight, setWeight] = useState(135);
   const [weightUnit, setWeightUnit] = useState('lbs');
-
   const [dob, setDob] = useState(new Date(2005, 0, 25));
-
-  // Modals visibility
   const [activeModal, setActiveModal] = useState(null);
+  const [countrySearch, setCountrySearch] = useState('');
 
-  // Formatters
   const formattedDob = useMemo(() => {
     return dob.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   }, [dob]);
 
   const selectedCountry = useMemo(() => {
-    return COUNTRIES.find(c => c.value === country)?.label || '';
+    return COUNTRIES.find(c => c.value === country) || null;
   }, [country]);
 
-  // Sort countries: selected one at top
-  const sortedCountries = useMemo(() => {
-    if (!country) return COUNTRIES;
-    const selected = COUNTRIES.find(c => c.value === country);
-    const rest = COUNTRIES.filter(c => c.value !== country);
-    return selected ? [selected, ...rest] : COUNTRIES;
-  }, [country]);
+  // Filter + sort: selected country always at top when no search query
+  const filteredCountries = useMemo(() => {
+    const q = countrySearch.trim().toLowerCase();
+    const list = q
+      ? COUNTRIES.filter(c => c.label.toLowerCase().includes(q))
+      : COUNTRIES;
 
-  // Handlers
+    if(!country || q) return list;
+
+    const selected = list.find(c => c.value === country);
+    const rest = list.filter(c => c.value !== country);
+    return selected ? [selected, ...rest] : list;
+  }, [country, countrySearch]);
+
   const handleNext = useCallback(() => {
     navigation.navigate(ROUTES.BASIC_INFO2);
   }, [navigation]);
+
+  const handleOpenCountry = useCallback(() => {
+    setCountrySearch('');
+    setActiveModal('country');
+  }, []);
+
+  const handleSelectCountry = useCallback((value) => {
+    setCountry(value);
+    setActiveModal(null);
+    setCountrySearch('');
+  }, []);
 
   const renderCountryItem = useCallback(({ item }) => {
     const isSelected = item.value === country;
@@ -80,30 +98,29 @@ const BasicInfoScreen = ({ navigation }) => {
           styles.countryItem,
           isSelected && styles.countryItemSelected,
         ]}
-        onPress={() => {
-          setCountry(item.value);
-          setActiveModal(null);
-        }}
+        onPress={() => handleSelectCountry(item.value)}
+        activeOpacity={0.7}
       >
-        <AppText
-          variant="body"
-          color={isSelected ? colors.primary : colors.textPrimary}
-          style={isSelected ? { fontWeight: '600' } : undefined}
-        >
-          {item.label}
-        </AppText>
+        <View style={styles.countryItemLeft}>
+          <AppText style={styles.countryFlag}>{codeToFlag(item.value)}</AppText>
+          <AppText
+            variant="body"
+            color={isSelected ? colors.primary : colors.textPrimary}
+            style={isSelected ? { fontWeight: '600' } : undefined}
+          >
+            {item.label}
+          </AppText>
+        </View>
         {isSelected && (
           <Icon name="checkmark-circle" size={20} color={colors.primary} />
         )}
       </TouchableOpacity>
     );
-  }, [colors, country, styles]);
+  }, [colors, country, styles, handleSelectCountry]);
 
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} translucent={false} />
-
-      {/* ── Header ── */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBtn}>
           <Icon name="chevron-back" size={24} color={colors.textPrimary} />
@@ -116,18 +133,14 @@ const BasicInfoScreen = ({ navigation }) => {
           <AppText variant="bodyMedium" color={colors.primary}>{t('common.buttons.skip')}</AppText>
         </TouchableOpacity>
       </View>
-
-      {/* ── Scrollable Content ── */}
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <AppText variant="h2" color={colors.textPrimary} style={styles.heading}>
+        <AppText variant="h3" color={colors.textPrimary} style={styles.heading}>
           {t('basicInfo.heading')}
         </AppText>
-
-        {/* ── Gender ── */}
         <AppText variant="body" style={styles.sectionLabel}>{t('basicInfo.genderLabel')}</AppText>
         <View style={styles.genderRow}>
           {GENDER_KEYS.map((g) => (
@@ -142,24 +155,32 @@ const BasicInfoScreen = ({ navigation }) => {
             </TouchableOpacity>
           ))}
         </View>
-
-        {/* ── Country ── */}
         <AppText variant="body" style={styles.sectionLabel}>{t('basicInfo.countryLabel')}</AppText>
         <TouchableOpacity
           style={[styles.pickerInput, activeModal === 'country' && styles.pickerInputActive]}
-          onPress={() => setActiveModal('country')}
+          onPress={handleOpenCountry}
+          activeOpacity={0.8}
         >
-          <AppText variant="body" style={selectedCountry ? styles.pickerText : styles.pickerPlaceholder}>
-            {selectedCountry || t('basicInfo.countryPlaceholder')}
-          </AppText>
+          {selectedCountry ? (
+            <View style={styles.countryPickerValue}>
+              <AppText style={styles.countryPickerFlag}>
+                {codeToFlag(selectedCountry.value)}
+              </AppText>
+              <AppText variant="body" style={styles.pickerText}>
+                {selectedCountry.label}
+              </AppText>
+            </View>
+          ) : (
+            <AppText variant="body" style={styles.pickerPlaceholder}>
+              {t('basicInfo.countryPlaceholder')}
+            </AppText>
+          )}
           <Icon
             name={activeModal === 'country' ? 'chevron-up' : 'chevron-down'}
             size={18}
             color={colors.textSecondary}
           />
         </TouchableOpacity>
-
-        {/* ── Height ── */}
         <AppText variant="body" style={styles.sectionLabel}>{t('basicInfo.heightLabel')}</AppText>
         <TouchableOpacity
           style={[styles.pickerInput, activeModal === 'height' && styles.pickerInputActive]}
@@ -169,8 +190,6 @@ const BasicInfoScreen = ({ navigation }) => {
             {height.toFixed(2)} {heightUnit}
           </AppText>
         </TouchableOpacity>
-
-        {/* ── Weight ── */}
         <AppText variant="body" style={styles.sectionLabel}>{t('basicInfo.weightLabel')}</AppText>
         <TouchableOpacity
           style={[styles.pickerInput, activeModal === 'weight' && styles.pickerInputActive]}
@@ -180,8 +199,6 @@ const BasicInfoScreen = ({ navigation }) => {
             {weight} {weightUnit}
           </AppText>
         </TouchableOpacity>
-
-        {/* ── Date of Birth ── */}
         <AppText variant="body" style={styles.sectionLabel}>{t('basicInfo.dobLabel')}</AppText>
         <TouchableOpacity
           style={[styles.pickerInput, activeModal === 'dob' && styles.pickerInputActive]}
@@ -192,8 +209,6 @@ const BasicInfoScreen = ({ navigation }) => {
           </AppText>
         </TouchableOpacity>
       </ScrollView>
-
-      {/* ── Next Button (Fixed at bottom) ── */}
       <View style={styles.bottomBtnContainer}>
         <Button
           title={t('common.buttons.next')}
@@ -202,19 +217,42 @@ const BasicInfoScreen = ({ navigation }) => {
           style={styles.nextBtn}
         />
       </View>
-
-      {/* ── Country Modal ── */}
-      <AppModal visible={activeModal === 'country'} onClose={() => setActiveModal(null)} title={t('modals.selectCountry.title')}>
+      <AppModal
+        visible={activeModal === 'country'}
+        onClose={() => setActiveModal(null)}
+        title={t('modals.selectCountry.title')}
+      >
+        <View style={styles.countrySearchWrapper}>
+          <TextInput
+            style={[styles.countrySearchInput, { color: colors.textPrimary }]}
+            placeholder={'Search country...'}
+            placeholderTextColor={colors.textSecondary}
+            value={countrySearch}
+            onChangeText={setCountrySearch}
+            autoCorrect={false}
+            autoCapitalize="words"
+            clearButtonMode="while-editing"
+          />
+          <Icon name="search-outline" size={16} color={colors.textSecondary} style={styles.countrySearchIcon} />
+        </View>
         <FlatList
-          data={sortedCountries}
+          data={filteredCountries}
           keyExtractor={(item) => item.value}
           renderItem={renderCountryItem}
           showsVerticalScrollIndicator={false}
-          style={{ maxHeight: 400 }}
+          style={{ height: 450, marginBottom: spacing[4] }}
+          keyboardShouldPersistTaps="handled"
+          ListEmptyComponent={
+            <AppText
+              variant="body"
+              color={colors.textSecondary}
+              style={styles.countryEmptyText}
+            >
+              No countries found
+            </AppText>
+          }
         />
       </AppModal>
-
-      {/* ── Height Modal ── */}
       <AppModal
         visible={activeModal === 'height'}
         onClose={() => setActiveModal(null)}
@@ -238,13 +276,11 @@ const BasicInfoScreen = ({ navigation }) => {
               <AppText style={[styles.toggleText, heightUnit === 'm' && styles.toggleTextActive]}>{t('basicInfo.unitMeters')}</AppText>
             </TouchableOpacity>
           </View>
-
-          <View style={styles.valueTextContainer}>
+          <View style={[styles.valueTextContainer]}>
             <AppText style={styles.valueText}>{height.toFixed(2)}</AppText>
             <AppText style={styles.unitText}>{heightUnit}</AppText>
           </View>
-
-          <RulerPicker
+          <SliderPicker
             key={`height-${heightUnit}`}
             min={heightUnit === 'm' ? 1.0 : 3.0}
             max={heightUnit === 'm' ? 2.5 : 8.0}
@@ -257,8 +293,6 @@ const BasicInfoScreen = ({ navigation }) => {
           />
         </View>
       </AppModal>
-
-      {/* ── Weight Modal ── */}
       <AppModal
         visible={activeModal === 'weight'}
         onClose={() => setActiveModal(null)}
@@ -282,13 +316,11 @@ const BasicInfoScreen = ({ navigation }) => {
               <AppText style={[styles.toggleText, weightUnit === 'lbs' && styles.toggleTextActive]}>{t('basicInfo.unitLbs')}</AppText>
             </TouchableOpacity>
           </View>
-
           <View style={styles.valueTextContainer}>
             <AppText style={styles.valueText}>{Math.round(weight)}</AppText>
             <AppText style={styles.unitText}>{weightUnit}</AppText>
           </View>
-
-          <RulerPicker
+          <SliderPicker
             key={`weight-${weightUnit}`}
             min={weightUnit === 'lbs' ? 50 : 30}
             max={weightUnit === 'lbs' ? 400 : 200}
@@ -301,8 +333,6 @@ const BasicInfoScreen = ({ navigation }) => {
           />
         </View>
       </AppModal>
-
-      {/* ── DOB Modal ── */}
       <AppModal
         visible={activeModal === 'dob'}
         onClose={() => setActiveModal(null)}

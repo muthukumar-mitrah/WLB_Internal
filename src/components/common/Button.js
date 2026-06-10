@@ -106,18 +106,18 @@ const getVariantStyles = (variant, colors) => {
         textColor: colors.primary,
         loaderColor: colors.primary,
       };
+    case 'gray':
+      return {
+        container: { backgroundColor: colors.backgroundTertiary },
+        textColor: colors.textPrimary,
+        loaderColor: colors.textPrimary,
+      };
     case 'danger':
       return {
         container: {backgroundColor: colors.error},
         textColor: colors.white,
         loaderColor: colors.white,
       };
-    case 'gray':
-      return {
-        container: { backgroundColor: "#F5F5F5" },
-        textColor: colors.textBlack,
-        loaderColor: colors.textBlack,
-      }
     default:
       return {
         container: {backgroundColor: colors.primary},

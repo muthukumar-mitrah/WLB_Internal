@@ -8,16 +8,15 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { useTheme } from '../../../theme';
 import { AppText, Button, SafeContainer, AppModal } from '../../../components/common';
-import { ROUTES } from '../../../constants';
+import MediaPicker from '../../../components/common/MediaPicker';
 import { useTranslation } from '../../../i18n/useTranslation';
+import { ROUTES } from '../../../constants';
+import { useTheme } from '../../../theme';
 import createStyles from './styles';
 
 // ─── Upload Zone ─────────────────────────────────────────────────────────────
-// Shown when no file is selected
-const UploadZone = memo(({ onPress, styles, colors, t }) => (
+const UploadZone = memo(({ onPress, styles, t, isImageSelected }) => (
   <TouchableOpacity style={styles.uploadZone} onPress={onPress} activeOpacity={0.8}>
     <View style={styles.uploadIconCircle}>
       <Image
@@ -26,14 +25,13 @@ const UploadZone = memo(({ onPress, styles, colors, t }) => (
         resizeMode="contain"
       />
     </View>
-    <AppText style={styles.uploadLabel}>{t('uploadImage.tapToUpload')}</AppText>
+    <AppText style={styles.uploadLabel}>{isImageSelected ? t('uploadImage.uploadAgain') : t('uploadImage.tapToUpload')}</AppText>
     <AppText style={styles.uploadHint}>{t('uploadImage.uploadHint')}</AppText>
   </TouchableOpacity>
 ));
 
 // ─── Progress Zone ────────────────────────────────────────────────────────────
-// Shown while the photo is being uploaded
-const ProgressZone = memo(({ progress, fileName, styles, colors, t }) => (
+const ProgressZone = memo(({ progress, fileName, styles, t }) => (
   <View style={styles.uploadZone}>
     <View style={styles.progressFileIconCircle}>
       <Image
@@ -75,14 +73,14 @@ const UploadImageScreen = ({ navigation }) => {
     setUploadProgress(0);
     setFileName(name);
 
-    if (timerRef.current) {
+    if(timerRef.current) {
       clearInterval(timerRef.current);
     }
 
     let current = 0;
     timerRef.current = setInterval(() => {
-      current += Math.random() * 15 + 10; // random increment
-      if (current >= 100) {
+      current += Math.random() * 15 + 10;
+      if(current >= 100) {
         current = 100;
         clearInterval(timerRef.current);
         setIsUploading(false);
@@ -92,18 +90,17 @@ const UploadImageScreen = ({ navigation }) => {
   }, []);
 
   const handleImagePickerResponse = useCallback((response) => {
-    if (response.didCancel) {
-      return;
-    }
-    if (response.errorCode) {
-      Alert.alert('Error', response.errorMessage || 'An error occurred while picking the image.');
-      return;
-    }
-    if (response.assets && response.assets.length > 0) {
-      const asset = response.assets[0];
+    if(!response) return;
+    if(response.success) {
+      const asset = response.asset;
       setSelectedImage(asset.uri);
       simulateUpload(asset.fileName || 'profile_image.jpg');
+    } else {
+      if(response.error && response.error !== 'cancelled') {
+        Alert.alert('Error', typeof response.error === 'string' ? response.error : 'An error occurred while picking the image.');
+      }
     }
+    setIsModalVisible(false);
   }, [simulateUpload]);
 
   // Opens custom bottom sheet modal
@@ -120,8 +117,6 @@ const UploadImageScreen = ({ navigation }) => {
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} translucent={false} />
-
-      {/* ── Header ── */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBtn}>
           <Icon name="chevron-back" size={24} color={colors.textPrimary} />
@@ -134,8 +129,6 @@ const UploadImageScreen = ({ navigation }) => {
           <AppText variant="bodyMedium" color={colors.primary}>{t('common.buttons.skip')}</AppText>
         </TouchableOpacity>
       </View>
-
-      {/* ── Scrollable Content ── */}
       <ScrollView
         contentContainerStyle={styles.uploadScrollContent}
         showsVerticalScrollIndicator={false}
@@ -143,12 +136,9 @@ const UploadImageScreen = ({ navigation }) => {
         <AppText variant="h2" color={colors.textPrimary} style={styles.uploadHeading}>
           {t('uploadImage.heading')}
         </AppText>
-
         <AppText variant="body" color={colors.textSecondary} style={styles.subtitle}>
           {t('uploadImage.subtitle')}
         </AppText>
-
-        {/* ── Avatar Preview ── */}
         <View style={styles.avatarWrapper}>
           <View style={styles.avatarCircle}>
             {selectedImage && uploadProgress === 100 ? (
@@ -173,13 +163,9 @@ const UploadImageScreen = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View>
-
-        {/* ── Hint ── */}
         <AppText style={[styles.hint, { color: colors.textSecondary }]}>
           {t('uploadImage.hint')}
         </AppText>
-
-        {/* ── Upload / Progress Zone ── */}
         {showingProgress ? (
           <ProgressZone
             progress={uploadProgress}
@@ -194,11 +180,10 @@ const UploadImageScreen = ({ navigation }) => {
             styles={styles}
             colors={colors}
             t={t}
+            isImageSelected={!!selectedImage && uploadProgress === 100}
           />
         )}
       </ScrollView>
-
-      {/* ── Next Button (Fixed at bottom) ── */}
       <View style={styles.bottomBtnContainer}>
         <Button
           title={t('common.buttons.next')}
@@ -207,67 +192,17 @@ const UploadImageScreen = ({ navigation }) => {
           style={styles.nextBtn}
         />
       </View>
-
-      {/* ── Camera/Gallery Selector Bottom Sheet ── */}
       <AppModal
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         showHandle={true}
-        showCloseButton={true}
+        showCloseButton={false}
       >
-        <AppText style={styles.modalTitle}>{t('modals.uploadProfilePhoto.title')}</AppText>
-        <AppText style={styles.modalSubtitle}>
-          {t('modals.uploadProfilePhoto.subtitle')}
-        </AppText>
-
-        <View style={styles.photoOptionsRow}>
-          <TouchableOpacity
-            style={styles.photoOptionCard}
-            onPress={() => {
-              setIsModalVisible(false);
-              setTimeout(() => {
-                const options = {
-                  mediaType: 'photo',
-                  maxWidth: 800,
-                  maxHeight: 600,
-                  quality: 0.8,
-                  saveToPhotos: false,
-                };
-                launchCamera(options, handleImagePickerResponse);
-              }, 300);
-            }}
-            activeOpacity={0.7}
-          >
-            <View style={[styles.photoOptionIconBg, { backgroundColor: colors.primarySurface }]}>
-              <Icon name="camera" size={28} color={colors.primary} />
-            </View>
-            <AppText style={styles.photoOptionTitle}>{t('modals.uploadProfilePhoto.takePhoto')}</AppText>
-            <AppText style={styles.photoOptionDesc}>{t('modals.uploadProfilePhoto.takePhotoDesc')}</AppText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.photoOptionCard}
-            onPress={() => {
-              setIsModalVisible(false);
-              setTimeout(() => {
-                const options = {
-                  mediaType: 'photo',
-                  maxWidth: 800,
-                  maxHeight: 600,
-                  quality: 0.8,
-                };
-                launchImageLibrary(options, handleImagePickerResponse);
-              }, 300);
-            }}
-            activeOpacity={0.7}
-          >
-            <View style={[styles.photoOptionIconBg, { backgroundColor: colors.successSurface }]}>
-              <Icon name="image" size={28} color={colors.success} />
-            </View>
-            <AppText style={styles.photoOptionTitle}>{t('modals.uploadProfilePhoto.chooseGallery')}</AppText>
-            <AppText style={styles.photoOptionDesc}>{t('modals.uploadProfilePhoto.chooseGalleryDesc')}</AppText>
-          </TouchableOpacity>
-        </View>
+        <MediaPicker
+          onSelect={handleImagePickerResponse}
+          closeModal={() => setIsModalVisible(false)}
+          title={t('modals.uploadProfilePhoto.title')}
+        />
       </AppModal>
     </SafeContainer>
   );

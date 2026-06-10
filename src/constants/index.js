@@ -1,9 +1,9 @@
 /**
  * Global app constants
  */
-import {Dimensions, Platform} from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
-const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // Base design dimensions (from design spec/Figma)
 const BASE_WIDTH = 375;
@@ -41,15 +41,10 @@ const ROUTES = {
   AUTH: 'Auth',
   SIGN_UP: 'SignUp',
   SETUP_PROFILE: 'SetupProfile',
-  BASIC_INFO: 'BasicInfo',
-  BASIC_INFO2: 'BasicInfo2',
   LOGIN: 'Login',
   LOGIN_PASSWORD: 'LoginPassword',
-  FORGOT_PASSWORD: 'ForgotPassword',
-  OTP_VERIFY: 'OtpVerify',
-  RESET_PASSWORD: 'ResetPassword',
-
-  // Survey
+  BASIC_INFO: 'BasicInfo',
+  BASIC_INFO2: 'BasicInfo2',
   WELCOME_SURVEY: 'WelcomeSurvey',
   SURVEY_Q1: 'SurveyQ1',
   SURVEY_Q2: 'SurveyQ2',
@@ -65,15 +60,20 @@ const ROUTES = {
   AI_BUDDY: 'AiBuddy',
   FIND_EMMA: 'FindEmma',
   EXPLORE_MATCHES: 'ExploreMatches',
+  FORGOT_PASSWORD: 'ForgotPassword',
+  VERIFICATION_CODE: 'VerificationCode',
+  CHANGE_PASSWORD: 'ChangePassword',
+  PASSWORD_RESET_SUCCESS: 'PasswordResetSuccess',
 
-  // Main
+  // Main App
   MAIN: 'Main',
+  DRAWER: 'Drawer',
+  HOME_TABS: 'HomeTabs',
   HOME: 'Home',
-  PROFILE: 'Profile',
-  SETTINGS: 'Settings',
-
-  // Onboarding
-  ONBOARDING: 'Onboarding',
+  BUDDIES: 'Buddies',
+  CREATE_POST: 'CreatePost',
+  NOTIFICATIONS: 'Notifications',
+  ROBI: 'Robi',
 };
 
 // Regex patterns
@@ -91,6 +91,13 @@ const ERROR_MESSAGES = {
   TIMEOUT_ERROR: 'Request timed out. Please try again.',
   UNAUTHORIZED: 'Session expired. Please login again.',
 };
+
+const GOOGLE_SIGN_IN_CONFIG = {
+  webClientId: '437241230236-8a7di109k3qqe2vva5oughh3cfs24dlm.apps.googleusercontent.com',
+  iosClientId: "437241230236-ad70fb4vipefk42a36m5tgf4e77ppqs5.apps.googleusercontent.com",
+  offlineAccess: true,
+  forceCodeForRefreshToken: true
+}
 
 // HTTP status codes
 const HTTP_STATUS = {
@@ -122,4 +129,5 @@ export {
   REGEX,
   ERROR_MESSAGES,
   HTTP_STATUS,
+  GOOGLE_SIGN_IN_CONFIG
 };

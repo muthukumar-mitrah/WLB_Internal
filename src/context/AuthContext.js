@@ -8,6 +8,18 @@ import authService from '../api/services/authService';
 import { storage } from '../utils/storage';
 import { STORAGE_KEYS } from '../constants';
 import { getApiErrorMessage } from '../utils/apiErrorHandler';
+import {
+  signInWithGoogle as googleSignIn,
+  logoutGoogle as googleLogout,
+} from '../services/googleAuth';
+import {
+  signInWithFacebook as fbSignIn,
+  logoutFacebook as fbLogout,
+} from '../services/facebookAuth';
+import {
+  signInWithApple as appleSignIn,
+  logoutApple as appleLogout,
+} from '../services/appleAuth';
 
 // ─── Initial State ────────────────────────────────────────────────────────────
 const initialState = {
@@ -62,8 +74,8 @@ export const AuthProvider = ({ children }) => {
       const { data } = await authService.signUp(payload);
       if (data.token) {
         await storage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
+        dispatch({ type: AUTH_ACTIONS.AUTH_SUCCESS, payload: data.token });
       }
-      dispatch({ type: AUTH_ACTIONS.AUTH_SUCCESS, payload: data.token });
     } catch (error) {
       dispatch({ type: AUTH_ACTIONS.SET_ERROR, payload: getApiErrorMessage(error) });
     }
@@ -73,11 +85,13 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
     try {
       const { data } = await authService.login(payload);
-      await storage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
-      if (data.refresh_token) {
+      if(data.token) {
+        await storage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
+        dispatch({ type: AUTH_ACTIONS.AUTH_SUCCESS, payload: data.token });
+      }
+      if(data.refresh_token) {
         await storage.setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refresh_token);
       }
-      dispatch({ type: AUTH_ACTIONS.AUTH_SUCCESS, payload: data.token });
     } catch (error) {
       dispatch({ type: AUTH_ACTIONS.SET_ERROR, payload: getApiErrorMessage(error) });
     }
@@ -87,9 +101,24 @@ export const AuthProvider = ({ children }) => {
     try {
       await authService.logout();
     } catch { /* ignore server errors on logout */ }
+    googleLogout();
+    fbLogout();
+    appleLogout();
     await storage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
     await storage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
     dispatch({ type: AUTH_ACTIONS.LOGOUT });
+  }, []);
+
+  const signInWithGoogle = useCallback(async () => {
+    return await googleSignIn();
+  }, []);
+
+  const signInWithFacebook = useCallback(async () => {
+    return await fbSignIn();
+  }, []);
+
+  const signInWithApple = useCallback(async () => {
+    return await appleSignIn();
   }, []);
 
   const clearError = useCallback(() => {
@@ -104,6 +133,9 @@ export const AuthProvider = ({ children }) => {
         loginWithEmail,
         logout,
         clearError,
+        signInWithGoogle,
+        signInWithFacebook,
+        signInWithApple,
       }}>
       {children}
     </AuthContext.Provider>

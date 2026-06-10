@@ -44,7 +44,11 @@ const AppFlatList = ({
 
   const Empty = useCallback(() => {
     if (loading) return null;
-    if (ListEmptyComponent) return ListEmptyComponent;
+    if(ListEmptyComponent) {
+      return React.isValidElement(ListEmptyComponent)
+        ? ListEmptyComponent
+        : <ListEmptyComponent />;
+    }
     return (
       <EmptyState
         title={emptyTitle}

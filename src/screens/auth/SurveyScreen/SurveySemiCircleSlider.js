@@ -191,14 +191,13 @@ const SurveySemiCircleSlider = ({
                 }}
               >
                 <AppText
-                  variant="bodyMedium"
+                  variant="titleMedium"
                   color={
                     isSelected
                       ? colors.primary
                       : colors.textSecondary
                   }
                   style={[
-                    styles.labelText,
                     {
                       transform: [
                         {
@@ -310,17 +309,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
-  },
-
-  labelText: {
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '500',
-    includeFontPadding: false,
-  },
-
-  selectedLabel: {
-    fontWeight: '700',
   },
 });
 

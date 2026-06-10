@@ -2,7 +2,7 @@
  * InputBox — themed, accessible text input
  * Supports: label, placeholder, error, left/right icons, secure entry, multiline
  */
-import React, { memo, useState, useRef } from 'react';
+import React, { memo, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import {
   View,
   TextInput,
@@ -10,10 +10,11 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useTheme } from '../../theme';
 import AppText from './AppText';
 
-const InputBox = ({
+const InputBox = forwardRef(({
   label,
   value,
   onChangeText,
@@ -36,11 +37,18 @@ const InputBox = ({
   inputStyle,
   testID,
   ...rest
-}) => {
+}, ref) => {
   const { colors, borderRadius, spacing, fonts, shadows } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const borderAnim = useRef(new Animated.Value(0)).current;
+  const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+    blur: () => inputRef.current?.blur(),
+    clear: () => inputRef.current?.clear(),
+  }));
 
   const handleFocus = e => {
     setIsFocused(true);
@@ -96,6 +104,7 @@ const InputBox = ({
         )}
 
         <TextInput
+          ref={inputRef}
           testID={testID}
           value={value}
           onChangeText={onChangeText}
@@ -131,9 +140,7 @@ const InputBox = ({
             onPress={() => setIsPasswordVisible(p => !p)}
             style={styles.rightIcon}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <AppText variant="caption" color={colors.textTertiary}>
-              {isPasswordVisible ? 'Hide' : 'Show'}
-            </AppText>
+            <Ionicons name={isPasswordVisible ? 'eye' : 'eye-off'} color={colors.textTertiary} size={20} />
           </TouchableOpacity>
         ) : rightIcon ? (
           <View style={styles.rightIcon}>{rightIcon}</View>
@@ -151,7 +158,7 @@ const InputBox = ({
       ) : null}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

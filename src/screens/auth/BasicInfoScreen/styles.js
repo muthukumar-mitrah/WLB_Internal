@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { fontFamily } from '../../../theme/fonts';
 
 const createStyles = ({ colors, spacing, borderRadius }) =>
   StyleSheet.create({
@@ -44,8 +45,7 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
     },
     heading: {
       textAlign: 'center',
-      marginVertical: spacing[4],
-      fontSize: 22,
+      marginVertical: spacing[1],
     },
     sectionLabel: {
       marginBottom: spacing[2],
@@ -103,10 +103,8 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: spacing[4],
+      paddingVertical: spacing[3],
       paddingHorizontal: spacing[2],
-      borderBottomWidth: 1,
-      borderColor: colors.border,
     },
     countryItemSelected: {
       backgroundColor: colors.primarySurface,
@@ -114,59 +112,113 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       borderBottomWidth: 0,
       marginBottom: spacing[1],
     },
+    // Flag + label row inside each list item
+    countryItemLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
+    countryFlag: {
+      fontSize: 22,
+      marginRight: spacing[3],
+      lineHeight: 28,
+    },
+    // Selected country shown in the picker trigger row
+    countryPickerValue: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
+    countryPickerFlag: {
+      fontSize: 22,
+      marginRight: spacing[2],
+      lineHeight: 28,
+    },
+    // Search bar inside country modal
+    countrySearchWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.backgroundSecondary,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: borderRadius.md,
+      paddingHorizontal: spacing[3],
+      marginBottom: spacing[3],
+      height: 42,
+    },
+    countrySearchIcon: {
+      marginRight: spacing[2],
+    },
+    countrySearchInput: {
+      flex: 1,
+      fontSize: 14,
+      fontFamily: 'BeVietnamPro-Regular',
+      paddingVertical: 0,
+      height: '100%',
+    },
+    countryEmptyText: {
+      textAlign: 'center',
+      paddingVertical: spacing[6],
+    },
     // Bottom Sheet Modals (Screen 1)
     modalContainer: {
       paddingHorizontal: 0,
       paddingBottom: spacing[8],
-      paddingTop: spacing[4],
+      paddingTop: spacing[8],
       backgroundColor: colors.backgroundSecondary,
     },
     modalContent: {
-      alignItems: 'center',
       width: '100%',
+      height: 250,
     },
     toggleContainer: {
       flexDirection: 'row',
-      backgroundColor: colors.surface,
+      alignSelf: 'center',
+      backgroundColor: colors.backgroundTertiary,
       borderWidth: 1,
       borderColor: colors.border,
       borderRadius: borderRadius.lg,
       padding: 2,
-      marginBottom: spacing[6],
+      marginBottom: spacing[10],
     },
     toggleBtn: {
-      paddingVertical: spacing[2],
-      paddingHorizontal: spacing[4],
+      paddingVertical: spacing[1],
+      paddingHorizontal: spacing[3],
       borderRadius: borderRadius.md,
     },
     toggleBtnActive: {
       backgroundColor: colors.surface,
-      borderColor: colors.primaryLight,
+      borderColor: '#A3C7E5',
       borderWidth: 1,
     },
     toggleText: {
       fontSize: 12,
-      fontWeight: '600',
+      fontWeight: '500',
       color: colors.textSecondary,
+      fontFamily: fontFamily.medium
     },
     toggleTextActive: {
-      color: colors.primary,
+      color: '#265E8D',
     },
     valueTextContainer: {
       flexDirection: 'row',
       alignItems: 'baseline',
-      marginBottom: spacing[2],
+      justifyContent: 'center',
+      marginBottom: spacing[3],
+      overflow: 'visible',
     },
     valueText: {
-      fontSize: 32,
+      fontSize: 26,
       fontWeight: '700',
       color: colors.textPrimary,
+      lineHeight: 28
     },
     unitText: {
       fontSize: 14,
       fontWeight: '600',
       color: colors.textSecondary,
       marginLeft: 4,
+      includeFontPadding: false,
     },
 
     // Screen 2: Upload Image Scrollable Content
@@ -345,6 +397,7 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       justifyContent: 'space-between',
       width: '100%',
       paddingHorizontal: spacing[1],
+      paddingBottom: spacing[5]
     },
     photoOptionCard: {
       flex: 1,

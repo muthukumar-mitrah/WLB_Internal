@@ -2,7 +2,7 @@
  * Responsive sizing utilities
  * Provides scale/font scaling relative to the design base screen (375pt wide)
  */
-import {Dimensions, PixelRatio} from 'react-native';
+import { PixelRatio} from 'react-native';
 import {BASE_WIDTH, BASE_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT} from '../constants';
 
 /**

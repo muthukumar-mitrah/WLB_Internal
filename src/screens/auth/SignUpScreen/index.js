@@ -9,7 +9,9 @@ import {
   ScrollView,
   StatusBar,
   Image,
+  Platform,
 } from 'react-native';
+import { useAuth } from '../../../context/AuthContext';
 import { useTheme } from '../../../theme';
 import {
   AppText,
@@ -42,7 +44,7 @@ const SocialButton = memo(({ iconSource, label, onPress, styles, colors }) => {
 });
 
 // ─── Illustration ─────────────────────────────────────────────────────────────
-const CommunityIllustration = memo(({ colors, styles }) => (
+const CommunityIllustration = memo(({ styles }) => (
   <View style={styles.illustrationWrapper}>
     <View style={styles.mascotContainer}>
       <Image 
@@ -58,7 +60,7 @@ const CommunityIllustration = memo(({ colors, styles }) => (
 const SignUpScreen = ({ navigation }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
-
+  const { signInWithGoogle, signInWithFacebook, signInWithApple } = useAuth();
   const styles = useMemo(
     () => createStyles({ colors, spacing, borderRadius }),
     [colors, spacing, borderRadius],
@@ -86,22 +88,75 @@ const SignUpScreen = ({ navigation }) => {
 
   const handleContinue = useCallback(() => {
     navigation.navigate(ROUTES.WELCOME_SURVEY);
+    // setIsDirty(true);
+    // const validationErrors = validateSignUp(formData);
+
+    // if(Object.keys(validationErrors).length > 0) {
+    //   return;
+    // }
+
+    // navigation.navigate(ROUTES.SETUP_PROFILE, { email: formData.email });
   }, [formData, navigation]);
 
-  const handleSocialLogin = useCallback(provider => {
-    // TODO: integrate actual social auth SDK
-  }, []);
+  const handleSocialLogin = useCallback(async (provider) => {
+    if (provider === 'google') {
+      const res = await signInWithGoogle();
+      if (!res) return;
+      if (res.cancelled) return;
+      if (res.success !== true) return;
+      if (!res.user) return;
+
+      navigation.navigate(ROUTES.SETUP_PROFILE, {
+        email: res.user.email,
+        firstName: res.user.name?.split(' ')[0] || '',
+        socialProvider: 'google',
+        idToken: res.idToken,
+        serverAuthCode: res.serverAuthCode,
+      });
+    }
+
+    if (provider === 'facebook') {
+      const res = await signInWithFacebook();
+      if (!res) return;
+      if (res.cancelled) return;
+      if (res.success !== true) return;
+      if (!res.user) return;
+
+      navigation.navigate(ROUTES.SETUP_PROFILE, {
+        email: res.user.email,
+        firstName: res.user.name?.split(' ')[0] || '',
+        socialProvider: 'facebook',
+        accessToken: res.accessToken,
+        facebookUserId: res.user.id,
+      });
+    }
+
+    if (provider === 'apple') {
+      const res = await signInWithApple();
+      if (!res) return;
+      if (res.cancelled) return;
+      if (res.success !== true) return;
+      if (!res.user) return;
+
+      navigation.navigate(ROUTES.SETUP_PROFILE, {
+        email: res.user.email,
+        firstName: res.user.name?.split(' ')[0] || '',
+        socialProvider: 'apple',
+        identityToken: res.identityToken,
+        authorizationCode: res.authorizationCode,
+        appleUserId: res.user.id,
+      });
+    }
+  }, [navigation, signInWithGoogle, signInWithFacebook, signInWithApple]);
 
   const handleLogin = useCallback(() => {
-    if (navigation?.navigate) {
-      navigation.navigate(ROUTES.LOGIN);
-    }
+    navigation.navigate(ROUTES.LOGIN);
   }, [navigation]);
 
   return (
     <SafeContainer avoidKeyboard edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar
-        barStyle="dark-content"
+        barStyle={colors.statusBar}
         backgroundColor={colors.background}
         translucent={false}
       />
@@ -109,14 +164,14 @@ const SignUpScreen = ({ navigation }) => {
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingHorizontal: spacing[6], paddingBottom: spacing[10] },
+          { paddingHorizontal: spacing[4], paddingBottom: spacing[2] },
         ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
 
         {/* ── Illustration ── */}
-        <View style={{ marginTop: spacing[10], marginBottom: spacing[4] }}>
-          <CommunityIllustration colors={colors} styles={styles} />
+        <View style={{ marginTop: spacing[8], marginBottom: spacing[4] }}>
+          <CommunityIllustration styles={styles} />
         </View>
 
         {/* ── Heading ── */}
@@ -129,7 +184,7 @@ const SignUpScreen = ({ navigation }) => {
         </AppText>
 
         {/* ── Email Input ── */}
-        <View style={{ marginTop: spacing[8] }}>
+        <View style={{ marginTop: spacing[6] }}>
           <InputBox
             testID="signup-email-input"
             placeholder={t('auth.signUp.emailPlaceholder')}
@@ -158,17 +213,20 @@ const SignUpScreen = ({ navigation }) => {
 
         {/* ── Divider ── */}
         <View style={styles.dividerWrapper}>
-          <Divider label={t('common.orContinueWith')} style={styles.divider} />
+          <Divider label={t('common.orContinueWith')} thickness={2} style={styles.divider} />
         </View>
 
         {/* ── Social Buttons ── */}
-        <SocialButton
-          iconSource={require('../../../assets/images/apple.png')}
-          label={t('auth.social.apple')}
-          onPress={() => handleSocialLogin('apple')}
-          styles={styles}
-          colors={colors}
-        />
+        {Platform.OS === 'ios' && (
+          <SocialButton
+            iconSource={require('../../../assets/images/apple.png')}
+            label={t('auth.social.apple')}
+            onPress={() => handleSocialLogin('apple')}
+            styles={styles}
+            colors={colors}
+          />
+        )
+        }
         <SocialButton
           iconSource={require('../../../assets/images/google.png')}
           label={t('auth.social.google')}
@@ -185,9 +243,9 @@ const SignUpScreen = ({ navigation }) => {
         />
 
         {/* ── Login Redirect ── */}
-        <View style={[styles.loginRow, { marginTop: spacing[8] }]}>
+        <View style={[styles.loginRow, { marginTop: spacing[6] }]}>
           <AppText variant="bodyMedium" color={colors.textPrimary}>
-            {t('auth.signUp.alreadyHaveAccount')}
+            {t('auth.common.alreadyHaveAccount')}
           </AppText>
           <TouchableOpacity
             onPress={handleLogin}
@@ -199,7 +257,7 @@ const SignUpScreen = ({ navigation }) => {
         </View>
 
         {/* ── Privacy Policy ── */}
-        <TouchableOpacity style={{ marginTop: spacing[12] }}>
+        <TouchableOpacity style={{ marginTop: spacing[6] }}>
           <AppText variant="caption" color={colors.textSecondary} style={styles.privacy}>
             {t('common.privacyPolicy')}
           </AppText>

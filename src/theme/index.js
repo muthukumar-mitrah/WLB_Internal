@@ -3,12 +3,12 @@
  * Usage: import { useTheme } from '../theme';
  */
 
-import React, { createContext, useContext, useState } from 'react';
-import { useColorScheme } from 'react-native';
-import { lightColors, darkColors } from './colors';
-import { fontFamily, fontSize, fontWeight, lineHeight, letterSpacing, textVariants } from './fonts';
-import { spacing, borderRadius, iconSize, avatarSize, buttonHeight, inputHeight, zIndex } from './spacing';
-import { shadows } from './shadows';
+import React, {createContext, useContext, useState} from 'react';
+import {useColorScheme} from 'react-native';
+import {lightColors, darkColors} from './colors';
+import {fontFamily, fontSize, fontWeight, lineHeight, letterSpacing, textVariants} from './fonts';
+import {spacing, borderRadius, iconSize, avatarSize, buttonHeight, inputHeight, zIndex} from './spacing';
+import {shadows} from './shadows';
 
 // Build theme object from mode
 const buildTheme = mode => {
@@ -17,7 +17,7 @@ const buildTheme = mode => {
     mode,
     isDark: mode === 'dark',
     colors,
-    fonts: { fontFamily, fontSize, fontWeight, lineHeight, letterSpacing },
+    fonts: {fontFamily, fontSize, fontWeight, lineHeight, letterSpacing},
     textVariants,
     spacing,
     borderRadius,
@@ -37,9 +37,9 @@ export const darkTheme = buildTheme('dark');
 
 const ThemeContext = createContext(lightTheme);
 
-export const ThemeProvider = ({ children }) => {
+export const ThemeProvider = ({children}) => {
   const systemScheme = useColorScheme();
-  const [themeMode, setThemeMode] = useState('light');
+  const [themeMode, setThemeMode] = useState(systemScheme || 'light');
 
   const theme = buildTheme(themeMode);
 
@@ -49,7 +49,7 @@ export const ThemeProvider = ({ children }) => {
   const setMode = mode => setThemeMode(mode);
 
   return (
-    <ThemeContext.Provider value={{ ...theme, toggleTheme, setMode }}>
+    <ThemeContext.Provider value={{...theme, toggleTheme, setMode}}>
       {children}
     </ThemeContext.Provider>
   );

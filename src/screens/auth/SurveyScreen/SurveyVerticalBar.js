@@ -35,14 +35,13 @@ const TICK_LARGE_W = 14;
 const TICK_H = 1;
 const BAR_W = CIRCLE / 2 + LINE_W / 2 + TICK_LARGE_W + 6;
 
-const COLOR_SELECTED   = '#D1D5DB';
+const COLOR_SELECTED = '#D1D5DB';
 const COLOR_UNSELECTED = '#3890F4';
-const TICK_COLOR       = '#BCC5D6';
+const TICK_COLOR = '#BCC5D6';
 
-const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, onSelect }) => {
+const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, onSelect, isThumbDrag = false }) => {
   const { colors } = useTheme();
 
-  /* vertical centre of each option row */
   const centers = useMemo(
     () => Array.from({ length: itemCount }, (_, i) => i * (rowHeight + rowGap) + rowHeight / 2),
     [itemCount, rowHeight, rowGap],
@@ -66,28 +65,25 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
       tension: 120,
       friction: 8,
     }).start();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedIndex]);
 
-  // ─── Find nearest option ───────────────────────────────────────────────────
   const snapToNearest = (y) => {
     let best = 0;
     let bestDist = Math.abs(centers[0] - y);
-    for (let i = 1; i < centers.length; i++) {
+    for(let i = 1; i < centers.length; i++) {
       const d = Math.abs(centers[i] - y);
-      if (d < bestDist) { bestDist = d; best = i; }
+      if(d < bestDist) { bestDist = d; best = i; }
     }
     return best;
   };
 
-  // ─── PanResponder ─────────────────────────────────────────────────────────
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder:  () => true,
+      onMoveShouldSetPanResponder: () => true,
 
       onPanResponderGrant: () => {
-        // Stop any running spring and record where we currently are
         thumbY.stopAnimation(val => {
           currentY.current = val;
           dragStartY.current = val;
@@ -97,7 +93,7 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
       onPanResponderMove: (_, gs) => {
         const nextY = Math.max(firstCenter, Math.min(lastCenter, dragStartY.current + gs.dy));
         currentY.current = nextY;
-        thumbY.setValue(nextY);       // direct set — no re-render, perfectly smooth
+        thumbY.setValue(nextY);
       },
 
       onPanResponderRelease: (_, gs) => {
@@ -105,7 +101,6 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
         const snappedIndex = snapToNearest(finalY);
         const snappedY = centers[snappedIndex];
 
-        // Spring-snap to nearest option
         Animated.spring(thumbY, {
           toValue: snappedY,
           useNativeDriver: false,
@@ -114,11 +109,10 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
         }).start();
 
         currentY.current = snappedY;
-        if (onSelect) onSelect(snappedIndex);
+        if(onSelect) onSelect(snappedIndex);
       },
 
       onPanResponderTerminate: () => {
-        // Snap back to wherever we last were
         const snappedIndex = snapToNearest(currentY.current);
         Animated.spring(thumbY, {
           toValue: centers[snappedIndex],
@@ -126,21 +120,19 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
           tension: 140,
           friction: 9,
         }).start();
-        if (onSelect) onSelect(snappedIndex);
+        if(onSelect) onSelect(snappedIndex);
       },
     }),
   ).current;
 
-  // ─── Derived animated values for the two line segments ────────────────────
-  const topLineH    = thumbY;   // blue segment: 0 → thumbY
+  const topLineH = thumbY;
   const bottomLineH = thumbY.interpolate({
-    inputRange:  [firstCenter, lastCenter],
+    inputRange: [firstCenter, lastCenter],
     outputRange: [totalH - firstCenter, totalH - lastCenter],
     extrapolate: 'clamp',
   });
-  const bottomLineTop = thumbY; // gray segment starts at thumbY
+  const bottomLineTop = thumbY;
 
-  /* evenly spaced tick positions */
   const ticks = useMemo(
     () => Array.from({ length: TICK_COUNT }, (_, i) => (i / (TICK_COUNT - 1)) * totalH),
     [totalH],
@@ -148,8 +140,6 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
 
   return (
     <View style={[styles.wrapper, { height: totalH, width: BAR_W }]}>
-
-      {/* ── Tick marks (ruler) ── */}
       {ticks.map((y, i) => {
         const isMajor = (i + 1) % 5 === 0;
         return (
@@ -166,34 +156,28 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
           />
         );
       })}
-
-      {/* ── Blue segment: 0 → thumb ── */}
       <Animated.View
         style={[
           styles.line,
           {
-            left:            lineX - LINE_W / 2,
-            top:             0,
-            height:          topLineH,
+            left: lineX - LINE_W / 2,
+            top: 0,
+            height: topLineH,
             backgroundColor: COLOR_SELECTED,
           },
         ]}
       />
-
-      {/* ── Gray segment: thumb → bottom ── */}
       <Animated.View
         style={[
           styles.line,
           {
-            left:            lineX - LINE_W / 2,
-            top:             bottomLineTop,
-            height:          bottomLineH,
+            left: lineX - LINE_W / 2,
+            top: bottomLineTop,
+            height: bottomLineH,
             backgroundColor: COLOR_UNSELECTED,
           },
         ]}
       />
-
-      {/* ── Draggable thumb (Animated.View for smooth transform) ── */}
       <Animated.View
         style={[
           styles.thumbOuter,
@@ -203,15 +187,10 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
           },
         ]}
         hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
-        {...panResponder.panHandlers}
+        {...(isThumbDrag ? panResponder.panHandlers : {})}
       >
-        {/* Left-pointing triangle ◄ */}
         <View style={[styles.triangle, { borderRightColor: '#21548E' }]} />
-
-        {/* Glow halo */}
         <View style={[styles.glow, { backgroundColor: `${COLOR_SELECTED}40` }]} />
-
-        {/* Filled circle */}
         <View
           style={[
             styles.circle,
@@ -265,10 +244,9 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
     marginRight: TRI_GAP,
   },
-  
+
   glow: {
     position: 'absolute',
-    // In the row, circle starts at (TRI_H + TRI_GAP); glow is centred on circle
     left: TRI_H + TRI_GAP - C_GLOW / 2,
     top: -(C_GLOW / 2),
     width: CIRCLE + C_GLOW,

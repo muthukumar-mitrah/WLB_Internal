@@ -34,9 +34,9 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       fontSize: 16,
     },
     continueBtn: {
-      marginTop: spacing[4],
       borderRadius: borderRadius.md,
       paddingVertical: 14,
+      marginTop: -spacing[1],
     },
     authError: {
       marginTop: 8,

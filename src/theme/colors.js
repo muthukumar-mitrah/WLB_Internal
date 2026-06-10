@@ -9,6 +9,7 @@ const palette = {
   primaryDark: '#1D4ED8',
   primaryLight: '#3B82F6',
   primarySurface: '#EFF6FF',
+  primarySoft: '#A3C7E5',
 
   // Secondary
   secondary: '#7C3AED',
@@ -76,7 +77,6 @@ const lightColors = {
   textTertiary: palette.gray400,
   textInverse: palette.white,
   textDisabled: palette.gray300,
-  textBlack: palette.black,
 
   // Border
   border: palette.gray200,
@@ -96,6 +96,10 @@ const lightColors = {
   cardBackground: palette.white,
   cardBorder: palette.gray200,
   cardShadow: palette.gray200,
+
+  // Warm surface (e.g. alignment boxes)
+  warmSurface: '#FFF7E8',
+  warmSurfaceBorder: '#F0E4D0',
 
   // Nav
   tabBarBackground: palette.white,
@@ -146,6 +150,10 @@ const darkColors = {
   cardBorder: palette.gray700,
   cardShadow: 'rgba(0,0,0,0.5)',
 
+  // Warm surface (e.g. alignment boxes)
+  warmSurface: '#3D2E1A',
+  warmSurfaceBorder: '#5A4A35',
+
   // Nav
   tabBarBackground: palette.gray900,
   tabBarBorder: palette.gray800,
@@ -161,4 +169,4 @@ const darkColors = {
   errorSurface: '#450A0A',
 };
 
-export { lightColors, darkColors, palette };
+export {lightColors, darkColors, palette};

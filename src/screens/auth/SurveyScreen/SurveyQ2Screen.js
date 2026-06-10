@@ -25,9 +25,9 @@ import { createSurveyStyles, createQ2ExtraStyles } from './styles';
 
 const TOTAL_QUESTIONS = 9;
 const CURRENT_QUESTION = 2;
-const DEFAULT_POUNDS = 25;
+const DEFAULT_POUNDS = 10;
 const MIN_POUNDS = 0;
-const MAX_POUNDS = 75;
+const MAX_POUNDS = 150;
 
 const clampPounds = value => Math.max(MIN_POUNDS, Math.min(value, MAX_POUNDS));
 
@@ -45,6 +45,10 @@ const SurveyQ2Screen = ({ navigation }) => {
       }),
     [colors, spacing],
   );
+  const isDark = useTheme().isDark;
+  const surveyQ2Image = isDark
+    ? require('../../../assets/images/survey_2_dark.png')
+    : require('../../../assets/images/survey_2.png');
 
   const [pounds, setPounds] = useState(clampPounds(surveyData.poundsToLose ?? DEFAULT_POUNDS));
 
@@ -63,43 +67,34 @@ const SurveyQ2Screen = ({ navigation }) => {
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundSecondary} translucent={false} />
-
-      {/* ═══ TOP SECTION — light-gray background ═══ */}
-      <View style={styles.topSection}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={handlePrevious}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            style={styles.backBtn}
-          >
-            <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
-          <View style={styles.backBtn} />
-        </View>
-
-        <View style={styles.illustrationArea}>
-          <Image
-            source={require('../../../assets/images/survey_2.png')}
-            style={styles.illustration}
-            resizeMode="contain"
-          />
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={handlePrevious}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={styles.backBtn}
+        >
+          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+        <SurveyProgressBar total={TOTAL_QUESTIONS} current={CURRENT_QUESTION} />
+        <View style={styles.backBtn} />
       </View>
-
-      {/* ═══ BOTTOM SECTION — white ═══ */}
+      <Image
+        source={surveyQ2Image}
+        style={styles.illustration}
+        resizeMode="contain"
+      />
       <View style={[styles.bottomSection, styles.bottomSectionClip]}>
-        {/* Question + value display (padded) */}
         <View style={styles.bottomContent}>
-          <AppText variant="h3" color={colors.textPrimary} style={[styles.question, {bottom:0}]}>
+          <AppText variant="title" color={colors.textPrimary}>
             {t('survey.q2.question')}
           </AppText>
         </View>
-
-        {/* Ruler Picker — full width, no horizontal padding */}
         <View style={styles.sliderWrapper}>
           <RulerPicker
             interaction="thumb"
+            isScrollableScale
+            minValue={MIN_POUNDS}
+            maxValue={MAX_POUNDS}
             showValueLabel
             valueUnit={t('survey.q2.unit')}
             min={MIN_POUNDS}
@@ -112,12 +107,8 @@ const SurveyQ2Screen = ({ navigation }) => {
             renderLabel={val => String(val)}
           />
         </View>
-
-        {/* Push buttons to the bottom */}
         <View style={styles.spacer} />
       </View>
-
-      {/* ═══ BOTTOM BUTTONS ═══ */}
       <View style={styles.bottomRow}>
         <Button
           title={t('common.buttons.previous')}

@@ -1,9 +1,8 @@
 /**
  * MatchResultScreen — "Happy Dance Time"
  */
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import {
-  FlatList,
   Image,
   ScrollView,
   StatusBar,
@@ -14,11 +13,10 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
 import { AppText, Button, SafeContainer } from '../../../components/common';
-import { GLOBAL_TEXTS, ROUTES } from '../../../constants';
-import { fontFamily, fontSize } from '../../../theme/fonts';
-import { t } from 'i18next';
+import { ROUTES } from '../../../constants';
+import { useTranslation } from '../../../i18n/useTranslation';
+import { createSurveyStyles } from './styles';
 
-// ─── Static match data ────────────────────────────────────────────────────────
 const STATIC_MATCHES = [
   {
     id: '1',
@@ -57,47 +55,48 @@ const STATIC_MATCHES = [
   },
 ];
 
-// ─── Match % badge ────────────────────────────────────────────────────────────
-const MatchBadge = memo(({ percent }) => {
-  // All shown as green in the Figma — adjust thresholds to taste
-  return (
-    <View style={badgeStyles.badge}>
-      <AppText style={badgeStyles.text}>{percent}% Match</AppText>
-    </View>
-  );
-});
+const MatchBadge = memo(({ percent, colors, t }) => (
+  <View style={[badgeBase.badge, { backgroundColor: colors.successSurface }]}>
+    <AppText
+      variant="captionMedium"
+      color={colors.successDark}
+      style={badgeBase.text}>
+      {t('common.matchPercent', { percent })}
+    </AppText>
+  </View>
+));
 
-// ─── Single buddy row ─────────────────────────────────────────────────────────
-const BuddyRow = memo(({ item }) => (
-  <TouchableOpacity activeOpacity={0.8} style={rowStyles.card}>
-    <Image
-      source={item.image}
-      style={rowStyles.avatar}
-      resizeMode="cover"
-    />
-
-    <View style={rowStyles.content}>
-      <View style={rowStyles.topRow}>
+const BuddyRow = memo(({ item, colors, t }) => (
+  <View style={[buddyBase.card, { borderColor: colors.border, backgroundColor: colors.cardBackground }]}>
+    <Image source={item.image} style={buddyBase.avatar} resizeMode="cover" />
+    <View style={buddyBase.content}>
+      <View style={buddyBase.topRow}>
         <AppText
-          style={rowStyles.name}
+          variant="titleMedium"
+          color={colors.textPrimary}
           numberOfLines={1}
-        >
+          style={buddyBase.name}>
           {item.name}
         </AppText>
-
-        <MatchBadge percent={item.matchPercent} />
+        <MatchBadge percent={item.matchPercent} colors={colors} t={t} />
       </View>
-
-      <AppText style={rowStyles.tag}>
+      <AppText variant="caption" color={colors.textSecondary}>
         {item.tag}
       </AppText>
     </View>
-  </TouchableOpacity>
+  </View>
 ));
 
-// ─── Screen ───────────────────────────────────────────────────────────────────
 const MatchResultScreen = ({ navigation, route }) => {
-  const { spacing } = useTheme();
+  const theme = useTheme();
+  const { colors, spacing } = theme;
+  const { t } = useTranslation();
+
+  const baseStyles = useMemo(
+    () => StyleSheet.create({ ...createSurveyStyles({ colors, spacing }) }),
+    [colors, spacing],
+  );
+  const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
 
   const matches = STATIC_MATCHES;
 
@@ -107,192 +106,125 @@ const MatchResultScreen = ({ navigation, route }) => {
     [navigation],
   );
 
+  const isDark = useTheme().isDark;
+  const matchResultImage = isDark
+    ? require('../../../assets/images/survey_dance_dark.png')
+    : require('../../../assets/images/survey_dance.png');
+
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" translucent={false} />
-
-      {/* ── Back ── */}
+      <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
       <TouchableOpacity
         onPress={handleBack}
         hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-        style={[styles.backBtn, { top: spacing[3], left: spacing[4] }]}>
-        <Icon name="chevron-back" size={22} color="#111827" />
+        style={[baseStyles.postMatchBackBtn, { top: spacing[3], left: spacing[4] }]}>
+        <Icon name="chevron-back" size={22} color={colors.textPrimary} />
       </TouchableOpacity>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
+        bounces={false}
         contentContainerStyle={styles.scrollContent}>
-
-        {/* ── Dancing robot ── */}
         <Image
-          source={require('../../../assets/images/survey_dance.png')}
+          source={matchResultImage}
           style={styles.illustration}
           resizeMode="contain"
         />
-
-        {/* ── Title block ── */}
-        <AppText style={styles.title}>{t('common.happyDanceTime')}</AppText>
-        <AppText style={styles.subtitle}>
+        <AppText variant="h2" color={colors.textPrimary} style={styles.title}>
+          {t('common.happyDanceTime')}
+        </AppText>
+        <AppText variant="body" color={colors.textSecondary} style={styles.subtitle}>
           {t('common.matchedYouPossibleBuddies')}
         </AppText>
-
-        {/* ── Buddy list ── */}
         <View style={styles.listContainer}>
           {matches.map(item => (
-            <BuddyRow key={item.id} item={item} />
+            <BuddyRow key={item.id} item={item} colors={colors} t={t} />
           ))}
         </View>
       </ScrollView>
-
-      {/* ── Footer CTA ── */}
-      <View style={styles.footer}>
+      <View style={baseStyles.postMatchFooter}>
         <Button
           title={t('common.buttons.continue')}
           onPress={handleContinue}
           variant="primary"
           size="lg"
-          style={styles.ctaBtn}
+          style={baseStyles.postMatchCtaBtn}
         />
       </View>
     </SafeContainer>
   );
 };
 
-// ─── Badge styles ─────────────────────────────────────────────────────────────
-const badgeStyles = StyleSheet.create({
+const badgeBase = StyleSheet.create({
   badge: {
-    backgroundColor: '#E2FFEB',
     borderRadius: 999,
-    paddingHorizontal: 5,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
-
   text: {
-    color: '#088D2E',
     fontSize: 10,
-    fontWeight: '600',
-    fontFamily: fontFamily.semiBold,
   },
 });
 
-// ─── Row styles ───────────────────────────────────────────────────────────────
-const rowStyles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-  },
-  avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 10,
-    marginRight: 12,
-    backgroundColor: '#E5E7EB',
-  },
-  tag: {
-    fontSize: 13,
-    color: '#6B7280',
-    fontWeight: '400',
-    fontFamily: fontFamily.regular,
-  },
+const buddyBase = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 8,
     paddingHorizontal: 8,
-    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#D9D9D9',
-    borderRadius: 24,
+    borderRadius: 15,
     marginBottom: 14,
   },
   avatar: {
     width: 60,
     height: 60,
-    borderRadius: 18,
+    borderRadius: 15,
     marginRight: 16,
   },
   content: {
     flex: 1,
   },
-  name: {
-    flex: 1,
-    fontSize: 16.01,
-    fontWeight: '600',
-    fontFamily: fontFamily.semiBold,
-    color: '#222222',
-    marginRight: 12,
-  },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 6,
+    marginBottom: 4,
+  },
+  name: {
+    flex: 1,
+    marginRight: 12,
   },
 });
 
-// ─── Screen styles ────────────────────────────────────────────────────────────
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  backBtn: {
-    position: 'absolute',
-    zIndex: 10,
-    width: 32,
-    height: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  scrollContent: {
-    paddingTop: 52,
-    paddingBottom: 20,
-    alignItems: 'center',
-  },
-  illustration: {
-    width: 160,
-    height: 140,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    color: '#111827',
-    textAlign: 'center',
-    marginBottom: 8,
-    letterSpacing: -0.3,
-    fontWeight: '500',
-    lineHeight: 30,
-    fontFamily: fontFamily.headingSemiBold,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-    textAlign: 'center',
-    marginBottom: 24,
-    paddingHorizontal: 32,
-    lineHeight: 20,
-    fontFamily: fontFamily.regular,
-    fontWeight: '400',
-  },
-  listContainer: {
-    width: '100%',
-    paddingHorizontal: 20,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#F3F4F6',
-    marginHorizontal: 0,
-  },
-  footer: {
-    paddingHorizontal: 20,
-    paddingBottom: 28,
-    paddingTop: 12,
-  },
-  ctaBtn: {
-    width: '100%',
-    borderRadius: 14,
-  },
-});
+const createStyles = ({ colors, spacing }) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    scrollContent: {
+      paddingTop: 52,
+      paddingBottom: 20,
+      alignItems: 'center',
+    },
+    illustration: {
+      width: 160,
+      height: 140,
+      marginBottom: 20,
+    },
+    title: {
+      textAlign: 'center',
+      marginBottom: 8,
+    },
+    subtitle: {
+      textAlign: 'center',
+      marginBottom: 24,
+      paddingHorizontal: spacing[8],
+    },
+    listContainer: {
+      width: '100%',
+      paddingHorizontal: spacing[5],
+    },
+  });
 
 export default memo(MatchResultScreen);

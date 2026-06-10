@@ -6,7 +6,7 @@ import {
   StatusBar,
   Image,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
 import {
   AppText,
@@ -79,9 +79,7 @@ const LoginPasswordScreen = ({ navigation, route }) => {
   }, [email, password, loginWithEmail]);
 
   const handleForgotPassword = useCallback(() => {
-    if (navigation?.navigate) {
-      navigation.navigate(ROUTES.FORGOT_PASSWORD);
-    }
+    navigation.navigate(ROUTES.FORGOT_PASSWORD);
   }, [navigation]);
 
   return (
@@ -140,7 +138,7 @@ const LoginPasswordScreen = ({ navigation, route }) => {
             onPress={() => setRememberMe(p => !p)}
             activeOpacity={0.8}
           >
-            <Icon
+            <Ionicons
               name={rememberMe ? 'checkbox' : 'square-outline'}
               size={20}
               color={rememberMe ? colors.primary : colors.textSecondary}

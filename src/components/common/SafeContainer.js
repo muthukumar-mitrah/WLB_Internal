@@ -30,7 +30,7 @@ const SafeContainer = ({
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
-      style={{flex: 1, backgroundColor: bg}}
+      style={[styles.flex, { backgroundColor: bg}]}
       {...rest}>
       {children}
     </ScrollView>

@@ -5,24 +5,17 @@
  */
 import {REGEX} from '../constants';
 
-/**
- * @param {string} email
- * @returns {{ valid: boolean, message: string }}
- */
-const validateEmail = email => {
-  if (!email || email.trim() === '') {
-    return {valid: false, message: 'validation.emailRequired'};
+const validateEmail = (email) => {
+  const value = email?.trim();
+  if(!value) {
+    return { valid: false, message: 'validation.emailRequired' };
   }
-  if (!REGEX.EMAIL.test(email.trim())) {
-    return {valid: false, message: 'validation.emailInvalid'};
+  if(!REGEX.EMAIL.test(value)) {
+    return { valid: false, message: 'validation.emailInvalid' };
   }
-  return {valid: true, message: ''};
+  return { valid: true, message: '' };
 };
 
-/**
- * @param {string} password
- * @returns {{ valid: boolean, message: string }}
- */
 const validatePassword = password => {
   if (!password) {
     return {valid: false, message: 'validation.passwordRequired'};
@@ -36,10 +29,6 @@ const validatePassword = password => {
   return {valid: true, message: ''};
 };
 
-/**
- * @param {string} phone
- * @returns {{ valid: boolean, message: string }}
- */
 const validatePhone = phone => {
   if (!phone || phone.trim() === '') {
     return {valid: false, message: 'validation.phoneRequired'};
@@ -50,10 +39,6 @@ const validatePhone = phone => {
   return {valid: true, message: ''};
 };
 
-/**
- * @param {string} name
- * @returns {{ valid: boolean, message: string }}
- */
 const validateName = name => {
   if (!name || name.trim() === '') {
     return {valid: false, message: 'validation.nameRequired'};
@@ -64,24 +49,13 @@ const validateName = name => {
   return {valid: true, message: ''};
 };
 
-/**
- * @param {string} value
- * @param {string} field
- * @returns {{ valid: boolean, message: string }}
- */
-const validateRequired = (value, field = 'This field') => {
+const validateRequired = (value) => {
   if (!value || String(value).trim() === '') {
     return {valid: false, message: 'validation.fieldRequired'};
   }
   return {valid: true, message: ''};
 };
 
-/**
- * Validate an object of fields with custom rules
- * @param {Object} fields
- * @param {Object} rules - { fieldName: (value) => { valid, message } }
- * @returns {{ isValid: boolean, errors: Object }}
- */
 const validateForm = (fields, rules) => {
   const errors = {};
   let isValid = true;
@@ -97,81 +71,88 @@ const validateForm = (fields, rules) => {
   return {isValid, errors};
 };
 
-/**
- * Validate Setup Profile form
- * @param {Object} data 
- * @returns {Object} validation errors (i18n keys)
- */
+const validateSignUp = (data) => {
+  const validation = {};
+
+  Object.entries(data).forEach(([key, rawValue]) => {
+    const value =
+      typeof rawValue === 'string' ? rawValue.trim() : rawValue;
+
+    if(typeof rawValue === 'string' && !value) {
+      validation[key] = 'validation.fieldRequired';
+    } else if(
+      key === 'email' &&
+      !REGEX.EMAIL.test(value)
+    ) {
+      validation[key] = 'validation.emailInvalid';
+    }
+  });
+  
+  return validation;
+};
+
 const validateSetupProfile = (data) => {
   let validation = {};
   const optionalFields = ['referralCode'];
-  
+
   Object.keys(data).forEach((key) => {
-    if (typeof data[key] === 'string' && !data[key].trim() && !optionalFields.includes(key)) {
+    if(typeof data[key] === 'string' && !data[key].trim() && !optionalFields.includes(key)) {
       validation = { ...validation, [key]: 'validation.fieldRequired' };
     }
-    if (data[key] && key === 'firstName' && !REGEX.NAME.test(data[key].trim())) {
+    if(data[key] && key === 'firstName' && !REGEX.NAME.test(data[key].trim())) {
       validation = { ...validation, [key]: 'validation.firstNameInvalid' };
     }
-    else if (data[key] && key === 'username' && data[key].trim().length < 3) {
+    else if(data[key] && key === 'username' && data[key].trim().length < 3) {
       validation = { ...validation, [key]: 'validation.usernameTooShort' };
     }
-    else if (data[key] && key === 'password' && !REGEX.PASSWORD.test(data[key])) {
+    else if(data[key] && key === 'password' && !REGEX.PASSWORD.test(data[key]?.trim())) {
       validation = { ...validation, [key]: 'validation.passwordComplex' };
     }
   });
-  
+
   return validation;
 };
 
-/**
- * Validate Login form
- * @param {Object} data 
- * @returns {Object} validation errors (i18n keys)
- */
 const validateLogin = (data) => {
-  let validation = {};
-  
-  Object.keys(data).forEach((key) => {
-    if (typeof data[key] === 'string' && !data[key].trim()) {
-      validation = { ...validation, [key]: 'validation.fieldRequired' };
-    }
-    if (data[key] && key === 'email' && !REGEX.EMAIL.test(data[key].trim())) {
-      validation = { ...validation, [key]: 'validation.emailInvalid' };
+  const validation = {};
+
+  Object.entries(data).forEach(([key, rawValue]) => {
+    const value =
+      typeof rawValue === 'string' ? rawValue.trim() : rawValue;
+
+    if(typeof rawValue === 'string' && !value) {
+      validation[key] = 'validation.fieldRequired';
+    } else if(
+      key === 'email' &&
+      !REGEX.EMAIL.test(value)
+    ) {
+      validation[key] = 'validation.emailInvalid';
     }
   });
   
   return validation;
 };
 
-/**
- * Validate SignUp form
- * @param {Object} data 
- * @returns {Object} validation errors (i18n keys)
- */
-const validateSignUp = (data) => {
-  let validation = {};
-  
-  Object.keys(data).forEach((key) => {
-    if (typeof data[key] === 'string' && !data[key].trim()) {
-      validation = { ...validation, [key]: 'validation.fieldRequired' };
-    }
-    if (data[key] && key === 'email' && !REGEX.EMAIL.test(data[key].trim())) {
-      validation = { ...validation, [key]: 'validation.emailInvalid' };
-    }
-  });
-  
-  return validation;
+
+const validatePasswordMatch = (password, confirmPassword) => {
+  if (!confirmPassword) {
+    return {valid: false, message: 'validation.confirmPasswordRequired'};
+  }
+  if (password !== confirmPassword) {
+    return {valid: false, message: 'validation.passwordsDoNotMatch'};
+  }
+  return {valid: true, message: ''};
 };
 
 export {
   validateEmail,
   validatePassword,
+  validatePasswordMatch,
   validatePhone,
   validateName,
   validateRequired,
   validateForm,
-  validateSetupProfile,
-  validateLogin,
   validateSignUp,
+  validateSetupProfile,
+  validateLogin
 };

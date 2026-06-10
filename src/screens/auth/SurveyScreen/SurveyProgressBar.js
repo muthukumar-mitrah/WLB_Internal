@@ -20,7 +20,7 @@ const SurveyProgressBar = memo(({ total = 9, current }) => {
             styles.dash,
             {
               backgroundColor:
-                i === current - 1 ? '#3685C6' : colors.gray200,
+                i === current - 1 ? colors.primary : colors.gray200,
             },
           ]}
         />
