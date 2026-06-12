@@ -36,6 +36,7 @@ const InputBox = forwardRef(({
   containerStyle,
   inputStyle,
   testID,
+  required = false,
   ...rest
 }, ref) => {
   const { colors, borderRadius, spacing, fonts, shadows } = useTheme();
@@ -83,9 +84,14 @@ const InputBox = forwardRef(({
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
-        <AppText variant="label" color={colors.textSecondary} style={styles.label}>
-          {label}
-        </AppText>
+        <View style={styles.wrapper}>
+          <AppText variant="label" color={colors.textSecondary} style={styles.label}>
+            {label}
+          </AppText>
+          {required &&
+            <AppText style={styles.requiredLabel}>*</AppText>
+          }
+        </View>
       )}
 
       <Animated.View
@@ -168,6 +174,13 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 6,
+  },
+  wrapper: {
+    flexDirection: 'row',
+    gap:2
+  },
+  requiredLabel:{
+    color: 'red'
   },
   inputWrapper: {
     flexDirection: 'row',

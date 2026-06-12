@@ -29,6 +29,7 @@ import MatchResultScreen from '../screens/auth/SurveyScreen/MatchResultScreen';
 import AiBuddyScreen from '../screens/auth/SurveyScreen/AiBuddyScreen';
 import FindEmmaScreen from '../screens/auth/SurveyScreen/FindEmmaScreen';
 import ExploreMatchesScreen from '../screens/auth/SurveyScreen/ExploreMatchesScreen';
+import PrivacyPolicyScreen from '../screens/legal/PrivacyPolicyScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,8 +69,8 @@ const AuthNavigator = () => (
     <Stack.Screen name={ROUTES.AI_BUDDY} component={AiBuddyScreen} options={{ animation: 'slide_from_right' }} />
     <Stack.Screen name={ROUTES.FIND_EMMA} component={FindEmmaScreen} options={{ animation: 'slide_from_right' }} />
     <Stack.Screen name={ROUTES.EXPLORE_MATCHES} component={ExploreMatchesScreen} options={{ animation: 'slide_from_right' }} />
+    <Stack.Screen name={ROUTES.PRIVACY_POLICY} component={PrivacyPolicyScreen} />
   </Stack.Navigator>
 );
 
 export default AuthNavigator;
-

@@ -20,7 +20,6 @@ import createStyles from './styles';
 
 const OTP_LENGTH = 5;
 
-// ─── Screen 2: Verification Code ─────────────────────────────────────────────
 const VerificationCodeScreen = ({ navigation, route }) => {
   const { colors, spacing, borderRadius, iconSize, fonts } = useTheme();
   const { t } = useTranslation();

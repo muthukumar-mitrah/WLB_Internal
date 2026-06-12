@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -14,26 +14,25 @@ import {
   InputBox,
   SafeContainer,
   Loader,
+  ToastService,
 } from '../../../components/common';
 import { useAuth } from '../../../context/AuthContext';
 import { ROUTES } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
 import createStyles from './styles';
 
-// ─── Logo Header ────────────────────────────────────────────────────────
 const LogoHeader = memo(({ styles }) => (
   <View style={styles.illustrationWrapper}>
     <View style={styles.mascotContainer}>
-      <Image 
-        source={require('../../../assets/images/wlb_logo.png')} 
-        style={styles.mascotImage} 
-        resizeMode="contain" 
+      <Image
+        source={require('../../../assets/images/wlb_logo.png')}
+        style={styles.mascotImage}
+        resizeMode="contain"
       />
     </View>
   </View>
 ));
 
-// ─── Screen ───────────────────────────────────────────────────────────────────
 const LoginPasswordScreen = ({ navigation, route }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { loginWithEmail, loading, error: authError } = useAuth();
@@ -41,9 +40,8 @@ const LoginPasswordScreen = ({ navigation, route }) => {
 
   const email = route.params?.email || '';
 
-  // Capitalize name from email prefix (e.g. sarah@gmail.com -> Sarah)
   const name = useMemo(() => {
-    if (!email) return '';
+    if(!email) return '';
     const prefix = email.split('@')[0];
     return prefix.charAt(0).toUpperCase() + prefix.slice(1);
   }, [email]);
@@ -57,14 +55,23 @@ const LoginPasswordScreen = ({ navigation, route }) => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
 
+  useEffect(() => {
+    if(authError) {
+      ToastService.show({
+        type: 'error',
+        message: authError,
+      });
+    }
+  }, [authError]);
+
   const error = useMemo(() => {
-    if (!isDirty) {
+    if(!isDirty) {
       return '';
     }
-    if (!password) {
+    if(!password) {
       return t('validation.passwordRequired');
     }
-    if (password.length < 8) {
+    if(password.length < 8) {
       return t('validation.passwordTooShort');
     }
     return '';
@@ -72,7 +79,7 @@ const LoginPasswordScreen = ({ navigation, route }) => {
 
   const handleLogin = useCallback(async () => {
     setIsDirty(true);
-    if (!password || password.length < 8) {
+    if(!password || password.length < 8) {
       return;
     }
     await loginWithEmail({ email, password });
@@ -89,21 +96,17 @@ const LoginPasswordScreen = ({ navigation, route }) => {
         backgroundColor={colors.background}
         translucent={false}
       />
-
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
           { paddingHorizontal: spacing[6], paddingBottom: spacing[6] },
         ]}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}>
-
-        {/* ── Mascot Logo ── */}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={{ marginTop: spacing[10], marginBottom: spacing[4] }}>
           <LogoHeader styles={styles} />
         </View>
-
-        {/* ── Heading ── */}
         <AppText variant="h1" color={colors.textPrimary} style={styles.heading}>
           {t('auth.loginPassword.heading')}
         </AppText>
@@ -111,8 +114,6 @@ const LoginPasswordScreen = ({ navigation, route }) => {
         <AppText variant="subtitle" color={colors.textSecondary} style={styles.subheading}>
           {t('auth.loginPassword.subheadingWithName', { name: name || 'User' })}
         </AppText>
-
-        {/* ── Password Input ── */}
         <View style={{ marginTop: spacing[8], width: '100%' }}>
           <AppText variant="label" color={colors.textSecondary} style={styles.passwordLabel}>
             {t('auth.loginPassword.passwordLabel')}
@@ -130,8 +131,6 @@ const LoginPasswordScreen = ({ navigation, route }) => {
             inputStyle={styles.passwordInput}
           />
         </View>
-
-        {/* ── Options Row (Remember Me & Forgot Password) ── */}
         <View style={styles.optionsRow}>
           <TouchableOpacity
             style={styles.rememberMeContainer}
@@ -147,15 +146,12 @@ const LoginPasswordScreen = ({ navigation, route }) => {
               {t('auth.loginPassword.rememberMe')}
             </AppText>
           </TouchableOpacity>
-
           <TouchableOpacity onPress={handleForgotPassword}>
             <AppText variant="bodyMedium" color={colors.textPrimary} style={styles.forgotPasswordText}>
               {t('auth.loginPassword.forgotPassword')}
             </AppText>
           </TouchableOpacity>
         </View>
-
-        {/* ── Sign In Button ── */}
         {loading ? (
           <View style={{ marginTop: spacing[4] }}>
             <Loader visible size="large" />
@@ -170,8 +166,6 @@ const LoginPasswordScreen = ({ navigation, route }) => {
             style={styles.continueBtn}
           />
         )}
-
-        {/* ── Use Another Email Button ── */}
         <Button
           testID="login-another-email-btn"
           title={t('common.buttons.useAnotherEmail')}
@@ -187,8 +181,6 @@ const LoginPasswordScreen = ({ navigation, route }) => {
           ]}
           textStyle={{ color: colors.textPrimary, fontWeight: '600' }}
         />
-
-        {/* ── Auth Service Error ── */}
         {authError ? (
           <AppText variant="caption" color={colors.error} style={styles.authError}>
             {authError}

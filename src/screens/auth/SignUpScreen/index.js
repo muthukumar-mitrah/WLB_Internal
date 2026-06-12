@@ -25,7 +25,6 @@ import { ROUTES } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
 import createStyles from './styles';
 
-// ─── Social Button ────────────────────────────────────────────────────────────
 const SocialButton = memo(({ iconSource, label, onPress, styles, colors }) => {
   const isApple = label.toLowerCase() === 'apple';
   const isDark = colors.textPrimary === '#FFFFFF';
@@ -43,20 +42,18 @@ const SocialButton = memo(({ iconSource, label, onPress, styles, colors }) => {
   );
 });
 
-// ─── Illustration ─────────────────────────────────────────────────────────────
 const CommunityIllustration = memo(({ styles }) => (
   <View style={styles.illustrationWrapper}>
     <View style={styles.mascotContainer}>
-      <Image 
-        source={require('../../../assets/images/wlb_logo.png')} 
-        style={styles.mascotImage} 
-        resizeMode="contain" 
+      <Image
+        source={require('../../../assets/images/wlb_logo.png')}
+        style={styles.mascotImage}
+        resizeMode="contain"
       />
     </View>
   </View>
 ));
 
-// ─── Screen ───────────────────────────────────────────────────────────────────
 const SignUpScreen = ({ navigation }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
@@ -72,7 +69,7 @@ const SignUpScreen = ({ navigation }) => {
   const [isDirty, setIsDirty] = useState(false);
 
   const errors = useMemo(() => {
-    if (!isDirty) {
+    if(!isDirty) {
       return {};
     }
     const raw = validateSignUp(formData);
@@ -87,24 +84,23 @@ const SignUpScreen = ({ navigation }) => {
   }, []);
 
   const handleContinue = useCallback(() => {
-    navigation.navigate(ROUTES.WELCOME_SURVEY);
-    // setIsDirty(true);
-    // const validationErrors = validateSignUp(formData);
+    setIsDirty(true);
+    const validationErrors = validateSignUp(formData);
 
-    // if(Object.keys(validationErrors).length > 0) {
-    //   return;
-    // }
+    if(Object.keys(validationErrors).length > 0) {
+      return;
+    }
 
-    // navigation.navigate(ROUTES.SETUP_PROFILE, { email: formData.email });
+    navigation.navigate(ROUTES.SETUP_PROFILE, { email: formData.email });
   }, [formData, navigation]);
 
   const handleSocialLogin = useCallback(async (provider) => {
-    if (provider === 'google') {
+    if(provider === 'google') {
       const res = await signInWithGoogle();
-      if (!res) return;
-      if (res.cancelled) return;
-      if (res.success !== true) return;
-      if (!res.user) return;
+      if(!res) return;
+      if(res.cancelled) return;
+      if(res.success !== true) return;
+      if(!res.user) return;
 
       navigation.navigate(ROUTES.SETUP_PROFILE, {
         email: res.user.email,
@@ -115,12 +111,12 @@ const SignUpScreen = ({ navigation }) => {
       });
     }
 
-    if (provider === 'facebook') {
+    if(provider === 'facebook') {
       const res = await signInWithFacebook();
-      if (!res) return;
-      if (res.cancelled) return;
-      if (res.success !== true) return;
-      if (!res.user) return;
+      if(!res) return;
+      if(res.cancelled) return;
+      if(res.success !== true) return;
+      if(!res.user) return;
 
       navigation.navigate(ROUTES.SETUP_PROFILE, {
         email: res.user.email,
@@ -131,12 +127,12 @@ const SignUpScreen = ({ navigation }) => {
       });
     }
 
-    if (provider === 'apple') {
+    if(provider === 'apple') {
       const res = await signInWithApple();
-      if (!res) return;
-      if (res.cancelled) return;
-      if (res.success !== true) return;
-      if (!res.user) return;
+      if(!res) return;
+      if(res.cancelled) return;
+      if(res.success !== true) return;
+      if(!res.user) return;
 
       navigation.navigate(ROUTES.SETUP_PROFILE, {
         email: res.user.email,
@@ -160,7 +156,6 @@ const SignUpScreen = ({ navigation }) => {
         backgroundColor={colors.background}
         translucent={false}
       />
-
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
@@ -168,13 +163,9 @@ const SignUpScreen = ({ navigation }) => {
         ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
-
-        {/* ── Illustration ── */}
         <View style={{ marginTop: spacing[8], marginBottom: spacing[4] }}>
           <CommunityIllustration styles={styles} />
         </View>
-
-        {/* ── Heading ── */}
         <AppText variant="h1" color={colors.textPrimary} style={styles.heading}>
           {t('auth.signUp.heading')}
         </AppText>
@@ -182,8 +173,6 @@ const SignUpScreen = ({ navigation }) => {
         <AppText variant="subtitle" color={colors.textSecondary} style={styles.subheading}>
           {t('auth.signUp.subheading')}
         </AppText>
-
-        {/* ── Email Input ── */}
         <View style={{ marginTop: spacing[6] }}>
           <InputBox
             testID="signup-email-input"
@@ -200,8 +189,6 @@ const SignUpScreen = ({ navigation }) => {
             inputStyle={styles.emailInput}
           />
         </View>
-
-        {/* ── Continue Button ── */}
         <Button
           testID="signup-continue-btn"
           title={t('common.buttons.continue')}
@@ -210,13 +197,9 @@ const SignUpScreen = ({ navigation }) => {
           size="lg"
           style={styles.continueBtn}
         />
-
-        {/* ── Divider ── */}
         <View style={styles.dividerWrapper}>
           <Divider label={t('common.orContinueWith')} thickness={2} style={styles.divider} />
         </View>
-
-        {/* ── Social Buttons ── */}
         {Platform.OS === 'ios' && (
           <SocialButton
             iconSource={require('../../../assets/images/apple.png')}
@@ -241,8 +224,6 @@ const SignUpScreen = ({ navigation }) => {
           styles={styles}
           colors={colors}
         />
-
-        {/* ── Login Redirect ── */}
         <View style={[styles.loginRow, { marginTop: spacing[6] }]}>
           <AppText variant="bodyMedium" color={colors.textPrimary}>
             {t('auth.common.alreadyHaveAccount')}
@@ -255,9 +236,9 @@ const SignUpScreen = ({ navigation }) => {
             </AppText>
           </TouchableOpacity>
         </View>
-
-        {/* ── Privacy Policy ── */}
-        <TouchableOpacity style={{ marginTop: spacing[6] }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(ROUTES.PRIVACY_POLICY)}
+          style={{ marginTop: spacing[6] }}>
           <AppText variant="caption" color={colors.textSecondary} style={styles.privacy}>
             {t('common.privacyPolicy')}
           </AppText>

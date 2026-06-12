@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -67,6 +67,14 @@ const UploadImageScreen = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const timerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if(timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
 
   const simulateUpload = useCallback((name) => {
     setIsUploading(true);

@@ -1,10 +1,5 @@
 /**
  * AiBuddyScreen — "Robi also found you a great AI Buddy"
- *
- * Screen 2 of the post-match onboarding flow.
- * Showcases Emma the AI buddy with her photo, style tag, bio, alignment note,
- * and an informational footer line.
- * Tapping Continue navigates to the FindEmma screen.
  */
 import React, { memo, useCallback, useMemo } from 'react';
 import {

@@ -16,7 +16,6 @@ import { ROUTES } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
 import createStyles from './styles';
 
-// ─── Screen 4: Password Reset Success ────────────────────────────────────────
 const PasswordResetSuccessScreen = ({ navigation }) => {
   const { colors, spacing, borderRadius, iconSize } = useTheme();
   const { t } = useTranslation();

@@ -1,14 +1,9 @@
 /**
  * BottomTabNavigator — 5-tab bottom bar.
- *
- * Tabs: Home | Buddies | + (Create) | Notification | Robi
- * Center "+" button is a custom elevated circle.
- * Active/inactive icons use PNG assets from assets/icons.
  */
-import React, { memo, useMemo } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import {
   Image,
-  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -17,31 +12,25 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../theme';
 import { useTranslation } from '../i18n/useTranslation';
-import { ROUTES } from '../constants';
+import { ROUTES, STORAGE_KEYS } from '../constants';
+import { storage } from '../utils/storage';
 
 import HomeScreen from '../screens/home/HomeScreen';
-import BuddiesScreen from '../screens/home/BuddiesScreen';
+import BuddiesSearchScreen from '../screens/home/BuddiesSearchScreen';
 import CreatePostScreen from '../screens/home/CreatePostScreen';
-import NotificationsScreen from '../screens/home/NotificationsScreen';
+import NotificationsScreen from '../screens/home/NotificationScreen';
 import RobiScreen from '../screens/home/RobiScreen';
+import AiBuddyDisclaimerModal from '../components/home/AiBuddyDisclaimerModal';
 
 const Tab = createBottomTabNavigator();
 
-// ─── Layout constants ─────────────────────────────────────────────────────────
+const TAB_BAR_HEIGHT = 70;
 
-/** Visible content height of the tab bar (above the safe-area inset). */
-const TAB_BAR_HEIGHT = 60;
-
-/** Fixed icon-container dimensions — ensures active & inactive icons occupy
- *  identical space so switching state never causes vertical shifting. */
 const ICON_CONTAINER = 28;
 const ICON_SIZE = 22;
 
-/** Center "+" button dimensions & vertical lift. */
 const CREATE_BUTTON_SIZE = 56;
 const CREATE_BUTTON_LIFT = 16;
-
-// ─── Icon assets ──────────────────────────────────────────────────────────────
 
 const TAB_ICONS = {
   [ROUTES.HOME]: {
@@ -66,24 +55,9 @@ const TAB_ICONS = {
   },
 };
 
-// ─── No-ripple tab button ─────────────────────────────────────────────────────
-//
-// React Navigation's default PlatformPressable produces an Android ripple and
-// an iOS opacity flash.  Replacing it with TouchableOpacity(activeOpacity=1)
-// gives a completely neutral press — no ripple, no flash, no highlight.
-
-// Must NOT be wrapped in memo() — React Navigation calls tabBarButton as a
-// plain function (button(props)), not via React.createElement. A memo wrapper
-// is an object, not a callable, which throws "Object is not a function".
 const NoRippleTabButton = (props) => (
   <TouchableOpacity {...props} activeOpacity={1} />
 );
-
-// ─── Tab icon ─────────────────────────────────────────────────────────────────
-//
-// Wrapped in a fixed-size container so the layout space is identical whether
-// the tab is focused or not.  Without the wrapper, different PNG intrinsic
-// sizes can shift the label position on focus change.
 
 const TabIcon = memo(({ routeName, focused, colors }) => {
   const icons = TAB_ICONS[routeName];
@@ -120,8 +94,6 @@ const tabIconStyles = StyleSheet.create({
     height: ICON_SIZE,
   },
 });
-
-// ─── Center "+" create button ─────────────────────────────────────────────────
 
 const CreateTabButton = memo(({ onPress, colors, shadows }) => (
   <TouchableOpacity
@@ -168,38 +140,70 @@ const createBtnStyles = StyleSheet.create({
   },
 });
 
-// ─── Navigator ────────────────────────────────────────────────────────────────
-
 const BottomTabNavigator = () => {
   const { colors, spacing, shadows } = useTheme();
   const { t } = useTranslation();
 
-  // Use actual bottom safe-area inset so the bar sits correctly above the
-  // system navigation area on every device and navigation mode:
-  //   • Android gesture nav     → insets.bottom > 0
-  //   • Android 3-button nav    → insets.bottom > 0
-  //   • iPhone with home bar    → insets.bottom > 0
-  //   • iPhone without home bar → insets.bottom = 0
   const insets = useSafeAreaInsets();
   const bottomInset = insets.bottom;
+
+  const [disclaimerVisible, setDisclaimerVisible] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState(null);
+
+  const handleRobiTabPress = useCallback(
+    async (e, navigation) => {
+      e.preventDefault();
+      const accepted = await storage.getItem(
+        STORAGE_KEYS.AI_BUDDY_DISCLAIMER_ACCEPTED,
+        false,
+      );
+      if (accepted === true) {
+        navigation.navigate(ROUTES.ROBI);
+      } else {
+        setPendingNavigation(() => () => navigation.navigate(ROUTES.ROBI));
+        setDisclaimerVisible(true);
+      }
+    },
+    [],
+  );
+
+  const handleDisclaimerClose = useCallback(() => {
+    setDisclaimerVisible(false);
+    setPendingNavigation(null);
+  }, []);
+
+  const handleDisclaimerContinue = useCallback(
+    async (dontShowAgain) => {
+      if (dontShowAgain) {
+        await storage.setItem(
+          STORAGE_KEYS.AI_BUDDY_DISCLAIMER_ACCEPTED,
+          true,
+        );
+      }
+      setDisclaimerVisible(false);
+      if (pendingNavigation) {
+        pendingNavigation();
+        setPendingNavigation(null);
+      }
+    },
+    [pendingNavigation],
+  );
+
+  const handleAiSettings = useCallback(() => {
+    setDisclaimerVisible(false);
+    setPendingNavigation(null);
+  }, []);
 
   const screenOptions = useMemo(
     () => ({
       headerShown: false,
-
-      // Replace PlatformPressable (which has ripple) with a neutral
-      // TouchableOpacity for all tabs.  CREATE_POST overrides this with its
-      // own tabBarButton so the center circle is unaffected.
       tabBarButton: NoRippleTabButton,
 
       tabBarStyle: {
         backgroundColor: colors.tabBarBackground,
-        // Setting an explicit height disables React Navigation's automatic
-        // safe-area calculation, so we include bottomInset ourselves.
         height: TAB_BAR_HEIGHT + bottomInset,
         paddingBottom: bottomInset,
         paddingTop: 0,
-        // Strip all borders / shadows from the bar itself.
         borderTopWidth: 0,
         elevation: 0,
         shadowColor: colors.transparent,
@@ -207,20 +211,15 @@ const BottomTabNavigator = () => {
         shadowOpacity: 0,
         shadowRadius: 0,
       },
-
-      // Each tab item is pinned to the content height (TAB_BAR_HEIGHT) so
-      // the icon+label block is vertically centred within the visible bar.
       tabBarItemStyle: {
         height: TAB_BAR_HEIGHT,
         paddingTop: spacing[2],
         paddingBottom: spacing[1],
       },
-
       tabBarActiveTintColor: colors.tabBarActive,
       tabBarInactiveTintColor: colors.tabBarInactive,
-
       tabBarLabelStyle: {
-        fontSize: 11,
+        fontSize: 10,
         fontFamily: 'BeVietnamPro-Medium',
         marginTop: spacing[0.5],
         marginBottom: 0,
@@ -230,67 +229,75 @@ const BottomTabNavigator = () => {
   );
 
   return (
-    <Tab.Navigator screenOptions={screenOptions}>
-      <Tab.Screen
-        name={ROUTES.HOME}
-        component={HomeScreen}
-        options={{
-          tabBarLabel: t('home.tabs.home'),
-          tabBarIcon: ({ focused }) => (
-            <TabIcon routeName={ROUTES.HOME} focused={focused} colors={colors} />
-          ),
-        }}
-      />
+    <>
+      <Tab.Navigator screenOptions={screenOptions}>
+        <Tab.Screen
+          name={ROUTES.HOME}
+          component={HomeScreen}
+          options={{
+            tabBarLabel: t('home.tabs.home'),
+            tabBarIcon: ({ focused }) => (
+              <TabIcon routeName={ROUTES.HOME} focused={focused} colors={colors} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name={ROUTES.BUDDIES}
+          component={BuddiesSearchScreen}
+          options={{
+            tabBarLabel: t('home.tabs.buddies'),
+            tabBarIcon: ({ focused }) => (
+              <TabIcon routeName={ROUTES.BUDDIES} focused={focused} colors={colors} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name={ROUTES.CREATE_POST}
+          component={CreatePostScreen}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: () => null,
+            tabBarButton: (props) => (
+              <CreateTabButton {...props} colors={colors} shadows={shadows} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name={ROUTES.NOTIFICATIONS}
+          component={NotificationsScreen}
+          options={{
+            tabBarLabel: t('home.tabs.notifications'),
+            tabBarIcon: ({ focused }) => (
+              <TabIcon
+                routeName={ROUTES.NOTIFICATIONS}
+                focused={focused}
+                colors={colors}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name={ROUTES.ROBI}
+          component={RobiScreen}
+          listeners={({ navigation }) => ({
+            tabPress: (e) => handleRobiTabPress(e, navigation),
+          })}
+          options={{
+            tabBarLabel: t('home.tabs.robi'),
+            tabBarIcon: ({ focused }) => (
+              <TabIcon routeName={ROUTES.ROBI} focused={focused} colors={colors} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
 
-      <Tab.Screen
-        name={ROUTES.BUDDIES}
-        component={BuddiesScreen}
-        options={{
-          tabBarLabel: t('home.tabs.buddies'),
-          tabBarIcon: ({ focused }) => (
-            <TabIcon routeName={ROUTES.BUDDIES} focused={focused} colors={colors} />
-          ),
-        }}
+      <AiBuddyDisclaimerModal
+        visible={disclaimerVisible}
+        onClose={handleDisclaimerClose}
+        onContinue={handleDisclaimerContinue}
+        onAiSettings={handleAiSettings}
       />
-
-      <Tab.Screen
-        name={ROUTES.CREATE_POST}
-        component={CreatePostScreen}
-        options={{
-          tabBarLabel: () => null,
-          tabBarIcon: () => null,
-          tabBarButton: (props) => (
-            <CreateTabButton {...props} colors={colors} shadows={shadows} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name={ROUTES.NOTIFICATIONS}
-        component={NotificationsScreen}
-        options={{
-          tabBarLabel: t('home.tabs.notifications'),
-          tabBarIcon: ({ focused }) => (
-            <TabIcon
-              routeName={ROUTES.NOTIFICATIONS}
-              focused={focused}
-              colors={colors}
-            />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name={ROUTES.ROBI}
-        component={RobiScreen}
-        options={{
-          tabBarLabel: t('home.tabs.robi'),
-          tabBarIcon: ({ focused }) => (
-            <TabIcon routeName={ROUTES.ROBI} focused={focused} colors={colors} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    </>
   );
 };
 

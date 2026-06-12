@@ -1,24 +1,25 @@
 /**
  * App.js — Root application component
- * Sets up: i18n, Theme, Context Providers, Navigation, Toast
  */
-import './src/i18n'; // ← initialize i18next before any screen renders
+import './src/i18n';
 import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider, useTheme } from './src/theme';
 import { AuthProvider } from './src/context/AuthContext';
-import { AppProvider } from './src/context/AppContext';
 import { SurveyProvider } from './src/context/SurveyContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import Toast from './src/components/common/Toast';
 import SplashScreen from 'react-native-splash-screen'
+import { GOOGLE_SIGN_IN_CONFIG } from './src/constants/index';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const AppCore = () => {
   const { colors } = useTheme();
 
   useEffect(()=>{
     SplashScreen.hide()
+    GoogleSignin.configure(GOOGLE_SIGN_IN_CONFIG, [])
   },[])
 
   return (
@@ -38,11 +39,9 @@ const App = () => (
   <SafeAreaProvider>
     <ThemeProvider>
       <AuthProvider>
-        <AppProvider>
-          <SurveyProvider>
-            <AppCore />
-          </SurveyProvider>
-        </AppProvider>
+        <SurveyProvider>
+          <AppCore />
+        </SurveyProvider>
       </AuthProvider>
     </ThemeProvider>
   </SafeAreaProvider>

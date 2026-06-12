@@ -1,9 +1,5 @@
 /**
  * ExploreMatchesScreen — "Here you can explore your real Buddy matches"
- *
- * Screen 4 (final) of the post-match onboarding flow.
- * Shows the app mockup (find_buddy.png) with the buddy list callout overlay,
- * and a "Continue to App" CTA that routes the user to the main app.
  */
 import React, { memo, useCallback, useMemo } from 'react';
 import {
@@ -16,15 +12,15 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
 import { AppText, Button, SafeContainer } from '../../../components/common';
+import { useAuth } from '../../../context/AuthContext';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { createSurveyStyles } from './styles';
-import { ROUTES } from '../../../constants';
 
-// ─── Screen ───────────────────────────────────────────────────────────────────
 const ExploreMatchesScreen = ({ navigation }) => {
   const theme = useTheme();
   const { colors, spacing } = theme;
   const { t } = useTranslation();
+  const { completeAuthSession } = useAuth();
 
   const baseStyles = useMemo(
     () => StyleSheet.create({ ...createSurveyStyles({ colors, spacing }) }),
@@ -34,8 +30,9 @@ const ExploreMatchesScreen = ({ navigation }) => {
 
   const handleBack = useCallback(() => navigation.goBack(), [navigation]);
   const handleContinue = useCallback(() => {
-    navigation.navigate(ROUTES.MAIN);
-  }, []);
+    // Marking the session authenticated switches the root navigator to Main.
+    completeAuthSession();
+  }, [completeAuthSession]);
 
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>

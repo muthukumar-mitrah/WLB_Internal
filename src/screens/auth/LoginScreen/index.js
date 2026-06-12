@@ -14,14 +14,14 @@ import {
   InputBox,
   Divider,
   SafeContainer,
+  ToastService,
 } from '../../../components/common';
 import { useAuth } from '../../../context/AuthContext';
-import { validateLogin } from '../../../utils/validation';
-import { ROUTES } from '../../../constants';
+import { validateUsernameOrEmail } from '../../../utils/validation';
+import { ROUTES, MOCK_AUTH } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
 import createStyles from './styles';
 
-// ─── Social Button ────────────────────────────────────────────────────────────
 const SocialButton = memo(({ iconSource, label, onPress, styles, colors }) => {
   const isApple = label.toLowerCase() === 'apple';
   const isDark = colors.textPrimary === '#FFFFFF';
@@ -39,20 +39,18 @@ const SocialButton = memo(({ iconSource, label, onPress, styles, colors }) => {
   );
 });
 
-// ─── Logo Illustration ────────────────────────────────────────────────────────
 const LogoHeader = memo(({ styles }) => (
   <View style={styles.illustrationWrapper}>
     <View style={styles.mascotContainer}>
-      <Image 
-        source={require('../../../assets/images/wlb_logo.png')} 
-        style={styles.mascotImage} 
-        resizeMode="contain" 
+      <Image
+        source={require('../../../assets/images/wlb_logo.png')}
+        style={styles.mascotImage}
+        resizeMode="contain"
       />
     </View>
   </View>
 ));
 
-// ─── Screen ───────────────────────────────────────────────────────────────────
 const LoginScreen = ({ navigation }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
@@ -66,31 +64,37 @@ const LoginScreen = ({ navigation }) => {
   const [isDirty, setIsDirty] = useState(false);
 
   const error = useMemo(() => {
-    if (!isDirty) {
+    if(!isDirty) {
       return '';
     }
-    const validationErrors = validateLogin({ email });
-    const key = validationErrors.email || '';
-    return key ? t(key) : '';
+    const result = validateUsernameOrEmail(email);
+    return result.valid ? '' : t(result.message);
   }, [email, isDirty, t]);
 
   const handleContinue = useCallback(() => {
     setIsDirty(true);
-    const validationErrors = validateLogin({ email });
-    if (Object.keys(validationErrors).length) {
+    const result = validateUsernameOrEmail(email);
+    if(!result.valid) {
       return;
     }
-    // Proceed to Step 2 (Password Screen) and pass email
+    // Temporary static user lookup — replaced by API once available.
+    if(email.trim().toLowerCase() !== MOCK_AUTH.IDENTIFIER) {
+      ToastService.show({
+        type: 'error',
+        message: t('auth.errors.userNotFound'),
+      });
+      return;
+    }
     navigation.navigate(ROUTES.LOGIN_PASSWORD, { email: email.trim() });
-  }, [email, navigation]);
+  }, [email, navigation, t]);
 
   const handleSocialLogin = useCallback(async (provider) => {
-    if (provider === 'google') {
+    if(provider === 'google') {
       const res = await signInWithGoogle();
-      if (!res) return;
-      if (res.cancelled) return;
-      if (res.success !== true) return;
-      if (!res.user) return;
+      if(!res) return;
+      if(res.cancelled) return;
+      if(res.success !== true) return;
+      if(!res.user) return;
       navigation.navigate(ROUTES.SETUP_PROFILE, {
         email: res.user.email,
         firstName: res.user.name?.split(' ')[0] || '',
@@ -100,12 +104,12 @@ const LoginScreen = ({ navigation }) => {
       });
     }
 
-    if (provider === 'facebook') {
+    if(provider === 'facebook') {
       const res = await signInWithFacebook();
-      if (!res) return;
-      if (res.cancelled) return;
-      if (res.success !== true) return;
-      if (!res.user) return;
+      if(!res) return;
+      if(res.cancelled) return;
+      if(res.success !== true) return;
+      if(!res.user) return;
 
       navigation.navigate(ROUTES.SETUP_PROFILE, {
         email: res.user.email,
@@ -116,12 +120,12 @@ const LoginScreen = ({ navigation }) => {
       });
     }
 
-    if (provider === 'apple') {
+    if(provider === 'apple') {
       const res = await signInWithApple();
-      if (!res) return;
-      if (res.cancelled) return;
-      if (res.success !== true) return;
-      if (!res.user) return;
+      if(!res) return;
+      if(res.cancelled) return;
+      if(res.success !== true) return;
+      if(!res.user) return;
 
       navigation.navigate(ROUTES.SETUP_PROFILE, {
         email: res.user.email,
@@ -135,7 +139,7 @@ const LoginScreen = ({ navigation }) => {
   }, [navigation, signInWithGoogle, signInWithFacebook, signInWithApple]);
 
   const handleSignUp = useCallback(() => {
-    if (navigation?.navigate) {
+    if(navigation?.navigate) {
       navigation.navigate(ROUTES.SIGN_UP);
     }
   }, [navigation]);
@@ -147,7 +151,6 @@ const LoginScreen = ({ navigation }) => {
         backgroundColor={colors.background}
         translucent={false}
       />
-
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
@@ -155,39 +158,30 @@ const LoginScreen = ({ navigation }) => {
         ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
-
-        {/* ── Mascot Logo ── */}
         <View style={{ marginTop: spacing[10], marginBottom: spacing[4] }}>
           <LogoHeader styles={styles} />
         </View>
-
-        {/* ── Heading ── */}
         <AppText variant="h1" color={colors.textPrimary} style={styles.heading}>
           {t('auth.login.heading')}
         </AppText>
-
         <AppText variant="subtitle" color={colors.textSecondary} style={styles.subheading}>
           {t('auth.login.subheading')}
         </AppText>
-
-        {/* ── Email Input ── */}
         <View style={{ marginTop: spacing[6] }}>
           <InputBox
             testID="login-email-input"
-            placeholder={t('auth.login.emailPlaceholder')}
+            placeholder={t('auth.login.usernameOrEmailPlaceholder')}
             value={email}
             onChangeText={text => setEmail(text)}
             error={error}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
-            autoComplete="email"
+            autoComplete="username"
             returnKeyType="done"
             inputStyle={styles.emailInput}
           />
         </View>
-
-        {/* ── Continue Button ── */}
         <Button
           testID="login-continue-btn"
           title={t('common.buttons.continue')}
@@ -196,13 +190,9 @@ const LoginScreen = ({ navigation }) => {
           size="lg"
           style={styles.continueBtn}
         />
-
-        {/* ── Divider ── */}
         <View style={styles.dividerWrapper}>
           <Divider label={t('common.orContinueWith')} style={styles.divider} />
         </View>
-
-        {/* ── Social Buttons ── */}
         {Platform.OS === 'ios' && (
           <SocialButton
             iconSource={require('../../../assets/images/apple.png')}
@@ -226,8 +216,6 @@ const LoginScreen = ({ navigation }) => {
           styles={styles}
           colors={colors}
         />
-
-        {/* ── SignUp Redirect ── */}
         <View style={[styles.loginRow, { marginTop: spacing[6] }]}>
           <AppText variant="bodyMedium" color={colors.textPrimary}>
             {t('auth.login.dontHaveAccount')}
@@ -240,9 +228,9 @@ const LoginScreen = ({ navigation }) => {
             </AppText>
           </TouchableOpacity>
         </View>
-
-        {/* ── Privacy Policy ── */}
-        <TouchableOpacity style={{ marginTop: spacing[6], marginBottom: spacing[4] }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(ROUTES.PRIVACY_POLICY)}
+          style={{ marginTop: spacing[6], marginBottom: spacing[4] }}>
           <AppText variant="caption" color={colors.textSecondary} style={styles.privacy}>
             {t('common.privacyPolicy')}
           </AppText>

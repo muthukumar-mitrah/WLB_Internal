@@ -15,3 +15,4 @@ export { default as Divider } from './Divider';
 export { default as AppFlatList } from './AppFlatList';
 export { default as SafeContainer } from './SafeContainer';
 export { default as Toast, ToastService } from './Toast';
+export { default as Sidebar } from './Sidebar';

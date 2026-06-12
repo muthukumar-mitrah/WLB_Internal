@@ -18,7 +18,7 @@ export const signInWithGoogle = async () => {
 
     const userInfo = await GoogleSignin.signIn();
 
-    const idToken = userInfo.idToken ?? userInfo.serverAuthCode ?? '';
+    const idToken = userInfo.idToken ?? '';
     const serverAuthCode = userInfo.serverAuthCode ?? null;
     const user = userInfo.user ?? null;
 

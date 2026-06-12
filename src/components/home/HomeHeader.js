@@ -1,7 +1,5 @@
 /**
  * HomeHeader — Top header for the Home screen.
- *
- * Layout: [Hamburger]  [WLB Logo]  [Message] [Avatar]
  */
 import React, { memo, useCallback, useMemo } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -26,7 +24,6 @@ const HomeHeader = () => {
         style={styles.iconBtn}>
         <Icon name="menu-outline" size={26} color={colors.textPrimary} />
       </TouchableOpacity>
-
       <View style={styles.logoWrapper}>
         <Image
           source={require('../../assets/images/header_wlb_logo.png')}
@@ -34,7 +31,6 @@ const HomeHeader = () => {
           resizeMode="contain"
         />
       </View>
-
       <View style={styles.rightRow}>
         <TouchableOpacity
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}

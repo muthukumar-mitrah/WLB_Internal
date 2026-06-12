@@ -40,7 +40,21 @@
     "buddyTag": "(Strict Coach)",
     "buddyBio": "Emma is direct but supportive, helping you stay focused and consistent every day.",
     "alignmentText": "You and Emma are aligned on steady progress and accountability.",
-    "infoText": "You can see why you were matched on Emma's profile. You can switch Buddies anytime."
+    "infoText": "You can see why you were matched on Emma's profile. You can switch Buddies anytime.",
+    "disclaimer": {
+      "title": "AI Support Disclaimer",
+      "description": "Robi uses AI to provide helpful guidance, but responses may not always be fully accurate.",
+      "aiGeneratedTitle": "AI-generated support",
+      "aiGeneratedDesc": "Robi may provide suggestions based on your questions and activity.",
+      "useJudgmentTitle": "Use your judgment",
+      "useJudgmentDesc": "Please review any advice before making decisions.",
+      "notMedicalTitle": "Not medical advice",
+      "notMedicalDesc": "For health or medical concerns, speak with a qualified professional.",
+      "dontShowAgain": "Don't show this again",
+      "continue": "Continue",
+      "close": "Close",
+      "aiSettings": "AI Settings"
+    }
   },
   "validation": {
     "emailRequired": "Email is required",
@@ -54,7 +68,8 @@
     "nameInvalid": "Name must be 2-50 alphabetic characters",
     "fieldRequired": "This field is required",
     "firstNameInvalid": "Please enter a valid first name",
-    "usernameTooShort": "Username must be at least 3 characters",
+    "usernameTooShort": "Username must contain at least 3 characters",
+    "usernameOrEmailRequired": "Username or email is required",
     "passwordComplex": "Password must contain at least 8 characters, uppercase, lowercase, number and special character",
     "confirmPasswordRequired": "Please confirm your password",
     "passwordsDoNotMatch": "Passwords do not match"
@@ -92,7 +107,12 @@
       "heading": "Welcome Back",
       "subheading": "Sign in to continue your weight loss journey.",
       "emailPlaceholder": "Enter your email",
+      "usernameOrEmailPlaceholder": "Enter your username or email",
       "dontHaveAccount": "Don't have an account? "
+    },
+    "errors": {
+      "userNotFound": "User not found",
+      "invalidCredentials": "Invalid username or password"
     },
     "loginPassword": {
       "heading": "Enter Your Password",
@@ -262,7 +282,269 @@
     "home": "Home",
     "profile": "Profile",
     "settings": "Settings",
+    "termsOfUse": "Terms of Use",
+    "privacyPolicy": "Privacy Policy",
     "theme": "Theme",
     "logout": "Log Out"
+  },
+  "legal": {
+    "effectiveDate": "Effective as of registration",
+    "copyright": "© {{year}} Weight Loss Buddy, Inc. All rights reserved.",
+    "termsOfUse": {
+      "title": "Terms of Use",
+      "heroSubtitle": "Please review the following terms carefully. By using the Weight Loss Buddy service, you agree to be bound by these terms and conditions.",
+      "footerContact": "For questions about these terms, please contact support.",
+      "sections": {
+        "agreement": {
+          "heading": "Agreement",
+          "body": [
+            "Use of this website represents your agreement with Weight Loss Buddy, Inc. to be legally bound by and to act in accordance with the following terms and conditions. We use the term \"visitors\" in our Terms of Use to include both members of this website as well as any other person that accesses this website at any point. This agreement and our Privacy Policy will remain in effect while you use this website whether as a visitor and/or as a member of the website. We reserve the right to terminate your membership, user account, and/or access to this website if you do not abide by these terms and conditions."
+          ]
+        },
+        "modifications": {
+          "heading": "Modifications & Termination",
+          "body": [
+            "Please note that we may, in our sole discretion and at any time, modify or discontinue this web site or specific portions of it without notice. You agree that any termination or cancellation of your access to or use of the website may be effected without prior notice. If you do not comply with the provisions of these Terms of Use, you agree that we may immediately deactivate or delete your user account and restrict your access to the website. Further, you agree that we shall not be liable to you or any third-party for any termination or cancellation of your access to or use of our website."
+          ]
+        },
+        "changesToTerms": {
+          "heading": "Changes to Terms",
+          "body": [
+            "Occasionally, we may revise or add to these Terms of Use with additional terms and conditions. You understand and agree that any supplemental or revised terms are included by reference into these Terms of Use. All visitors have the obligation to review the changes to this Terms of Use policy. Any changes to this policy unless otherwise stated shall become effective when they are posted.",
+            "In order to participate in certain activities on this website, you may be required to provide certain personally identifiable information about yourself, such as your name and personal contact information (\"personal information\"). We gather personal information for many reasons including to protect your security, the security of other visitors, the security of our website and for the proper functioning of the website. Please refer to our Privacy Policy to see how we use and protect the information provided to us by our visitors.",
+            "Visitors must provide accurate, timely and complete information to us and to any of our affiliates in connection with the use of the website. This obligation also applies to information provided to any third party merchants or service providers (\"Operational Providers\") through the website. Your membership or right to use the website may be terminated at any time if we discover that you have provided false information or violated any term of this Agreement. As necessary and in accordance with the law, we will cooperate with law enforcement to protect this website, our intellectual property, visitors, affiliates and Operational Providers."
+          ]
+        },
+        "useOfMaterials": {
+          "heading": "Use of Materials",
+          "body": [
+            "Visitors represent and warrant that they are the owner or otherwise have the right to provide any information or materials (including pre-existing materials) that they post or transmit for use in public or private areas of the website. Visitors hereby grant Weight Loss Buddy, Inc., its affiliates, parents and subsidiaries an irrevocable, royalty-free, perpetual, non-exclusive worldwide license to use, copy, display, modify, edit and create derivative works from and distribute any information or materials that visitors post or transmit in areas on our website.",
+            "Each visitor also agrees to indemnify and hold Weight Loss Buddy, Inc., its affiliates, parents, subsidiaries, directors, officers, employees and agents harmless from any claim or demand, including reasonable attorney's fees, made by any party arising out of information or materials that the visitor submits on our website."
+          ]
+        },
+        "healthDisclaimer": {
+          "heading": "Health and Advice Disclaimer",
+          "body": [
+            "This website provides information for weight loss management and is intended only to assist users in their personal weight loss endeavors. This website is not a medical organization, and our staff cannot offer you medical advice or diagnosis. Nothing on this website should be interpreted as such advice or diagnosis. The information we provide on our website should not be used as a substitute for physician consultation, evaluation, and/or treatment.",
+            "We strongly urge you to seek the advice of a physician before you begin any weight loss effort or routine. This website is intended for use only by healthy adult individuals and is not intended for minors, pregnant women, or anyone with any type of health condition.",
+            "You acknowledge that any reliance upon any such advice, opinions, statement or other information shall be at your sole risk and you agree that Weight Loss Buddy, Inc., its affiliates, parents, subsidiaries, directors, officers, employees and agents shall not be held responsible or liable, directly or indirectly, for any loss or damage caused or alleged to have been caused in any way whatsoever related to any advice, opinions, statements or other information displayed or distributed on our website."
+          ]
+        },
+        "onlineConduct": {
+          "heading": "Online Content and Conduct Guidelines",
+          "body": [
+            "Any content or information made available through our website (including all postings made in the Chat, Message Boards, and/or Online Forums (collectively \"interactive areas\"), are solely the responsibility of their respective authors. Weight Loss Buddy, Inc. does not adopt, endorse, or support any of the information or opinions garnered in the Chats, Message Boards and/or Online Forums.",
+            "Weight Loss Buddy, Inc., its affiliates, parents, subsidiaries, directors, officers, employees, agents and any Operational Providers that conduct, operate and/or manage interactive areas, will not be responsible for the action of any visitors or other third parties with respect to any information, materials or content posted, uploaded or transmitted in interactive areas or on our website.",
+            "You understand and agree that we may review and delete any content, messages, and/or information that may be considered offensive, illegal, or that may violate the rights, harm or threaten the safety of members. We may terminate your access and usage to this website and/or take further appropriate measures to implement and enforce these community standards and conduct guidelines if we discover any violations or infringements to this agreement.",
+            "Weight Loss Buddy, Inc. does not screen the members registering to the Weight Loss Buddy service in any way. As a result, we will not be liable for any damages, direct, indirect, incidental, and/or consequential, arising out of the use of this website, including, without limitation, damages arising out of contacts and/or liaisons made with other members of this service or members introduced to you via this service. Such damages include, without limitation, physical damages, bodily injury, and/or emotional distress and discomfort."
+          ]
+        },
+        "interactiveAreas": {
+          "heading": "Interactive Areas & User Conduct",
+          "body": [
+            "You are solely responsible for your interactions, whether online or offline, with other Weight Loss Buddy members and visitors. By participating in any interactive areas or other areas on our website, you agree to follow the standards of conduct in this Terms of Use. Postings to public areas may not be reviewed by us prior to appearing on the website.",
+            "Nonetheless, we reserve the right to: (i) change, delete, or remove, in part or in full, any postings on any portion of our website or in interactive areas; (ii) terminate or suspend access to such areas for conduct that we believe interferes with other people's enjoyment; and/or (iii) cooperate with local, state, and/or federal authorities if necessary, and in accordance with applicable law.",
+            "You are responsible for all content and/or materials that you post, e-mail, transmit, upload or otherwise make available through our website. You agree not to use our website or interactive areas linked through our website to make available any content, information or materials that:"
+          ],
+          "bullets": [
+            "Is unlawful, harmful to adults or minors, threatening, abusive, harassing, tortuous, defamatory, vulgar, obscene, libelous, invasive of another's privacy, hateful, or racially, ethnically or otherwise objectionable",
+            "Infringes any patent, trademark, trade secret, copyright or other proprietary rights of any person",
+            "Contains unauthorized advertising or solicits other visitors",
+            "Is a chain letter or pyramid scheme",
+            "Impersonates another person",
+            "Collects information about others, including email addresses, without their consent",
+            "Uses another person's identity for the use of the website",
+            "Is intended to interrupt, destroy or limit the functionality or integrity of any computer software, hardware or materials on this website"
+          ]
+        },
+        "passwords": {
+          "heading": "Passwords",
+          "body": [
+            "If you are required to create a password or are provided a password in connection with your use of the website, it is your responsibility to keep your password and any other membership account information confidential. You agree to immediately notify us of any unauthorized use of your password or other membership account information and further agree to indemnify and hold Weight Loss Buddy, Inc., its affiliates, Operational Providers and partners harmless for any improper or illegal use of your password.",
+            "We encourage you to keep us informed about any changes in your membership, personal contact and e-mail information."
+          ]
+        },
+        "parentalPermission": {
+          "heading": "Parental / Guardian Permission",
+          "body": [
+            "CHILDREN UNDER THE AGE OF 18 ARE NOT PERMITTED TO USE THIS WEBSITE. By using this website and becoming a member, you represent and warrant that you are at least 18 years old."
+          ]
+        },
+        "links": {
+          "heading": "Links",
+          "body": [
+            "This website contains links to other sites, and these Terms of Use apply only to this website. Please be aware that Weight Loss Buddy, Inc. is not responsible for or liable for the content, information, and/or privacy practices of such other sites, nor do we adopt or endorse any such content."
+          ]
+        },
+        "choiceOfLaw": {
+          "heading": "Choice of Law and Forum",
+          "body": [
+            "Weight Loss Buddy, Inc. is originated and located in the United States, and this Agreement shall be governed by and construed in accordance with the laws of the State of New Jersey, excluding its conflicts of law rules. Any dispute arising out of or relating to this Agreement or your access or use of this website will be subject to the exclusive jurisdiction of the courts located within the state of New Jersey, and you hereby submit to the personal jurisdiction of such courts.",
+            "If any provision in this Agreement is held invalid or unenforceable, that provision shall be construed in a manner consistent with applicable law to reflect the original intent of the provision, and the remaining provisions of this Agreement shall remain in full force and effect."
+          ]
+        },
+        "limitationOfLiability": {
+          "heading": "Limitation of Liability",
+          "body": [
+            "You understand and agree that, except in jurisdictions where such provisions are restricted, in no event will Weight Loss Buddy, Inc. be liable to you or any third person for any indirect, incidental, exemplary, consequential, special or punitive damages, including, but not limited to, loss of profits, loss of data, and/or loss of programs arising from your use of the website or the service, even if Weight Loss Buddy, Inc. knows and has been advised of the possibility of such damages.",
+            "Notwithstanding anything to the contrary contained herein, our liability to you for any cause whatsoever, and regardless of the form of the action, will at all times be limited to the amount paid, if any, by you to Weight Loss Buddy, Inc. for the Service during the term of membership."
+          ]
+        },
+        "disclaimers": {
+          "heading": "Disclaimers",
+          "body": [
+            "THE CONTENT, MATERIALS, AND OFFERINGS ON THIS WEBSITE ARE PROVIDED \"AS IS\" AND WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED AND EXPRESSLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR FOR ANY PARTICULAR PURPOSE. WEIGHT LOSS BUDDY, INC. SHALL NOT BE RESPONSIBLE OR LIABLE FOR THE ACCURACY OF ANY MATERIALS PROVIDED ON THIS WEBSITE WHETHER PROVIDED BY WEIGHT LOSS BUDDY, INC., ITS AFFILIATES, OPERATIONAL PROVIDERS OR OTHER USERS OR MEMBERS OF THE WEBSITE.",
+            "NEITHER WEIGHT LOSS BUDDY, INC., NOR ANY OF ITS AFFILIATES, PARENTS, SUBSIDIARIES, DIRECTORS, OFFICERS, EMPLOYEES, AGENTS, OPERATIONAL PROVIDERS OR SPONSORS ARE LIABLE OR SHALL HAVE RESPONSIBILITY OF ANY KIND TO ANY VISITOR FOR ANY LOSS OR DAMAGE THAT A VISITOR INCURS IN THE EVENT OF (I) ANY FAILURE OR INTERRUPTION OF THIS WEBSITE; (II) ANY ACT OR OMISSION OF ANY THIRD PARTY INVOLVED IN MAKING THIS WEBSITE OR THE DATA CONTAINED HEREIN AVAILABLE TO VISITORS; (III) ANY OTHER CAUSE RELATING TO A VISITOR'S ACCESS OR USE, OR INABILITY TO ACCESS OR USE, ANY PORTION OF THIS WEBSITE OR MATERIALS ON THIS WEBSITE; (IV) ANY VISITOR'S INTERACTION OR SUBMISSIONS ON THE WEBSITE, INCLUDING, BUT NOT LIMITED TO, WEIGHT LOSS ADVICE; (V) OR FROM ANY VISITOR'S FAILURE TO COMPLY WITH THIS AGREEMENT, WHETHER OR NOT THE CIRCUMSTANCES GIVING RISE TO SUCH CAUSE MAY HAVE BEEN WITHIN THE CONTROL OF WEIGHT LOSS BUDDY, INC. OR OF ANY VENDOR PROVIDING SOFTWARE, SERVICES OR SUPPORT.",
+            "IN NO EVENT WILL WEIGHT LOSS BUDDY, INC., ITS AFFILIATES, PARENTS, SUBSIDIARIES, DIRECTORS, OFFICERS OR EMPLOYEES BE LIABLE TO ANY VISITOR FOR ANY DIRECT, SPECIAL, INDIRECT, CONSEQUENTIAL, OR INCIDENTAL DAMAGES OR ANY OTHER LOSS OR DAMAGES OF ANY KIND EVEN IF WEIGHT LOSS BUDDY, INC. OR ANY OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY THEREOF.",
+            "PLEASE BE ADVISED THAT ONCE YOU LEAVE OUR WEBSITE, YOUR USE OF THE INTERNET WILL BE GOVERNED BY THE TERMS OF USAGE AGREEMENTS AND PRIVACY POLICIES, IF ANY, OF THE PARTICULAR WEBSITE THAT YOU ARE ACCESSING, INCLUDING THOSE OF OUR OPERATIONAL PROVIDERS, ADVERTISERS, SPONSORS, AND PROMOTIONAL PARTNERS. WEIGHT LOSS BUDDY, INC., ITS AFFILIATES, PARENTS, SUBSIDIARIES, DIRECTORS, OFFICERS, EMPLOYEES, AND AGENTS WILL NOT BE RESPONSIBLE OR LIABLE FOR THE CONTENT, ACTIVITIES, OR PRIVACY PRACTICES OF THE OTHER WEBSITES, OR ANY LOSS OR DAMAGE THAT COULD RESULT FROM LEAVING OUR WEBSITE."
+          ]
+        }
+      }
+    },
+    "privacyPolicy": {
+      "title": "Privacy Policy",
+      "heroSubtitle": "Please review our privacy practices carefully. Your privacy and the security of your personal information are very important to us.",
+      "footerContact": "For questions about this policy, contact us at contactus@weightlossbuddy.com",
+      "sections": {
+        "plainEnglish": {
+          "heading": "Plain English",
+          "body": [
+            "At WeightLossBuddy.com we take your privacy very seriously. We never rent, sell or divulge any of your private information, including name, address, or email to anyone.",
+            "All communication between members is done either in the chats or through an internal (WLB site only) PM - Private Messenger. That is why we use usernames to identify members.",
+            "So when people look for a \"buddy\" on the website, they will not be able to find your personal information such as name, email, etc.",
+            "If someone wants to contact you, or if you check off that you want to be notified for a recipe, or message board topic, WLB will send you an email notifying you that you have a PM (private message) on the site. You can choose to turn off this notification at any time. You can choose to hide when you're on line, and restrict who can see your blog or diet tracker.",
+            "We created this Privacy Policy because your privacy and the security of your personal information are very important to us. This Privacy Policy demonstrates our dedication to protecting the privacy of those who visit our website and use our online features. Throughout this Privacy Policy, we use the term \"visitors\" to mean both registered members of the website as well as any other person who accesses our website."
+          ]
+        },
+        "informationCollected": {
+          "heading": "Information Collected about You",
+          "body": [
+            "To operate our website, we collect certain non-personal and personal information from our visitors for specific purposes. For website activities that request personal information, you agree to provide accurate and current information about yourself. Your membership and/or participation in our website activities will be canceled without notice if at any time we discover that you provide false information, or violate any term of our Privacy Policy or our Terms of Use. We may retain personal information for an indefinite amount of time to preserve our website membership database and to comply with various federal and state laws.",
+            "Personally identifiable information may include your name, address, email address, telephone number, birth date (primarily for eligibility purposes) and billing and credit card information. Personally identifiable information is information that identifies you or can be used to identify or contact you.",
+            "We may request personally identifiable information from you when you register on our website, subscribe to our online products, or in connection with other online products or services we may make available on our website from time to time. In all of the above cases, we will collect personally identifiable information from you only if you voluntarily submit such information to us.",
+            "We do not sell any of your personally identifiable information to third parties unless we have your permission to do so. Non-personally identifiable information may include demographic information (like age, gender, profession), health information (like current weight), IP addresses, browser types, domain names, and other anonymous statistical data involving the use of our website. Non-personally identifiable information cannot be used to contact you; it is used to help us understand who uses our website and to improve and market our website in general."
+          ]
+        },
+        "ipCookiesGifs": {
+          "heading": "IP Address, Cookies and GIFs",
+          "body": [
+            "Your IP Address is automatically collected each time you visit the site, just as in most e-commerce websites.",
+            "Cookies are small text files saved onto your computer's hard drive in order to identify your web browser and the activities of your computer on our website. Cookies allow us to better understand how users use our site and also help us to tailor a website to correspond with your interests and needs.",
+            "Third parties whom we use to advertise on our site may also place cookies on your computer. Their cookies do not collect personally identifiable information, and we do not share that information with them.",
+            "You are not required to accept cookies in order to view or use our website. However, some parts of this website, such as the resources, features, and/or offers may not work properly if you do not accept cookies.",
+            "This website may use clear Graphic Interchange Formats (\"GIFs\") (also known as pixel tags, web beacons or web bugs). A clear GIF is a tiny line of code that is programmed to collect certain information about a visit to a particular website or website page.",
+            "We may use GIFs to gather non-personal, aggregate information on visits to our website and track usage of website links. Although we do not intend to use GIFs to collect personal information, some personal information you provide over our website may be linked to non-personal information collected through GIFs. We do not disclose this combined information to third parties."
+          ]
+        },
+        "howInfoUsed": {
+          "heading": "How Information Collected is Used",
+          "body": [
+            "Generally, we use your information on a collective basis to do such things as operate our site, enhance our site, and sell and deliver advertising.",
+            "We use the information collected on our website to help us understand who uses our website and how it is used, to personalize your online experience, to assist you in using our online products, to improve our website, and for subscription billing purposes, if applicable.",
+            "If you become a registered user of our website, we use your information to contact you with important service announcements and/or updates regarding our website and online products.",
+            "If you opt to receive newsletters or information about new products, services, or news via email, your information is used to contact you with those. We will always provide you with the option to edit these preferences."
+          ]
+        },
+        "operationalProviders": {
+          "heading": "Use and Collection of Information by Contract Service and Operational Providers",
+          "body": [
+            "For the convenience of our visitors, we will provide the opportunity to purchase merchandise and services through this website. Companies not affiliated, owned or operated by Weight Loss Buddy, Inc., its parents or subsidiaries may handle some of these transactions. We call these companies that conduct our e-commerce operations and/or order fulfillment \"Operational Providers.\" If you choose to use these optional services, our Operational Providers will request your personal information to fulfill your order or request. The voluntary submission of your personal information to these Operational Providers, including your order or request, will be governed by the specific provider's terms of usage and privacy policies. To facilitate an order or request, we may share your personal information with the Operational Provider. The Operational Provider may also share your personal information with us.",
+            "In most instances, we request that our Operational Providers adhere to the provisions in this Privacy Policy and that such providers only share visitors' personal information with Weight Loss Buddy, Inc., unless necessary to complete a visitor's request or order. We also request that these providers only use the personal information for the purpose of conducting the sale or fulfilling the requested order. However, you must read an Operational Provider's privacy policy to determine the extent of use and disclosure of your personal information collected online. Weight Loss Buddy, Inc., its affiliates, parents, subsidiaries, directors, officers, employees and agents are not responsible for the collection, use and disclosure practices of Operational Providers, nor are they responsible or liable for the products or services offered and/or provided by Operational Providers."
+          ]
+        },
+        "advertisersSponsors": {
+          "heading": "Use and Collection of Information by Advertisers and Sponsors",
+          "body": [
+            "Our website will post banner ads and other forms of advertisements, and/or links to the websites of advertisers or sponsors which are companies that are not owned or operated by Weight Loss Buddy, Inc., its parents or subsidiaries. These advertisers and sponsors may independently solicit and collect personal information, or send their own cookies to our visitors. Please be advised that when you visit an advertiser's or sponsor's website you will be subject to the privacy policy and terms of usage agreement of that website operator. Weight Loss Buddy, Inc., its affiliates, parents, subsidiaries, directors, officers, employees and agents will not be responsible for advertiser or sponsor ads and/or links or the content, activities, information collection, use and disclosure practices of the websites of advertisers and sponsors."
+          ]
+        },
+        "disclosingInfo": {
+          "heading": "Our Policy on Disclosing Your Information to Parties",
+          "body": [
+            "We only share or disclose your personal information with third parties when you consent to the disclosure, when disclosure is required or authorized by law, when it is necessary to operate the website or our website services, to provide or enhance our website features, complete requested transactions, protect the safety of our visitors, employees or property, when disclosure is consistent with our practices for services that are similarly provided offline, or as otherwise provided in this Privacy Policy.",
+            "We may provide aggregate information about our visitors to our advertisers, sponsors, promotional partners, and affiliates, such as how many persons visited a particular page or activity, the average age of our visitors on the website or page, or the preferences of our visitors, but this information does not include personal information about any individual visitor. We may obtain geographic information such as zip code clustering from other sources, but this aggregate information will not reveal any personal information about a specific visitor."
+          ]
+        },
+        "limitations": {
+          "heading": "Limitations on Our Abilities",
+          "body": [
+            "Although your privacy is very important to us, due to the existing legal regulatory and security environment, we cannot fully ensure that your private communications and other personally identifiable information will not be disclosed to third parties. For example, we may be forced to disclose information to the government or third parties under certain circumstances, or third parties may unlawfully intercept or access transmissions or private communications. Additionally, in the unlikely event we need to investigate or resolve possible problems or inquiries, we can disclose any information about you to private entities, law enforcement or other government officials as may be required under law or as we, in our sole and absolute discretion, believe necessary or appropriate.",
+            "We use industry-standard efforts to safeguard the confidentiality of your personally identifiable information, such as firewalls and Secure Socket Layers (SSL) where appropriate. However, \"perfect security\" does not exist on the Internet, and there is always some risk that others could find a way to bypass or thwart our security systems. As a result, while we strive to protect your information, we cannot ensure or warrant the security and privacy of any information you transmit to us, and you do so at your own risk."
+          ]
+        },
+        "deleteData": {
+          "heading": "How to Delete Your Data",
+          "body": [
+            "You may have a right to request that we delete the personal information we hold about you at any time, and we will take reasonable steps to delete your personal information from our current records. If you ask us to delete your personal information, we will let you know how the deletion affects your use of the site and services.",
+            "You can delete your data by deleting your account from WLB. Deleting account can be found in settings page or you can write to us at contactus@weightlossbuddy.com"
+          ]
+        },
+        "updates": {
+          "heading": "Updates to the Privacy Policy",
+          "body": [
+            "We may amend this privacy policy from time to time. Please refer back to this policy on a regular basis so that you are informed and updated on any and all changes. By visiting this website, you agree to and are accepting the policies described here for this website.",
+            "We hope this policy clarifies our procedures regarding your personal information. We at Weight Loss Buddy, Inc. encourage you to learn as much as you can about your privacy on the Internet."
+          ]
+        }
+      }
+    }
+  },
+  "sidebar": {
+    "greeting": {
+      "morning": "Good morning, {{name}}!",
+      "afternoon": "Good afternoon, {{name}}!",
+      "evening": "Good evening, {{name}}!"
+    },
+    "menu": {
+      "blockedUsers": "Blocked Users",
+      "changePassword": "Change Password",
+      "blog": "Blog",
+      "tracker": "Tracker",
+      "chooseAiBuddy": "Choose an AI Buddy",
+      "savedPosts": "Saved Posts",
+      "awards": "Awards",
+      "leaderBoard": "Leader Board"
+    },
+    "sections": {
+      "settings": "Setting",
+      "supportLegal": "Support & Legal"
+    },
+    "settings": {
+      "aiSettings": "AI Settings",
+      "accountSettings": "Account Settings"
+    },
+    "support": {
+      "help": "Help",
+      "contactUs": "Contact Us",
+      "termsOfUse": "Terms of Use",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "logout": "Log Out"
+  },
+  "contactUs": {
+    "title": "Contact Us",
+    "heading": "We're here to help.",
+    "subheading": "Need help? Send us a message and we'll get back to you.",
+    "firstName": "First Name",
+    "email": "Email",
+    "category": "Category",
+    "message": "Message",
+    "firstNamePlaceholder": "Enter your first name",
+    "emailPlaceholder": "Enter your email address",
+    "categoryPlaceholder": "Select a category",
+    "messagePlaceholder": "Write your message here...",
+    "submitMessage": "Submit Message",
+    "contactInfo": "Contact Information",
+    "locationTitle": "Weight Loss Buddy",
+    "locationAddress": "PO Box 488\nTenafly, NJ 07670",
+    "emailSupportTitle": "Email Support",
+    "emailSupportAddress": "support@weightlossbuddy.app",
+    "categories": {
+      "generalInquiry": "General Inquiry",
+      "technicalSupport": "Technical Support",
+      "billing": "Billing",
+      "feedback": "Feedback",
+      "bugReport": "Bug Report"
+    }
   }
 }

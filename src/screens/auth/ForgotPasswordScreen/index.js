@@ -18,7 +18,6 @@ import { ROUTES } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
 import createStyles from './styles';
 
-// ─── Screen 1: Forgot Password ───────────────────────────────────────────────
 const ForgotPasswordScreen = ({ navigation }) => {
   const { colors, spacing, borderRadius, iconSize } = useTheme();
   const { t } = useTranslation();

@@ -33,6 +33,7 @@ const STORAGE_KEYS = {
   USER_PROFILE: '@wlb/user_profile',
   THEME_MODE: '@wlb/theme_mode',
   ONBOARDING_DONE: '@wlb/onboarding_done',
+  AI_BUDDY_DISCLAIMER_ACCEPTED: '@wlb/ai_buddy_disclaimer_accepted',
 };
 
 // Navigation routes
@@ -74,13 +75,24 @@ const ROUTES = {
   CREATE_POST: 'CreatePost',
   NOTIFICATIONS: 'Notifications',
   ROBI: 'Robi',
+  CONTACT_US: 'ContactUs',
+  TERMS_OF_USE: 'TermsOfUse',
+  PRIVACY_POLICY: 'PrivacyPolicy',
+  WEB_VIEW_SCREEN: 'WebViewScreen',
+};
+
+// Remove once the real login API is integrated.
+const MOCK_AUTH = {
+  IDENTIFIER: 'saravana',
+  PASSWORD: 'P@ssw0rd',
+  TOKEN: 'mock-static-jwt-token',
 };
 
 // Regex patterns
 const REGEX = {
   EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   PHONE: /^\+?[1-9]\d{9,14}$/,
-  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_%^&*()+=?/\\.,:;'"<>|~`{}[\]-])[A-Za-z\d@$!%*?&#_%^&*()+=?/\\.,:;'"<>|~`{}[\]-]{8,}$/,
   NAME: /^[a-zA-Z\s]{2,50}$/,
 };
 
@@ -126,6 +138,7 @@ export {
   PAGE_SIZE,
   STORAGE_KEYS,
   ROUTES,
+  MOCK_AUTH,
   REGEX,
   ERROR_MESSAGES,
   HTTP_STATUS,

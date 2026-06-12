@@ -79,9 +79,7 @@ const CheckInCard = memo(({ option, isSelected, onPress, colors, borderRadius })
                     backgroundColor: cell === 1
                       ? colors.primarySoft
                       : colors.backgroundTertiary
-                  },
-                  cell === 1 && { opacity: 0.5 },
-                  cell === 1 && { opacity: 1 },
+                  }
                 ]}
               />
             ))}

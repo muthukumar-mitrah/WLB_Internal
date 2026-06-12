@@ -17,7 +17,7 @@ import {
 } from '../../../components/common';
 import SliderPicker from '../../../components/common/SliderPicker';
 import DateWheelPicker from '../../../components/common/DateWheelPicker';
-import { COUNTRIES } from '../../../constants/countries';
+import { COUNTRIES, countryCodeToFlag } from '../../../constants/countries';
 import { useTranslation } from '../../../i18n/useTranslation';
 import createStyles from './styles';
 import { ROUTES } from '../../../constants/index';
@@ -27,13 +27,6 @@ const GENDER_KEYS = [
   { value: 'Female', labelKey: 'basicInfo.genderFemale' },
   { value: 'Other', labelKey: 'basicInfo.genderOther' },
 ];
-
-const codeToFlag = (code = '') =>
-  code
-    .toUpperCase()
-    .split('')
-    .map(ch => String.fromCodePoint(0x1f1e6 + ch.charCodeAt(0) - 65))
-    .join('');
 
 const BasicInfoScreen = ({ navigation }) => {
   const { colors, spacing, borderRadius } = useTheme();
@@ -102,7 +95,7 @@ const BasicInfoScreen = ({ navigation }) => {
         activeOpacity={0.7}
       >
         <View style={styles.countryItemLeft}>
-          <AppText style={styles.countryFlag}>{codeToFlag(item.value)}</AppText>
+          <AppText style={styles.countryFlag}>{countryCodeToFlag(item.value)}</AppText>
           <AppText
             variant="body"
             color={isSelected ? colors.primary : colors.textPrimary}
@@ -164,7 +157,7 @@ const BasicInfoScreen = ({ navigation }) => {
           {selectedCountry ? (
             <View style={styles.countryPickerValue}>
               <AppText style={styles.countryPickerFlag}>
-                {codeToFlag(selectedCountry.value)}
+                {countryCodeToFlag(selectedCountry.value)}
               </AppText>
               <AppText variant="body" style={styles.pickerText}>
                 {selectedCountry.label}
@@ -265,13 +258,19 @@ const BasicInfoScreen = ({ navigation }) => {
           <View style={styles.toggleContainer}>
             <TouchableOpacity
               style={[styles.toggleBtn, heightUnit === 'ft' && styles.toggleBtnActive]}
-              onPress={() => setHeightUnit('ft')}
+              onPress={() => {
+                setHeight((prev) => Math.max(3.0, Math.min(Number((prev * 3.28084).toFixed(1)), 8.0)));
+                setHeightUnit('ft');
+              }}
             >
               <AppText style={[styles.toggleText, heightUnit === 'ft' && styles.toggleTextActive]}>{t('basicInfo.unitFeet')}</AppText>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.toggleBtn, heightUnit === 'm' && styles.toggleBtnActive]}
-              onPress={() => setHeightUnit('m')}
+              onPress={() => {
+                setHeight((prev) => Math.max(1.0, Math.min(Number((prev / 3.28084).toFixed(2)), 2.5)));
+                setHeightUnit('m');
+              }}
             >
               <AppText style={[styles.toggleText, heightUnit === 'm' && styles.toggleTextActive]}>{t('basicInfo.unitMeters')}</AppText>
             </TouchableOpacity>
@@ -305,13 +304,19 @@ const BasicInfoScreen = ({ navigation }) => {
           <View style={styles.toggleContainer}>
             <TouchableOpacity
               style={[styles.toggleBtn, weightUnit === 'kg' && styles.toggleBtnActive]}
-              onPress={() => setWeightUnit('kg')}
+              onPress={() => {
+                setWeight((prev) => Math.max(30, Math.min(Math.round(prev / 2.20462), 200)));
+                setWeightUnit('kg');
+              }}
             >
               <AppText style={[styles.toggleText, weightUnit === 'kg' && styles.toggleTextActive]}>{t('basicInfo.unitKg')}</AppText>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.toggleBtn, weightUnit === 'lbs' && styles.toggleBtnActive]}
-              onPress={() => setWeightUnit('lbs')}
+              onPress={() => {
+                setWeight((prev) => Math.max(50, Math.min(Math.round(prev * 2.20462), 400)));
+                setWeightUnit('lbs');
+              }}
             >
               <AppText style={[styles.toggleText, weightUnit === 'lbs' && styles.toggleTextActive]}>{t('basicInfo.unitLbs')}</AppText>
             </TouchableOpacity>

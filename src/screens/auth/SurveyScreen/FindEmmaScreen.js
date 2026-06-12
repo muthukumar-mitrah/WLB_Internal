@@ -16,7 +16,6 @@ import { ROUTES } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { createSurveyStyles } from './styles';
 
-// ─── Screen ───────────────────────────────────────────────────────────────────
 const FindEmmaScreen = ({ navigation }) => {
   const theme = useTheme();
   const { colors, spacing } = theme;

@@ -182,7 +182,7 @@ const SurveyVerticalBar = memo(({ selectedIndex, itemCount, rowHeight, rowGap, o
         style={[
           styles.thumbOuter,
           {
-            transform: [{ translateY: Animated.add(thumbY, new Animated.Value(-CIRCLE / 2)) }],
+            transform: [{ translateY: Animated.subtract(thumbY, CIRCLE / 2) }],
             left: lineX - CIRCLE / 2 - TRI_H - TRI_GAP,
           },
         ]}

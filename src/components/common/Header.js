@@ -6,6 +6,7 @@ import {View, TouchableOpacity, StyleSheet, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../theme';
 import AppText from './AppText';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Header = ({
   title,
@@ -48,13 +49,8 @@ const Header = ({
         {leftComponent ? (
           leftComponent
         ) : showBack ? (
-          <TouchableOpacity
-            onPress={handleBack}
-            style={[styles.backButton, {backgroundColor: colors.backgroundSecondary}]}
-            hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
-            <AppText variant="title" color={colors.textPrimary}>
-              ←
-            </AppText>
+          <TouchableOpacity onPress={handleBack} >
+            <MaterialIcons name="arrow-back-ios-new" size={25} color={colors.textPrimary} />
           </TouchableOpacity>
         ) : null}
       </View>
@@ -97,14 +93,7 @@ const styles = StyleSheet.create({
   center: {
     flex: 3,
     alignItems: 'center',
-  },
-  backButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  }
 });
 
 export default memo(Header);

@@ -10,7 +10,12 @@ const initialSurveyState = {
   mainGoal: null,
   poundsToLose: null,
   commitmentLevel: null,
-
+  buddyType: null,
+  communicationStyle: null,
+  checkInFrequency: null,
+  genderPreference: null,
+  ageRange: null,
+  personalizationRatings: null,
 };
 
 // ─── Actions ─────────────────────────────────────────────────────────────────

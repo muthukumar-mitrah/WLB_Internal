@@ -96,8 +96,8 @@ const starCentreX = (starIdx) => starX(starIdx) + THUMB_SIZE / 2;
 const HALF_STEP = THUMB_TRAVEL / (STAR_COUNT - 1) / 2;
 
 const xToValue = (x) => {
-  if(x < HALF_STEP) return 0;
-  return Math.round((x / THUMB_TRAVEL) * (STAR_COUNT - 1)) + 1; // 1..5
+  const clampedX = Math.max(0, Math.min(x, THUMB_TRAVEL));
+  return Math.max(1, Math.round((clampedX / THUMB_TRAVEL) * (STAR_COUNT - 1)) + 1); // 1..5
 };
 
 const valueToX = (value) => {
@@ -142,7 +142,7 @@ const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValu
   }, [value]);
 
   const snapToValue = useCallback((newValue) => {
-    const clamped = Math.max(0, Math.min(newValue, STAR_COUNT));
+    const clamped = Math.max(1, Math.min(newValue, STAR_COUNT));
     currentValue.current = clamped;
     onValueChange(clamped);
     Animated.spring(thumbX, {

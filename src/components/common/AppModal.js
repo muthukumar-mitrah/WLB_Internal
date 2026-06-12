@@ -1,7 +1,7 @@
 /**
  * AppModal — bottom sheet / centered modal wrapper
  */
-import React, {memo} from 'react';
+import React, { memo } from 'react';
 import {
   Modal,
   View,
@@ -11,15 +11,15 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {useTheme} from '../../theme';
-import AppText from './AppText';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../theme';
 
 const AppModal = ({
   visible = false,
   onClose,
   title,
   children,
-  position = 'bottom', // 'bottom' | 'center'
+  position = 'bottom',
   showHandle = true,
   showCloseButton = true,
   closeOnOverlay = true,
@@ -27,7 +27,7 @@ const AppModal = ({
   style,
   contentStyle,
 }) => {
-  const {colors, borderRadius, spacing, shadows} = useTheme();
+  const { colors, borderRadius, spacing, shadows } = useTheme();
 
   const isBottom = position === 'bottom';
 
@@ -47,8 +47,6 @@ const AppModal = ({
           activeOpacity={1}
           onPress={closeOnOverlay ? onClose : undefined}
         />
-
-        {/* Content */}
         <View
           style={[
             styles.container,
@@ -64,37 +62,35 @@ const AppModal = ({
             shadows.modal,
             style,
           ]}>
-          {/* Handle */}
           {showHandle && isBottom && (
             <View
               style={[
                 styles.handle,
-                {backgroundColor: colors.border, marginTop: spacing[2], marginBottom: spacing[1]},
+                { backgroundColor: colors.border, marginTop: spacing[2], marginBottom: spacing[1] },
               ]}
             />
           )}
-
-          {/* Header row */}
           {(title || showCloseButton) && (
-            <View style={[styles.header, {paddingTop: spacing[3], paddingBottom: spacing[2]}]}>
-              {title && (
+            <View style={[styles.header, { paddingTop: spacing[3], paddingBottom: spacing[2] }]}>
+              {title ? (
                 <AppText variant="title" color={colors.textPrimary}>
                   {title}
                 </AppText>
-              )}
+              ) : <View />}
               {showCloseButton && (
                 <TouchableOpacity
                   onPress={onClose}
-                  hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
-                  style={[styles.closeBtn, {backgroundColor: colors.backgroundSecondary}]}>
-                  <AppText variant="buttonSmall" color={colors.textSecondary}>
-                    ✕
-                  </AppText>
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  style={[styles.closeBtn, { backgroundColor: colors.backgroundTertiary }]}>
+                  <Ionicons
+                    name="close"
+                    size={24}
+                    color={colors.textSecondary}
+                  />
                 </TouchableOpacity>
               )}
             </View>
           )}
-
           <View style={contentStyle}>{children}</View>
         </View>
       </KeyboardAvoidingView>
@@ -106,7 +102,7 @@ const styles = StyleSheet.create({
   keyboardView: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor:'#00000080'
+    backgroundColor: '#00000080'
   },
   overlay: {
     ...StyleSheet.absoluteFill,

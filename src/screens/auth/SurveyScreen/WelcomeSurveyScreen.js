@@ -15,6 +15,7 @@ import {
 import { useTheme } from '../../../theme';
 import { AppText, Button, SafeContainer } from '../../../components/common';
 import { ROUTES } from '../../../constants';
+import { useAuth } from '../../../context/AuthContext';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { fontFamily } from '../../../theme/fonts';
 
@@ -24,6 +25,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const WelcomeSurveyScreen = ({ navigation }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
+  const { completeAuthSession } = useAuth();
 
   const styles = useMemo(
     () => createStyles({ colors, spacing, borderRadius }),
@@ -39,12 +41,13 @@ const WelcomeSurveyScreen = ({ navigation }) => {
   }, [navigation]);
 
   const handleSkip = useCallback(() => {
-    // Naviage to further flow (e.g. home screen) without completing survey
-  }, [navigation]);
+    // Marking the session authenticated switches the root navigator to Main.
+    completeAuthSession();
+  }, [completeAuthSession]);
 
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} translucent={false} />
+      <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
       <View style={styles.headerRow}>
         <TouchableOpacity
           style={styles.skipBtn}
