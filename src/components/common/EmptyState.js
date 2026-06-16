@@ -13,6 +13,7 @@ const EmptyState = ({
   description,
   actionLabel,
   onAction,
+  actionVariant = 'outline',
   style,
 }) => {
   const {colors, spacing} = useTheme();
@@ -45,7 +46,7 @@ const EmptyState = ({
         <Button
           title={actionLabel}
           onPress={onAction}
-          variant="outline"
+          variant={actionVariant}
           fullWidth={false}
           style={{marginTop: spacing[5], paddingHorizontal: spacing[8]}}
         />

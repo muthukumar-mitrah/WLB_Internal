@@ -92,6 +92,7 @@ const SignUpScreen = ({ navigation }) => {
     }
 
     navigation.navigate(ROUTES.SETUP_PROFILE, { email: formData.email });
+    // navigation.navigate(ROUTES.HOME)
   }, [formData, navigation]);
 
   const handleSocialLogin = useCallback(async (provider) => {

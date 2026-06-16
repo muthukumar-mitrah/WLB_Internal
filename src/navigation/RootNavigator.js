@@ -9,6 +9,7 @@ import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
 import { Loader } from '../components/common';
 import { useAuth } from '../context/AuthContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const RootStack = createNativeStackNavigator();
 
@@ -20,15 +21,17 @@ const RootNavigator = () => {
   }
 
   return (
-    <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        {isAuthenticated ? (
-          <RootStack.Screen name={ROUTES.MAIN} component={MainNavigator} />
-        ) : (
-          <RootStack.Screen name={ROUTES.AUTH} component={AuthNavigator} />
-        )}
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+          {isAuthenticated ? (
+            <RootStack.Screen name={ROUTES.MAIN} component={MainNavigator} />
+          ) : (
+            <RootStack.Screen name={ROUTES.AUTH} component={AuthNavigator} />
+          )}
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 };
 

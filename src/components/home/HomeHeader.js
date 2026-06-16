@@ -6,10 +6,12 @@ import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../theme';
+import { useFeed } from '../../context/FeedContext';
 
 const HomeHeader = () => {
   const navigation = useNavigation();
   const { colors, spacing } = useTheme();
+  const { activeTab } = useFeed();
   const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
 
   const handleOpenDrawer = useCallback(() => {

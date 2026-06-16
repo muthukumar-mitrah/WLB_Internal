@@ -9,6 +9,7 @@ import { ThemeProvider, useTheme } from './src/theme';
 import { AuthProvider } from './src/context/AuthContext';
 import { SurveyProvider } from './src/context/SurveyContext';
 import { ProfileProvider } from './src/context/ProfileContext';
+import { FeedProvider } from './src/context/FeedContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import Toast from './src/components/common/Toast';
 import SplashScreen from 'react-native-splash-screen'
@@ -41,9 +42,11 @@ const App = () => (
     <ThemeProvider>
       <AuthProvider>
         <ProfileProvider>
-          <SurveyProvider>
+        <SurveyProvider>
+          <FeedProvider>
             <AppCore />
-          </SurveyProvider>
+          </FeedProvider>
+        </SurveyProvider>
         </ProfileProvider>
       </AuthProvider>
     </ThemeProvider>

@@ -26,7 +26,10 @@
     "meetYourAiBuddy": "Meet your new AI Buddy",
     "hereIsWhereYouWillFindEmma": "Here's where you'll find Emma",
     "hereYouCanExploreYourRealBuddyMatches": "Here you can explore your real Buddy matches",
-    "matchPercent": "{{percent}}% Match"
+    "matchPercent": "{{percent}}% Match",
+    "likes": "Likes",
+    "message": "Message",
+    "follow": "Follow"
   },
   "matchLoading": {
     "stage1": "Give me a second…",
@@ -276,7 +279,27 @@
       "buddies": "Buddies",
       "groups": "Groups"
     },
-    "comingSoon": "Coming Soon"
+    "comingSoon": "Coming Soon",
+    "emptyStates": {
+      "buddies": {
+        "title": "No Buddies Yet",
+        "subtitle": "Connect with buddies to see their posts, updates, and support here.",
+        "button": "Find Buddies"
+      },
+      "noRecords": "No records found"
+    },
+    "feed": {
+      "cw": "CW: ",
+      "chat": "Chat"
+    },
+    "postOptions": {
+      "save": "Save post",
+      "message": "Message {{username}}",
+      "profile": "View profile",
+      "hide": "Hide post",
+      "report": "Report post",
+      "block": "Block {{username}}'s profile"
+    }
   },
   "drawer": {
     "home": "Home",

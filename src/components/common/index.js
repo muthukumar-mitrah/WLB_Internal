@@ -21,3 +21,8 @@ export { default as DateWheelPicker } from './DateWheelPicker';
 export { default as CountryListItem } from './CountryListItem';
 export { default as WeightPicker } from './WeightPicker';
 export { default as PostCard } from './PostCard';
+export { default as LikeAnimationOverlay } from './Like/LikeAnimationOverlay';
+export { default as PostPreviewModal } from './PostPreviewModal';
+export { default as CommonBottomSheet } from './BottomSheet/AppBottomSheet';
+export { default as CommentsBottomSheet } from '../../screens/home/CommentsBottomSheet';
+export { default as LikesBottomSheet } from '../../screens/home/LikesBottomSheet';

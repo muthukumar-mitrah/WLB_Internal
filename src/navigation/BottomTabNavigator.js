@@ -198,7 +198,7 @@ const BottomTabNavigator = () => {
     () => ({
       headerShown: false,
       tabBarButton: NoRippleTabButton,
-
+      tabBarHideOnKeyboard: true,
       tabBarStyle: {
         backgroundColor: colors.tabBarBackground,
         height: TAB_BAR_HEIGHT + bottomInset,

@@ -1,41 +1,319 @@
 /**
  * HomeScreen — Main home screen with header, top tabs, and feed placeholder.
  */
-import React, { memo, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {
+  memo,
+  useCallback,
+  useMemo,
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
+import {
+  FlatList,
+  Image,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Share from 'react-native-share';
 import { useTheme } from '../../theme';
-import { AppText, SafeContainer } from '../../components/common';
-import { useTranslation } from '../../i18n/useTranslation';
+import { AppText, PostPreviewModal, EmptyState, CommentsBottomSheet, AppModal, LikesBottomSheet } from '../../components/common';
+import { LikeAnimationOverlay } from '../../components/common'
+import { fontFamily } from '../../theme/fonts';
+import Video from 'react-native-video';
 import HomeHeader from '../../components/home/HomeHeader';
+import TopTabs from '../../components/home/TopTabs';
+import { useTranslation } from '../../i18n/useTranslation';
+import { useFeed } from '../../context/FeedContext';
+import { ROUTES } from '../../constants';
+import PostCard from './Feed';
 
-const HomeScreen = () => {
+// ─── Post options (bottom sheet items) ───────────────────────────────────────
+const buildPostOptions = (username, t) => [
+  { key: 'save', icon: 'bookmark-outline', label: t('home.postOptions.save') },
+  { key: 'message', icon: 'chatbubble-outline', label: t('home.postOptions.message', { username }) },
+  { key: 'profile', icon: 'person-outline', label: t('home.postOptions.profile') },
+  { key: 'hide', icon: 'eye-off-outline', label: t('home.postOptions.hide') },
+  { key: 'report', icon: 'flag-outline', label: t('home.postOptions.report') },
+  { key: 'block', icon: 'person-remove-outline', label: t('home.postOptions.block', { username }) },
+];
+
+
+// ─── Post Options Bottom Sheet ────────────────────────────────────────────────
+const PostOptionsSheet = memo(({ visible, username, onClose, onSelect }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const styles = useMemo(() => createStyles({ colors }), [colors]);
+  const options = useMemo(() => buildPostOptions(username, t), [username, t]);
 
   return (
-    <SafeContainer edges={['top']} style={styles.container}>
+    <AppModal
+      visible={visible}
+      onClose={onClose}
+      position="bottom"
+      showHandle={true}
+      showCloseButton={false}
+      closeOnOverlay={true}
+      overlayColor="rgba(0,0,0,0.45)"
+    >
+      {options.map((opt, idx) => (
+        <TouchableOpacity
+          key={opt.key}
+          style={styles.sheetRow}
+          activeOpacity={0.65}
+          onPress={() => {
+            onSelect?.(opt.key);
+            onClose();
+          }}
+        >
+          <Icon
+            name={opt.icon}
+            size={22}
+            color={colors.iconPrimary}
+            style={styles.sheetRowIcon}
+          />
+          <AppText style={[styles.sheetRowLabel, { color: colors.textPrimary }]}>
+            {opt.label}
+          </AppText>
+        </TouchableOpacity>
+      ))}
+    </AppModal>
+  );
+});
+
+const HomeScreen = ({ navigation }) => {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const {
+    posts,
+    activeTab,
+    setActiveTab,
+    loading,
+    error,
+    likePost,
+    savePost,
+    refreshFeed,
+  } = useFeed();
+
+  const [menuPost, setMenuPost] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const commentsSheetRef = useRef(null);
+  const likesSheetRef = useRef(null);
+
+  const handleMenuPress = useCallback((post) => {
+    console.log('genga');
+    setMenuPost(post);
+  }, []);
+  const handleMenuClose = useCallback(() => setMenuPost(null), []);
+  const handleImagePreview = useCallback((image) => setPreviewImage(image), []);
+  const handleClosePreview = useCallback(() => setPreviewImage(null), []);
+
+  const handleCommentPress = useCallback((post) => {
+    commentsSheetRef.current?.open();
+  }, []);
+
+  const handleSharePress = useCallback(async (post) => {
+    if (!post) return;
+    const shareMessage = post.text || 'Check out this post on WLB!';
+    const shareUrl = `https://wlb.app/post/${post.id}`;
+    
+    try {
+      await Share.open({
+        title: 'Share Post',
+        message: `Check out this post by @${post.username} on Weight Loss Buddy:\n\n"${shareMessage}"`,
+        url: shareUrl,
+        failOnCancel: false,
+      });
+    } catch (e) {
+      console.log('[SharePress] Native share error or cancelled:', e);
+    }
+  }, []);
+
+  const handleLikesCountPress = useCallback((post) => {
+    likesSheetRef.current?.open(post.id);
+  }, []);
+
+  const handleMenuSelect = useCallback((action) => {
+    console.log('[FeedScreen] Post action:', action, 'on post:', menuPost?.id);
+  }, [menuPost]);
+
+  const renderPost = useCallback(({ item }) => (
+    <PostCard
+      post={item}
+      colors={colors}
+      showChat={activeTab === 'buddies'}
+      onLikePress={likePost}
+      onSavePress={savePost}
+      onMenuPress={handleMenuPress}
+      onImagePreview={handleImagePreview}
+      onCommentPress={handleCommentPress}
+      onSharePress={handleSharePress}
+      onLikesCountPress={handleLikesCountPress}
+    />
+  ), [colors, activeTab, likePost, savePost, handleMenuPress, handleImagePreview, handleCommentPress, handleSharePress, handleLikesCountPress]);
+
+  const keyExtractor = useCallback((item) => item.id, []);
+
+  const renderEmptyState = useCallback(() => {
+    if (loading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      );
+    }
+
+    if (activeTab === 'buddies') {
+      return (
+        <EmptyState
+          icon={
+            <Image
+              source={require('../../assets/images/No_Buddies_Found.png')}
+              style={styles.emptyRobiImage}
+              resizeMode="contain"
+            />
+          }
+          title={t('home.emptyStates.buddies.title')}
+          description={t('home.emptyStates.buddies.subtitle')}
+          actionLabel={t('home.emptyStates.buddies.button')}
+          actionVariant="primary"
+          onAction={() => navigation.navigate(ROUTES.BUDDIES)}
+          style={styles.emptyStateContainer}
+        />
+      );
+    }
+
+    return (
+      <EmptyState
+        title={t('home.emptyStates.noRecords')}
+        style={styles.emptyStateContainer}
+      />
+    );
+  }, [loading, activeTab, colors.primary, t, navigation]);
+
+  return (
+    <SafeAreaView
+      style={[styles.screen, { backgroundColor: colors.backgroundSecondary }]}
+      edges={['top']}
+    >
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} translucent={false} />
       <HomeHeader />
-      <View style={styles.feedPlaceholder}>
-        <AppText variant="h3" color={colors.textTertiary}>
-          {t('home.comingSoon')}
-        </AppText>
-      </View>
-    </SafeContainer>
+      <TopTabs activeTab={activeTab} setActiveTab={setActiveTab} colors={colors} />
+      <FlatList
+        data={posts}
+        renderItem={renderPost}
+        keyExtractor={keyExtractor}
+        style={styles.feedList}
+        contentContainerStyle={posts.length === 0 ? styles.feedContentEmpty : styles.feedContent}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => <View style={{ height: 3 }} />}
+        ListEmptyComponent={renderEmptyState}
+        refreshing={loading}
+        onRefresh={refreshFeed}
+      />
+      <PostOptionsSheet
+        visible={!!menuPost}
+        username={menuPost?.username ?? ''}
+        onClose={handleMenuClose}
+        onSelect={handleMenuSelect}
+      />
+      <PostPreviewModal
+        visible={!!previewImage}
+        image={previewImage}
+        onClose={handleClosePreview}
+      />
+      <CommentsBottomSheet
+        ref={commentsSheetRef}
+      />
+      <LikesBottomSheet
+        ref={likesSheetRef}
+      />
+    </SafeAreaView>
   );
 };
 
-const createStyles = ({ colors }) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    feedPlaceholder: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    paddingVertical: 5,
+  },
+  logoImage: {
+    width: 150,
+    height: 38,
+    bottom: 3,
+    left: 6
+  },
+  logoRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  topBarRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  topBarIconBtn: {
+    padding: 4,
+  },
+  topBarAvatar: {
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  feedList: {
+    flex: 1,
+  },
+  feedContent: {
+    paddingVertical: 3,
+  },
+  sheetRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 15,
+  },
+  sheetRowIcon: {
+    marginRight: 18,
+    width: 24,
+    textAlign: 'center',
+  },
+  sheetRowLabel: {
+    fontFamily: fontFamily.regular,
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyRobiImage: {
+    width: 150,
+    height: 150,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  feedContentEmpty: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+});
 
 export default memo(HomeScreen);
