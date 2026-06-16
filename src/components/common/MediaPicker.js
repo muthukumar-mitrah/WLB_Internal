@@ -192,7 +192,7 @@ const MediaPicker = ({ onSelect, title }) => {
     return (
         <View style={styles.container}>
             <AppText style={styles.title} variant='h3'>
-                {title || t('modals.uploadProfilePhoto.title')}
+                {title}
             </AppText>
             <TouchableOpacity
                 style={styles.optionRow}

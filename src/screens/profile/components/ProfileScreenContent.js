@@ -6,7 +6,7 @@
  *                 camera badge on avatar, MediaPicker modal
  *  - Other profile: Request Buddy + Message buttons, 3-dot menu, Block/Report modals
  */
-import React, {memo, useCallback, useMemo, useState} from 'react';
+import React, {memo, useCallback, useMemo, useState, useRef} from 'react';
 import {View, StatusBar, TouchableOpacity, Clipboard} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Share from 'react-native-share';
@@ -22,12 +22,18 @@ import {
   AppModal,
   ToastService,
   AppFlatList,
-  PostCard,
+  CommentsBottomSheet,
+  LikesBottomSheet,
+  EmptyState,
+  PostOptionsSheet,
+  PostPreviewModal,
 } from '../../../components/common';
+import PostCard from '../../home/Feed';
 import MediaPicker from '../../../components/common/MediaPicker';
 import {ROUTES} from '../../../constants';
 import {APP_IMAGES} from '../../../constants';
 import {useTranslation} from 'react-i18next';
+import { useFeed } from '../../../context/FeedContext';
 
 import { calculateWeightProgress } from '../../../utils/weightUtils';
 import ProfileInfoCard from './ProfileInfoCard';
@@ -45,11 +51,15 @@ const ProfileScreenContent = ({
   const {t} = useTranslation();
   const theme = useTheme();
   const {colors, spacing, borderRadius, shadows} = theme;
+  const { likePost, savePost } = useFeed();
 
   const styles = useMemo(
     () => createStyles({colors, spacing, borderRadius, shadows}),
     [colors, spacing, borderRadius, shadows],
   );
+
+  const commentsSheetRef = useRef(null);
+  const likesSheetRef = useRef(null);
 
   // ── Own-profile modal state ─────────────────────────────────────────────────
   const [isEditVisible, setIsEditVisible] = useState(false);
@@ -57,6 +67,10 @@ const ProfileScreenContent = ({
   // ── Other-profile modal state ───────────────────────────────────────────────
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isBlockConfirmVisible, setIsBlockConfirmVisible] = useState(false);
+
+  // ── Post Menu & Preview state ───────────────────────────────────────────────
+  const [menuPost, setMenuPost] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   // ── Weight progress (own profile) ───────────────────────────────────────────
   const startWeight   = profile?.startWeight   ?? 150;
@@ -66,16 +80,39 @@ const ProfileScreenContent = ({
 
   // ── Tabs & Feed State ───────────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState('Posts');
+  const [localPostUpdates, setLocalPostUpdates] = useState({});
 
   const feedData = useMemo(() => {
-    return profile.posts?.map(post => ({
-      ...post,
-      userId: profile?.id,
-      authorName: profile?.name,
-      authorAvatar: avatar ? { uri: avatar } : APP_IMAGES.userAvatar,
-      currentWeight: isOwnProfile ? `${currentWeight}lbs` : post.currentWeight,
-    })) || [];
-  }, [profile.posts, profile?.id, profile?.name, avatar, isOwnProfile, currentWeight]);
+    return profile.posts?.map(post => {
+      const resolvedAvatar = avatar
+        ? { uri: avatar }
+        : (post.authorAvatar ?? APP_IMAGES.userAvatar);
+        
+      const localUpdate = localPostUpdates[post.id];
+      const liked = localUpdate?.liked !== undefined ? localUpdate.liked : (post.liked ?? false);
+      const likesCount = localUpdate?.likes !== undefined ? localUpdate.likes : (post.likesCount ?? 0);
+      const saved = localUpdate?.saved !== undefined ? localUpdate.saved : (post.saved ?? false);
+
+      return {
+        // identity
+        id: post.id,
+        userId: profile?.id,
+        // Feed PostCard shape
+        username: profile?.name ?? post.authorName,
+        avatar: resolvedAvatar,
+        currentWeight: isOwnProfile ? `${currentWeight}lbs` : (post.currentWeight ?? ''),
+        timeAgo: post.timeAgo,
+        text: post.content,
+        image: post.image ?? null,
+        video: post.video ?? null,
+        likes: likesCount,
+        comments: post.commentsCount ?? 0,
+        shares: post.sharesCount ?? 0,
+        saved: saved,
+        liked: liked,
+      };
+    }) || [];
+  }, [profile.posts, profile?.id, profile?.name, avatar, isOwnProfile, currentWeight, localPostUpdates]);
 
   const listData = useMemo(() => {
     const base = [
@@ -87,8 +124,8 @@ const ProfileScreenContent = ({
       const extendedPosts = [
         ...feedData,
         ...(feedData.length > 1 ? [
-          { ...feedData[0], id: 'post-6', timeAgo: '1w ago', likesCount: 532 },
-          { ...feedData[1], id: 'post-7', timeAgo: '2w ago', commentsCount: 11 }
+          { ...feedData[0], id: 'post-6', timeAgo: '1w ago', likes: 532 },
+          { ...feedData[1], id: 'post-7', timeAgo: '2w ago', comments: 11 }
         ] : [])
       ];
       return [
@@ -105,6 +142,98 @@ const ProfileScreenContent = ({
     () => avatar ? {uri: avatar} : APP_IMAGES.userAvatar,
     [avatar],
   );
+
+  // ── Profile navigation helpers ───────────────────────────────────────────────
+  const handleAvatarPress = useCallback((userId) => {
+    if (!userId) return;
+    navigation.navigate(ROUTES.VIEW_PROFILE, { userId });
+  }, [navigation]);
+
+  const handleImagePreview = useCallback((imageSource) => {
+    setPreviewImage(imageSource);
+  }, []);
+
+  const handleClosePreview = useCallback(() => {
+    setPreviewImage(null);
+  }, []);
+
+  const handleMenuPress = useCallback((post) => {
+    setMenuPost(post);
+  }, []);
+
+  const handleMenuClose = useCallback(() => {
+    setMenuPost(null);
+  }, []);
+
+  const handleMenuSelect = useCallback((action) => {
+    console.log('[ProfileScreen] Post action:', action, 'on post:', menuPost?.id);
+  }, [menuPost]);
+
+  const handleCommentPress = useCallback((post) => {
+    commentsSheetRef.current?.open();
+  }, []);
+
+  const handleSharePress = useCallback(async (post) => {
+    if (!post) return;
+    const shareMessage = post.text || 'Check out this post on WLB!';
+    const shareUrl = `https://wlb.app/post/${post.id}`;
+    
+    try {
+      await Share.open({
+        title: 'Share Post',
+        message: `Check out this post by @${post.username} on Weight Loss Buddy:\n\n"${shareMessage}"`,
+        url: shareUrl,
+        failOnCancel: false,
+      });
+    } catch (e) {
+      console.log('[SharePress] Native share error or cancelled:', e);
+    }
+  }, []);
+
+  const handleLikesCountPress = useCallback((post) => {
+    likesSheetRef.current?.open(post.id);
+  }, []);
+
+  const handleLikePress = useCallback((postId) => {
+    likePost(postId); // backend call from useFeed
+
+    setLocalPostUpdates(prev => {
+      const prevUpdate = prev[postId] || {};
+      const basePost = profile.posts?.find(p => p.id === postId) || {};
+      const wasLiked = prevUpdate.liked !== undefined ? prevUpdate.liked : (basePost.liked ?? false);
+      const baseLikes = prevUpdate.likes !== undefined ? prevUpdate.likes : (basePost.likesCount ?? 0);
+
+      const nextLiked = !wasLiked;
+      const nextLikes = nextLiked ? baseLikes + 1 : Math.max(0, baseLikes - 1);
+
+      return {
+        ...prev,
+        [postId]: {
+          ...prevUpdate,
+          liked: nextLiked,
+          likes: nextLikes,
+        }
+      };
+    });
+  }, [likePost, profile.posts]);
+
+  const handleSavePress = useCallback((postId) => {
+    savePost(postId);
+
+    setLocalPostUpdates(prev => {
+      const prevUpdate = prev[postId] || {};
+      const basePost = profile.posts?.find(p => p.id === postId) || {};
+      const wasSaved = prevUpdate.saved !== undefined ? prevUpdate.saved : (basePost.saved ?? false);
+
+      return {
+        ...prev,
+        [postId]: {
+          ...prevUpdate,
+          saved: !wasSaved,
+        }
+      };
+    });
+  }, [savePost, profile.posts]);
 
   // ── Own-profile handlers ────────────────────────────────────────────────────
   const handleUpdateProfile = useCallback(() => {
@@ -125,8 +254,8 @@ const ProfileScreenContent = ({
   }, [navigation, avatarSource]);
 
   const handlePressAvatar = useCallback(() => {
-    navigation.navigate(ROUTES.IMAGE_PREVIEW, {imageUri: avatarSource});
-  }, [navigation, avatarSource]);
+    handleImagePreview(avatarSource);
+  }, [handleImagePreview, avatarSource]);
 
   const handlePressCamera = useCallback(() => {
     setIsEditVisible(true);
@@ -176,17 +305,6 @@ const ProfileScreenContent = ({
     setIsMenuVisible(false);
   }, [profile?.name, t]);
 
-  const handleSharePress = useCallback(async () => {
-    setIsMenuVisible(false);
-    const url = `https://weightlossbuddy.app/u/${profile?.name?.toLowerCase()}`;
-    const msg = `${profile?.name} is on Weight Loss Buddy! Check out their profile: ${url}`;
-    try {
-      await Share.open({title: t('profile.share.title'), message: msg, url});
-    } catch (err) {
-      console.log('Share error:', err);
-    }
-  }, [profile?.name, t]);
-
   // ── Right-header component ──────────────────────────────────────────────────
   const renderRightComponent = useMemo(() => {
     if (isOwnProfile) {
@@ -209,7 +327,7 @@ const ProfileScreenContent = ({
         accessibilityLabel="Menu"
         accessibilityRole="button">
         <Icon name="dots-vertical" size={20} color={colors.textPrimary} />
-      </TouchableOpacity>
+        </TouchableOpacity>
     );
   }, [isOwnProfile, styles.menuButton, colors.textPrimary, handleOpenMenu, handleOpenDrawer]);
 
@@ -371,17 +489,30 @@ const ProfileScreenContent = ({
           }
 
           if (item.type === 'blank') {
-            return <View style={{ paddingBottom: spacing[10] }} />;
+            return (
+              <View style={{ flex: 1, paddingVertical: spacing[10] }}>
+                <EmptyState
+                  title={t('common.noRecordsFound', 'No records found')}
+                  icon={null}
+                />
+              </View>
+            );
           }
 
           if (item.type === 'post') {
             return (
               <PostCard
-                {...item.data}
-                onPressLike={() => {}}
-                onPressComment={() => {}}
-                onPressShare={() => {}}
-                onPressOptions={() => {}}
+                post={item.data}
+                colors={colors}
+                hidePostMenu={isOwnProfile}
+                onLikePress={handleLikePress}
+                onCommentPress={() => handleCommentPress(item.data)}
+                onSharePress={() => handleSharePress(item.data)}
+                onMenuPress={() => handleMenuPress(item.data)}
+                onSavePress={handleSavePress}
+                onAvatarPress={() => handleAvatarPress(item.data.userId)}
+                onImagePreview={handleImagePreview}
+                onLikesCountPress={() => handleLikesCountPress(item.data)}
               />
             );
           }
@@ -467,6 +598,26 @@ const ProfileScreenContent = ({
           </AppModal>
         </>
       )}
+
+      <CommentsBottomSheet
+        ref={commentsSheetRef}
+      />
+      <LikesBottomSheet
+        ref={likesSheetRef}
+      />
+
+      <PostOptionsSheet
+        visible={!!menuPost}
+        username={menuPost?.username}
+        onClose={handleMenuClose}
+        onSelect={handleMenuSelect}
+      />
+
+      <PostPreviewModal
+        visible={!!previewImage}
+        image={previewImage}
+        onClose={handleClosePreview}
+      />
     </SafeContainer>
   );
 };

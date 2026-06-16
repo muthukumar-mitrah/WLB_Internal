@@ -18,7 +18,7 @@ import { useTranslation } from '../../../i18n/useTranslation';
 import { AppText, LikeAnimationOverlay } from '../../../components/common';
 import styles from './styles';
 
-const PostCard = memo(({ post, colors, showChat, onLikePress, onSavePress, onMenuPress, onImagePreview, onCommentPress, onSharePress, onLikesCountPress }) => {
+const PostCard = memo(({ post, colors, showChat, hidePostMenu, onLikePress, onSavePress, onMenuPress, onImagePreview, onCommentPress, onSharePress, onLikesCountPress, onAvatarPress }) => {
     const { t } = useTranslation();
     const liked = post.liked ?? false;
     const likesCount = post.likes;
@@ -155,24 +155,48 @@ const PostCard = memo(({ post, colors, showChat, onLikePress, onSavePress, onMen
         );
     });
 
+    // Avatar element — handles both local require() numbers and remote URI strings
+    const avatarEl = post.avatar ? (
+        <Image
+            source={typeof post.avatar === 'string' ? { uri: post.avatar } : post.avatar}
+            style={styles.avatar}
+        />
+    ) : (
+        <AvatarPlaceholder username={post.username} />
+    );
+
+    // Author info element
+    const authorInfoEl = (
+        <View style={styles.cardHeaderInfo}>
+            <AppText style={[styles.cardUsername, { color: colors.textPrimary }]}>
+                {post.username}
+            </AppText>
+            <AppText style={[styles.cardMeta, { color: colors.textSecondary }]}>
+                {t('home.feed.cw')}{post.currentWeight} · {post.timeAgo}
+            </AppText>
+        </View>
+    );
+
     return (
         <View style={[styles.card, { backgroundColor: colors.background }]}>
             {/* Header row */}
             <View style={styles.cardHeader}>
-                {post.avatar ? (
-                    <Image source={{ uri: post.avatar }} style={styles.avatar} />
+                {/* Author section — tappable when onAvatarPress is provided */}
+                {onAvatarPress ? (
+                    <TouchableOpacity
+                        style={styles.cardAuthorRow}
+                        onPress={onAvatarPress}
+                        activeOpacity={0.7}
+                    >
+                        {avatarEl}
+                        {authorInfoEl}
+                    </TouchableOpacity>
                 ) : (
-                    <AvatarPlaceholder username={post.username} />
+                    <>
+                        {avatarEl}
+                        {authorInfoEl}
+                    </>
                 )}
-
-                <View style={styles.cardHeaderInfo}>
-                    <AppText style={[styles.cardUsername, { color: colors.textPrimary }]}>
-                        {post.username}
-                    </AppText>
-                    <AppText style={[styles.cardMeta, { color: colors.textSecondary }]}>
-                        {t('home.feed.cw')}{post.currentWeight} · {post.timeAgo}
-                    </AppText>
-                </View>
 
                 <View style={styles.cardHeaderRight}>
                     {/* Chat button (shown when there's a buddy relationship) */}
@@ -186,14 +210,16 @@ const PostCard = memo(({ post, colors, showChat, onLikePress, onSavePress, onMen
                     )}
 
                     {/* Three-dot menu */}
-                    <TouchableOpacity
-                        style={styles.menuBtn}
-                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                        onPress={() => onMenuPress(post)}
-                        activeOpacity={0.6}
-                    >
-                        <Icon name="ellipsis-horizontal" size={20} color={colors.iconSecondary} />
-                    </TouchableOpacity>
+                    {!hidePostMenu && (
+                        <TouchableOpacity
+                            style={styles.menuBtn}
+                            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                            onPress={() => onMenuPress(post)}
+                            activeOpacity={0.6}
+                        >
+                            <Icon name="ellipsis-horizontal" size={20} color={colors.iconSecondary} />
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
 

@@ -12,6 +12,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
     },
+    cardAuthorRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+    },
     avatar: {
         width: 38,
         height: 38,

@@ -87,7 +87,6 @@ const ROUTES = {
   VIEW_PROFILE: 'ViewProfile',
   UPDATE_PROFILE: 'UpdateProfile',
   PORTRAIT_VIEW: 'PortraitView',
-  IMAGE_PREVIEW: 'ImagePreview',
   WEIGHT_UPDATE: 'WeightUpdate',
   PRIVACY_SELECTION: 'PrivacySelection',
   GENDER_SELECTION: 'GenderSelection',

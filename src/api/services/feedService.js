@@ -1,7 +1,7 @@
 /**
  * Feed service — all feed and post API calls
  */
-import apiClient from '../apiClient';
+import { APP_IMAGES } from '../../constants/images';
 
 // Mock posts data representing feed screenshots
 export const MOCK_POSTS = [
@@ -17,7 +17,7 @@ export const MOCK_POSTS = [
     shares: 15,
     saved: false,
     liked: false,
-    avatar: null,
+    avatar: APP_IMAGES.userAvatar,
     tab: 'trending',
   },
   {
@@ -32,7 +32,7 @@ export const MOCK_POSTS = [
     shares: 5,
     saved: true,
     liked: false,
-    avatar: null,
+    avatar: APP_IMAGES.profileAvatar,
     tab: 'trending',
   },
   {
@@ -47,7 +47,7 @@ export const MOCK_POSTS = [
     shares: 11,
     saved: false,
     liked: false,
-    avatar: null,
+    avatar: APP_IMAGES.userAvatar,
     tab: 'wlb',
   },
   {
@@ -62,7 +62,7 @@ export const MOCK_POSTS = [
     shares: 22,
     saved: false,
     liked: false,
-    avatar: null,
+    avatar: APP_IMAGES.profileAvatar,
     tab: 'wlb', // Moved from 'buddies' to make the Buddies tab initially empty
   },
 ];

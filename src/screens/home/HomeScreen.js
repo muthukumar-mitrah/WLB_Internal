@@ -4,32 +4,21 @@
 import React, {
   memo,
   useCallback,
-  useMemo,
   useState,
   useRef,
-  useEffect,
 } from 'react';
 import {
   FlatList,
   Image,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
   StatusBar,
   StyleSheet,
-  TouchableOpacity,
   View,
   ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Share from 'react-native-share';
 import { useTheme } from '../../theme';
-import { AppText, PostPreviewModal, EmptyState, CommentsBottomSheet, AppModal, LikesBottomSheet } from '../../components/common';
-import { LikeAnimationOverlay } from '../../components/common'
-import { fontFamily } from '../../theme/fonts';
-import Video from 'react-native-video';
+import { PostPreviewModal, EmptyState, CommentsBottomSheet, LikesBottomSheet, PostOptionsSheet } from '../../components/common';
 import HomeHeader from '../../components/home/HomeHeader';
 import TopTabs from '../../components/home/TopTabs';
 import { useTranslation } from '../../i18n/useTranslation';
@@ -37,57 +26,7 @@ import { useFeed } from '../../context/FeedContext';
 import { ROUTES } from '../../constants';
 import PostCard from './Feed';
 
-// ─── Post options (bottom sheet items) ───────────────────────────────────────
-const buildPostOptions = (username, t) => [
-  { key: 'save', icon: 'bookmark-outline', label: t('home.postOptions.save') },
-  { key: 'message', icon: 'chatbubble-outline', label: t('home.postOptions.message', { username }) },
-  { key: 'profile', icon: 'person-outline', label: t('home.postOptions.profile') },
-  { key: 'hide', icon: 'eye-off-outline', label: t('home.postOptions.hide') },
-  { key: 'report', icon: 'flag-outline', label: t('home.postOptions.report') },
-  { key: 'block', icon: 'person-remove-outline', label: t('home.postOptions.block', { username }) },
-];
 
-
-// ─── Post Options Bottom Sheet ────────────────────────────────────────────────
-const PostOptionsSheet = memo(({ visible, username, onClose, onSelect }) => {
-  const { colors } = useTheme();
-  const { t } = useTranslation();
-  const options = useMemo(() => buildPostOptions(username, t), [username, t]);
-
-  return (
-    <AppModal
-      visible={visible}
-      onClose={onClose}
-      position="bottom"
-      showHandle={true}
-      showCloseButton={false}
-      closeOnOverlay={true}
-      overlayColor="rgba(0,0,0,0.45)"
-    >
-      {options.map((opt, idx) => (
-        <TouchableOpacity
-          key={opt.key}
-          style={styles.sheetRow}
-          activeOpacity={0.65}
-          onPress={() => {
-            onSelect?.(opt.key);
-            onClose();
-          }}
-        >
-          <Icon
-            name={opt.icon}
-            size={22}
-            color={colors.iconPrimary}
-            style={styles.sheetRowIcon}
-          />
-          <AppText style={[styles.sheetRowLabel, { color: colors.textPrimary }]}>
-            {opt.label}
-          </AppText>
-        </TouchableOpacity>
-      ))}
-    </AppModal>
-  );
-});
 
 const HomeScreen = ({ navigation }) => {
   const { colors } = useTheme();
@@ -97,7 +36,6 @@ const HomeScreen = ({ navigation }) => {
     activeTab,
     setActiveTab,
     loading,
-    error,
     likePost,
     savePost,
     refreshFeed,
@@ -109,7 +47,6 @@ const HomeScreen = ({ navigation }) => {
   const likesSheetRef = useRef(null);
 
   const handleMenuPress = useCallback((post) => {
-    console.log('genga');
     setMenuPost(post);
   }, []);
   const handleMenuClose = useCallback(() => setMenuPost(null), []);
@@ -145,6 +82,11 @@ const HomeScreen = ({ navigation }) => {
     console.log('[FeedScreen] Post action:', action, 'on post:', menuPost?.id);
   }, [menuPost]);
 
+  const handleAvatarPress = useCallback((post) => {
+    if (!post) return;
+    navigation.navigate(ROUTES.VIEW_PROFILE, { userId: post.userId || post.username });
+  }, [navigation]);
+
   const renderPost = useCallback(({ item }) => (
     <PostCard
       post={item}
@@ -157,8 +99,9 @@ const HomeScreen = ({ navigation }) => {
       onCommentPress={handleCommentPress}
       onSharePress={handleSharePress}
       onLikesCountPress={handleLikesCountPress}
+      onAvatarPress={() => handleAvatarPress(item)}
     />
-  ), [colors, activeTab, likePost, savePost, handleMenuPress, handleImagePreview, handleCommentPress, handleSharePress, handleLikesCountPress]);
+  ), [colors, activeTab, likePost, savePost, handleMenuPress, handleImagePreview, handleCommentPress, handleSharePress, handleLikesCountPress, handleAvatarPress]);
 
   const keyExtractor = useCallback((item) => item.id, []);
 
@@ -241,7 +184,7 @@ const HomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  screen: {
+  screen: { 
     flex: 1,
   },
   topBar: {
@@ -279,22 +222,7 @@ const styles = StyleSheet.create({
   feedContent: {
     paddingVertical: 3,
   },
-  sheetRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 15,
-  },
-  sheetRowIcon: {
-    marginRight: 18,
-    width: 24,
-    textAlign: 'center',
-  },
-  sheetRowLabel: {
-    fontFamily: fontFamily.regular,
-    fontSize: 15,
-    lineHeight: 20,
-  },
+
   emptyStateContainer: {
     flex: 1,
     justifyContent: 'center',
