@@ -8,13 +8,14 @@ import {useTheme} from '../../theme';
 const AppImage = ({
   source,
   style,
+  imageStyle,
   resizeMode = 'cover',
   fallback,
   showLoader = true,
   borderRadius: customRadius,
   ...rest
 }) => {
-  const {colors, borderRadius} = useTheme();
+  const {colors} = useTheme();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -38,7 +39,7 @@ const AppImage = ({
     <View style={[styles.wrapper, style]}>
       <Image
         source={source}
-        style={[StyleSheet.absoluteFill, customRadius !== undefined && {borderRadius: customRadius}]}
+        style={[StyleSheet.absoluteFill, customRadius !== undefined && {borderRadius: customRadius}, imageStyle]}
         resizeMode={resizeMode}
         onLoad={() => setLoading(false)}
         onError={() => {

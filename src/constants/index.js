@@ -2,7 +2,7 @@
  * Global app constants
  */
 import { Dimensions, Platform } from 'react-native';
-
+import { APP_IMAGES } from './images';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // Base design dimensions (from design spec/Figma)
@@ -79,6 +79,21 @@ const ROUTES = {
   TERMS_OF_USE: 'TermsOfUse',
   PRIVACY_POLICY: 'PrivacyPolicy',
   WEB_VIEW_SCREEN: 'WebViewScreen',
+
+  // Profile
+  PROFILE_NAVIGATOR: 'ProfileNavigator',
+  PROFILE: 'Profile',
+  MY_PROFILE: 'MyProfile',
+  VIEW_PROFILE: 'ViewProfile',
+  UPDATE_PROFILE: 'UpdateProfile',
+  PORTRAIT_VIEW: 'PortraitView',
+  IMAGE_PREVIEW: 'ImagePreview',
+  WEIGHT_UPDATE: 'WeightUpdate',
+  PRIVACY_SELECTION: 'PrivacySelection',
+  GENDER_SELECTION: 'GenderSelection',
+  COUNTRY_SELECTION: 'CountrySelection',
+  DOB_SELECTION: 'DobSelection',
+  REPORT_USER: 'ReportUser',
 };
 
 // Remove once the real login API is integrated.
@@ -142,5 +157,6 @@ export {
   REGEX,
   ERROR_MESSAGES,
   HTTP_STATUS,
-  GOOGLE_SIGN_IN_CONFIG
+  GOOGLE_SIGN_IN_CONFIG,
+  APP_IMAGES
 };

@@ -183,6 +183,11 @@ const Sidebar = (props) => {
 
   const greeting = t(getGreetingKey(), { name: user.name });
 
+  const handleProfilePress = useCallback(() => {
+    close();
+    navigation.navigate(ROUTES.MY_PROFILE);
+  }, [close, navigation]);
+
   return (
     <DrawerContentScrollView
       {...props}
@@ -227,7 +232,7 @@ const Sidebar = (props) => {
       <TouchableOpacity
         style={styles.profileRow}
         activeOpacity={0.8}
-        onPress={close}
+        onPress={handleProfilePress}
       >
         <Image
           source={user.avatar ? { uri: user.avatar } : ASSET.userPlaceholder}

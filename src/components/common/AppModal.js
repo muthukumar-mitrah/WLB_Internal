@@ -7,12 +7,13 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Animated,
+
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../theme';
+import AppText from './AppText';
 
 const AppModal = ({
   visible = false,

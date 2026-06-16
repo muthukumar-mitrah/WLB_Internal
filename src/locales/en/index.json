@@ -521,6 +521,184 @@
     },
     "logout": "Log Out"
   },
+  "profile": {
+      "infoCard": {
+      "posts": "Posts",
+      "following": "Following",
+      "followers": "Followers",
+      "buddies": "Buddies",
+      "labels": {
+        "gender": "Gender",
+        "country": "Country",
+        "dateOfBirth": "Date Of Birth",
+        "totalPoints": "Total Points",
+        "currentWeight": "Current Weight",
+        "weeklyPoints": "Weekly Points",
+        "buddyStatus": "Buddy Status"
+      },
+    },
+           "header": {
+      "title": "Profile"
+    },
+    "buttons": {
+      "updateProfile": "Update Profile",
+      "viewPortrait": "View Portrait",
+      "viewPortfolio": "View Portfolio",
+      "requestBuddy": "Request Buddy",
+      "message": "Message"
+    },
+    "weightProgress": {
+      "title": "Weight Progress",
+      "subtitle": "Add your numbers to start tracking",
+      "start": "START",
+      "current": "CURRENT",
+      "goal": "GOAL",
+      "progressLabel": "Progress"
+    }, 
+        "menu": {
+      "block": "Block",
+      "report": "Report",
+      "copyLink": "Copy profile URL",
+      "share": "Share this profile",
+      "shareVia": "Share via"
+    },
+    "toast": {
+      "copied": "Copied",
+      "blocked": "User blocked successfully",
+      "requestSent": "Buddy request sent successfully",
+      "openingChat": "Opening chat..."
+    },
+    "block": {
+      "title": "Block {{name}}?",
+      "description": "They won't be able to message you, send buddy requests, or interact with your posts. They won't be notified that you blocked them. You can unblock them anytime from Settings.",
+      "cancel": "Cancel",
+      "block": "Block"
+    },
+    "share": {
+      "title": "Share Profile",
+      "verified": "Verified",
+      "copy": "Copy"
+    },
+    "updateProfile": {
+      "title": "Update Profile",
+      "labels": {
+        "name": "Name",
+        "bio": "Bio",
+        "gender": "Gender",
+        "country": "Country",
+        "currentWeight": "Your current weight",
+        "dateOfBirth": "Date of birth"
+      }
+    },
+        "weightUpdate": {
+      "title": "Weight",
+      "subtitle": "What is your current weight?",
+      "label": "Current weight",
+      "placeholder": "e.g. 150 lbs",
+      "privacyTitle": "Who can see this?",
+      "privacySubtitle": "Choose who can view your weight history and updates.",
+      "buttons": {
+        "save": "Save"
+      }
+    },
+    "dob": {
+      "title": "Date of birth",
+      "subtitle": "When is your birthday?",
+      "label": "Date of birth",
+      "placeholder": "Select Date of Birth",
+      "buttons": {
+        "save": "Save"
+      }
+    },
+    "gender": {
+      "title": "Gender",
+      "subtitle": "Which gender do you identify with?",
+      "options": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other",
+        "preferNotToSay": "Prefer not to say"
+      },
+      "buttons": {
+        "save": "Save"
+      }
+    },
+    "country": {
+      "title": "Country",
+      "subtitle": "Where do you live?",
+      "searchPlaceholder": "Search country",
+      "emptyText": "No countries found.",
+      "buttons": {
+        "save": "Save"
+      }
+    },
+    "privacy": {
+      "title": "Who Can See This",
+      "subtitle": "Choose who can view this information on your profile.",
+      "chooseAudience": "Choose audience",
+      "options": {
+        "public": {
+          "title": "Public",
+          "description": "Anyone on or off Weight Loss Buddy"
+        },
+        "buddies": {
+          "title": "Buddies Only",
+          "description": "Only your connected buddies"
+        },
+        "private": {
+          "title": "Only Me",
+          "description": "Only visible to you"
+        }
+      }
+    },
+    "report": {
+      "title": "Report",
+      "steps": {
+        "whyReporting": "Why are you reporting this profile?",
+        "whoPretending": "Who are they pretending to be?",
+        "whatReporting": "What do you want to report about this profile?",
+        "whoImpersonating": "Who is this profile pretending to be?",
+        "searchSubtitle": "Search for the person they are pretending to be",
+        "searchPlaceholder": "Search...",
+        "describeTitle": "Describe the problem",
+        "describePlaceholder": "Please write details about the problem here...",
+        "submitTitle": "You are about to submit a report",
+        "submitSubtitle": "We only remove accounts that go against our Community Standards.",
+        "communityStandards": "Community Standards"
+      },
+      "options": {
+        "pretendingSomeone": "Pretending to be someone",
+        "somethingElse": "Something else",
+        "me": "Me",
+        "someoneElse": "Someone else",
+        "dontLikeIt": "I just don't like it",
+        "bullying": "Bullying or unwanted contact",
+        "suicide": "Suicide, self-injury or eating disorders",
+        "violence": "Violence, hate or exploitation",
+        "restrictedItems": "Selling or promoting restricted items",
+        "nudity": "Nudity or sexual activity",
+        "scam": "Scam or fraud",
+        "falseInfo": "False information"
+      },
+      "details": {
+        "title": "Report details",
+        "whyReporting": "Why are you reporting?",
+        "whoPretending": "Who are they pretending to be?"
+      },
+      "thankYou": {
+        "title": "Thank You for your feedback",
+        "subtitle": "We've received your report and will review it shortly."
+      },
+      "buttons": {
+        "submit": "Submit",
+        "done": "Done"
+      },
+      "follower": "follower",
+      "followers": "followers",
+      "buddy": "buddy",
+      "buddies": "buddies"
+    }
+  },
   "contactUs": {
     "title": "Contact Us",
     "heading": "We're here to help.",

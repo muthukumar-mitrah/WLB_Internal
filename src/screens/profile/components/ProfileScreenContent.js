@@ -1,0 +1,474 @@
+/**
+ * ProfileScreenContent — shared rendering logic for My Profile & View Profile.
+ *
+ * Accepts an `isOwnProfile` boolean to conditionally show:
+ *  - Own profile: Update Profile + View Portrait buttons, Weight Progress card,
+ *                 camera badge on avatar, MediaPicker modal
+ *  - Other profile: Request Buddy + Message buttons, 3-dot menu, Block/Report modals
+ */
+import React, {memo, useCallback, useMemo, useState} from 'react';
+import {View, StatusBar, TouchableOpacity, Clipboard} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Share from 'react-native-share';
+import {DrawerActions} from '@react-navigation/native';
+import {useTheme} from '../../../theme';
+import {
+  AppText,
+  Button,
+  AppImage,
+  Header,
+  SafeContainer,
+  ProgressBar,
+  AppModal,
+  ToastService,
+  AppFlatList,
+  PostCard,
+} from '../../../components/common';
+import MediaPicker from '../../../components/common/MediaPicker';
+import {ROUTES} from '../../../constants';
+import {APP_IMAGES} from '../../../constants';
+import {useTranslation} from 'react-i18next';
+
+import { calculateWeightProgress } from '../../../utils/weightUtils';
+import ProfileInfoCard from './ProfileInfoCard';
+import ProfileTabs from './ProfileTabs';
+import WeightColumn from './WeightColumn';
+import createStyles from './ProfileScreenContentStyles';
+
+const ProfileScreenContent = ({
+  navigation,
+  isOwnProfile,
+  profile,
+  avatar,          // uri string (own profile only)
+  onAvatarChange,  // (uri) => void  (own profile only)
+}) => {
+  const {t} = useTranslation();
+  const theme = useTheme();
+  const {colors, spacing, borderRadius, shadows} = theme;
+
+  const styles = useMemo(
+    () => createStyles({colors, spacing, borderRadius, shadows}),
+    [colors, spacing, borderRadius, shadows],
+  );
+
+  // ── Own-profile modal state ─────────────────────────────────────────────────
+  const [isEditVisible, setIsEditVisible] = useState(false);
+
+  // ── Other-profile modal state ───────────────────────────────────────────────
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [isBlockConfirmVisible, setIsBlockConfirmVisible] = useState(false);
+
+  // ── Weight progress (own profile) ───────────────────────────────────────────
+  const startWeight   = profile?.startWeight   ?? 150;
+  const currentWeight = profile?.currentWeight ?? 144;
+  const goalWeight    = profile?.goalWeight    ?? 140;
+  const progressPercent = calculateWeightProgress(startWeight, currentWeight, goalWeight);
+
+  // ── Tabs & Feed State ───────────────────────────────────────────────────────
+  const [activeTab, setActiveTab] = useState('Posts');
+
+  const feedData = useMemo(() => {
+    return profile.posts?.map(post => ({
+      ...post,
+      userId: profile?.id,
+      authorName: profile?.name,
+      authorAvatar: avatar ? { uri: avatar } : APP_IMAGES.userAvatar,
+      currentWeight: isOwnProfile ? `${currentWeight}lbs` : post.currentWeight,
+    })) || [];
+  }, [profile.posts, profile?.id, profile?.name, avatar, isOwnProfile, currentWeight]);
+
+  const listData = useMemo(() => {
+    const base = [
+      { id: 'profile-header', type: 'header' },
+      { id: 'profile-tabs', type: 'tabs' }
+    ];
+
+    if (activeTab === 'Posts' || activeTab === 'All') {
+      const extendedPosts = [
+        ...feedData,
+        ...(feedData.length > 1 ? [
+          { ...feedData[0], id: 'post-6', timeAgo: '1w ago', likesCount: 532 },
+          { ...feedData[1], id: 'post-7', timeAgo: '2w ago', commentsCount: 11 }
+        ] : [])
+      ];
+      return [
+        ...base,
+        ...extendedPosts.map(post => ({ id: post.id, type: 'post', data: post }))
+      ];
+    } else {
+      return [...base, { id: `empty-${activeTab}`, type: 'blank' }];
+    }
+  }, [feedData, activeTab]);
+
+  // ── Avatar source ───────────────────────────────────────────────────────────
+  const avatarSource = useMemo(
+    () => avatar ? {uri: avatar} : APP_IMAGES.userAvatar,
+    [avatar],
+  );
+
+  // ── Own-profile handlers ────────────────────────────────────────────────────
+  const handleUpdateProfile = useCallback(() => {
+    navigation.navigate(ROUTES.UPDATE_PROFILE);
+  }, [navigation]);
+
+  const handleOpenDrawer = useCallback(() => {
+    const parent = navigation.getParent('RightDrawer');
+    if (parent) {
+      parent.dispatch(DrawerActions.openDrawer());
+    } else {
+      navigation.dispatch(DrawerActions.openDrawer());
+    }
+  }, [navigation]);
+
+  const handleViewPortrait = useCallback(() => {
+    navigation.navigate(ROUTES.PORTRAIT_VIEW, {imageUri: avatarSource});
+  }, [navigation, avatarSource]);
+
+  const handlePressAvatar = useCallback(() => {
+    navigation.navigate(ROUTES.IMAGE_PREVIEW, {imageUri: avatarSource});
+  }, [navigation, avatarSource]);
+
+  const handlePressCamera = useCallback(() => {
+    setIsEditVisible(true);
+  }, []);
+
+  const handleImagePickerResponse = useCallback((response) => {
+    if (!response) return;
+    if (response.success && onAvatarChange) {
+      onAvatarChange(response.asset.uri);
+    }
+    setIsEditVisible(false);
+  }, [onAvatarChange]);
+
+  // ── Other-profile handlers ──────────────────────────────────────────────────
+  const handleRequestBuddy = useCallback(() => {
+    ToastService.show({type: 'success', message: t('profile.toast.requestSent')});
+  }, [t]);
+
+  const handleMessage = useCallback(() => {
+    ToastService.show({type: 'info', message: t('profile.toast.openingChat')});
+  }, [t]);
+
+  const handleOpenMenu  = useCallback(() => setIsMenuVisible(true), []);
+  const handleCloseMenu = useCallback(() => setIsMenuVisible(false), []);
+
+  const handleBlockPress = useCallback(() => {
+    setIsMenuVisible(false);
+    setTimeout(() => setIsBlockConfirmVisible(true), 300);
+  }, []);
+
+  const handleReportPress = useCallback(() => {
+    setIsMenuVisible(false);
+    setTimeout(() => navigation.navigate(ROUTES.REPORT_USER), 300);
+  }, [navigation]);
+
+  const handleConfirmBlock = useCallback(() => {
+    setIsBlockConfirmVisible(false);
+    ToastService.show({type: 'success', message: t('profile.toast.blocked')});
+  }, [t]);
+
+  const handleCancelBlock = useCallback(() => setIsBlockConfirmVisible(false), []);
+
+  const handleCopyLinkPress = useCallback(() => {
+    const url = `https://weightlossbuddy.app/u/${profile?.name?.toLowerCase()}`;
+    if (Clipboard?.setString) { Clipboard.setString(url); }
+    ToastService.show({type: 'success', message: t('profile.toast.copied')});
+    setIsMenuVisible(false);
+  }, [profile?.name, t]);
+
+  const handleSharePress = useCallback(async () => {
+    setIsMenuVisible(false);
+    const url = `https://weightlossbuddy.app/u/${profile?.name?.toLowerCase()}`;
+    const msg = `${profile?.name} is on Weight Loss Buddy! Check out their profile: ${url}`;
+    try {
+      await Share.open({title: t('profile.share.title'), message: msg, url});
+    } catch (err) {
+      console.log('Share error:', err);
+    }
+  }, [profile?.name, t]);
+
+  // ── Right-header component ──────────────────────────────────────────────────
+  const renderRightComponent = useMemo(() => {
+    if (isOwnProfile) {
+      return (
+        <TouchableOpacity
+          style={styles.menuButton}
+          hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+          onPress={handleOpenDrawer}
+          accessibilityLabel="Open Menu"
+          accessibilityRole="button">
+          <Icon name="menu" size={20} color={colors.textPrimary} />
+        </TouchableOpacity>
+      );
+    }
+    return (
+      <TouchableOpacity
+        style={styles.menuButton}
+        hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+        onPress={handleOpenMenu}
+        accessibilityLabel="Menu"
+        accessibilityRole="button">
+        <Icon name="dots-vertical" size={20} color={colors.textPrimary} />
+      </TouchableOpacity>
+    );
+  }, [isOwnProfile, styles.menuButton, colors.textPrimary, handleOpenMenu, handleOpenDrawer]);
+
+  // ── Action buttons (inside ProfileInfoCard) ─────────────────────────────────
+  const renderActionButtons = useMemo(() => {
+    if (isOwnProfile) {
+      return (
+        <View style={styles.buttonsRow}>
+          <Button
+            testID="profile-update-btn"
+            title={t('profile.buttons.updateProfile')}
+            onPress={handleUpdateProfile}
+            variant="primary"
+            size="md"
+            fullWidth
+            style={styles.buttonHalf}
+            accessibilityLabel={t('profile.buttons.updateProfile')}
+          />
+          <Button
+            testID="profile-portrait-btn"
+            title={t('profile.buttons.viewPortrait')}
+            onPress={handleViewPortrait}
+            variant="gray"
+            size="md"
+            fullWidth
+            style={styles.secondaryButton}
+            textStyle={{color: colors.textPrimary}}
+            accessibilityLabel={t('profile.buttons.viewPortrait')}
+          />
+        </View>
+      );
+    }
+    return (
+      <View style={styles.buttonsRow}>
+        <Button
+          testID="profile-request-buddy-btn"
+          title={t('profile.buttons.requestBuddy')}
+          onPress={handleRequestBuddy}
+          variant="primary"
+          size="md"
+          fullWidth
+          style={styles.buttonHalf}
+          accessibilityLabel={t('profile.buttons.requestBuddy')}
+        />
+        <Button
+          testID="profile-message-btn"
+          title={t('profile.buttons.message')}
+          onPress={handleMessage}
+          variant="gray"
+          size="md"
+          fullWidth
+          style={styles.secondaryButton}
+          textStyle={{color: colors.textPrimary}}
+          accessibilityLabel={t('profile.buttons.message')}
+        />
+      </View>
+    );
+  }, [
+    isOwnProfile, styles, colors, t,
+    handleUpdateProfile, handleViewPortrait,
+    handleRequestBuddy, handleMessage,
+  ]);
+
+  return (
+    <SafeContainer edges={['top', 'bottom']} style={styles.container}>
+      <StatusBar
+        barStyle={colors.statusBar}
+        backgroundColor={colors.primarySurface}
+        translucent={false}
+      />
+
+      <Header
+        title={t('profile.header.title')}
+        showBack
+        transparent={true}
+        rightComponent={renderRightComponent}
+      />
+
+      <AppFlatList
+        data={listData}
+        keyExtractor={item => item.id}
+        stickyHeaderIndices={[1]}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.scrollContent}
+        renderItem={({ item }) => {
+          if (item.type === 'header') {
+            return (
+              <View>
+                <ProfileInfoCard
+                  profile={profile}
+                  isOwnProfile={isOwnProfile}
+                  avatarSource={avatarSource}
+                  onPressCamera={isOwnProfile ? handlePressCamera : undefined}
+                  onPressAvatar={handlePressAvatar}>
+                  {renderActionButtons}
+                </ProfileInfoCard>
+
+                {isOwnProfile && (
+                  <View style={styles.weightCard}>
+                    <AppText variant="title" color={colors.textPrimary} style={styles.weightTitle}>
+                      {t('profile.weightProgress.title')}
+                    </AppText>
+                    <AppText variant="caption" color={colors.textSecondary} style={styles.weightSubtitle}>
+                      {t('profile.weightProgress.subtitle')}
+                    </AppText>
+
+                    <View style={styles.weightRow}>
+                      <WeightColumn
+                        dotColor={colors.textTertiary}
+                        label={t('profile.weightProgress.start')}
+                        value={String(startWeight)}
+                        iconName="fire"
+                      />
+                      <WeightColumn
+                        dotColor={colors.primary}
+                        label={t('profile.weightProgress.current')}
+                        value={String(currentWeight)}
+                        iconName="trending-down"
+                      />
+                      <WeightColumn
+                        dotColor={colors.success}
+                        label={t('profile.weightProgress.goal')}
+                        value={String(goalWeight)}
+                        iconName="target"
+                      />
+                    </View>
+
+                    <View style={styles.progressHeader}>
+                      <AppText variant="captionMedium" color={colors.textSecondary}>
+                        {t('profile.weightProgress.progressLabel')}
+                      </AppText>
+                      <AppText
+                        variant="label"
+                        color={progressPercent >= 100 ? colors.success : colors.primary}>
+                        {Math.round(progressPercent)}%
+                      </AppText>
+                    </View>
+                    <ProgressBar
+                      progress={progressPercent}
+                      height={10}
+                      color={colors.primary}
+                      trackColor={colors.backgroundSecondary}
+                      animated={true}
+                    />
+                  </View>
+                )}
+              </View>
+            );
+          }
+
+          if (item.type === 'tabs') {
+            return (
+              <ProfileTabs 
+                activeTab={activeTab} 
+                onTabChange={setActiveTab} 
+              />
+            );
+          }
+
+          if (item.type === 'blank') {
+            return <View style={{ paddingBottom: spacing[10] }} />;
+          }
+
+          if (item.type === 'post') {
+            return (
+              <PostCard
+                {...item.data}
+                onPressLike={() => {}}
+                onPressComment={() => {}}
+                onPressShare={() => {}}
+                onPressOptions={() => {}}
+              />
+            );
+          }
+
+          return null;
+        }}
+      />
+
+      {/* ── Own Profile: Media Picker Modal ── */}
+      {isOwnProfile && (
+        <AppModal
+          visible={isEditVisible}
+          onClose={() => setIsEditVisible(false)}
+          showHandle={true}
+          showCloseButton={false}>
+          <MediaPicker
+            onSelect={handleImagePickerResponse}
+            closeModal={() => setIsEditVisible(false)}
+            title={t('modals.uploadProfilePhoto.title')}
+          />
+        </AppModal>
+      )}
+
+      {/* ── Other Profile: 3-Dot Options Menu ── */}
+      {!isOwnProfile && (
+        <>
+          <AppModal
+            visible={isMenuVisible}
+            onClose={handleCloseMenu}
+            showCloseButton={false}
+            showHandle={true}
+            position="bottom">
+            <TouchableOpacity style={styles.menuItem} onPress={handleBlockPress}>
+              <AppText style={styles.menuItemDangerText}>{t('profile.menu.block')}</AppText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem} onPress={handleReportPress}>
+              <AppText style={styles.menuItemText}>{t('profile.menu.report')}</AppText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem} onPress={handleCopyLinkPress}>
+              <AppText style={styles.menuItemText}>{t('profile.menu.copyLink')}</AppText>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem} onPress={handleSharePress}>
+              <AppText style={styles.menuItemText}>{t('profile.menu.share')}</AppText>
+            </TouchableOpacity>
+          </AppModal>
+
+          <AppModal
+            visible={isBlockConfirmVisible}
+            onClose={handleCancelBlock}
+            showCloseButton={false}
+            showHandle={true}
+            position="bottom">
+            <View style={styles.confirmContainer}>
+              <AppImage
+                source={APP_IMAGES.userAvatar}
+                style={styles.confirmAvatar}
+                imageStyle={styles.avatarImageInternal}
+                borderRadius={36}
+              />
+              <AppText style={styles.confirmTitle}>
+                {t('profile.block.title', {name: profile?.name})}
+              </AppText>
+              <AppText style={styles.confirmDescription}>
+                {t('profile.block.description')}
+              </AppText>
+              <View style={styles.confirmButtonsRow}>
+                <Button
+                  title={t('profile.block.cancel')}
+                  onPress={handleCancelBlock}
+                  variant="gray"
+                  fullWidth={false}
+                  style={styles.confirmButton}
+                />
+                <Button
+                  title={t('profile.block.block')}
+                  onPress={handleConfirmBlock}
+                  variant="primary"
+                  fullWidth={false}
+                  style={styles.confirmButton}
+                />
+              </View>
+            </View>
+          </AppModal>
+        </>
+      )}
+    </SafeContainer>
+  );
+};
+
+export default memo(ProfileScreenContent);

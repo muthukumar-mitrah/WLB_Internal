@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider, useTheme } from './src/theme';
 import { AuthProvider } from './src/context/AuthContext';
 import { SurveyProvider } from './src/context/SurveyContext';
+import { ProfileProvider } from './src/context/ProfileContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import Toast from './src/components/common/Toast';
 import SplashScreen from 'react-native-splash-screen'
@@ -39,9 +40,11 @@ const App = () => (
   <SafeAreaProvider>
     <ThemeProvider>
       <AuthProvider>
-        <SurveyProvider>
-          <AppCore />
-        </SurveyProvider>
+        <ProfileProvider>
+          <SurveyProvider>
+            <AppCore />
+          </SurveyProvider>
+        </ProfileProvider>
       </AuthProvider>
     </ThemeProvider>
   </SafeAreaProvider>

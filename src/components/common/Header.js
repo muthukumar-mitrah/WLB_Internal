@@ -40,12 +40,13 @@ const Header = ({
           paddingHorizontal: spacing[4],
           paddingTop: Platform.OS === 'ios' ? spacing[2] : spacing[2],
           paddingBottom: spacing[3],
+          zIndex: 10,
         },
         !transparent && shadows.xs,
         style,
       ]}>
       {/* Left */}
-      <View style={styles.side}>
+      <View style={styles.leftSide}>
         {leftComponent ? (
           leftComponent
         ) : showBack ? (
@@ -73,7 +74,7 @@ const Header = ({
       </View>
 
       {/* Right */}
-      <View style={styles.side}>
+      <View style={styles.rightSide}>
         {rightComponent || null}
       </View>
     </View>
@@ -86,9 +87,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minHeight: 56,
   },
-  side: {
+  leftSide: {
     flex: 1,
     alignItems: 'flex-start',
+    justifyContent: 'center',
+    zIndex: 1,
+  },
+  rightSide: {
+    flex: 1,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    zIndex: 1,
   },
   center: {
     flex: 3,
