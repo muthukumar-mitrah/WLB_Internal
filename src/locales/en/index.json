@@ -58,6 +58,55 @@
       "continue": "Continue",
       "close": "Close",
       "aiSettings": "AI Settings"
+    },
+    "modal": {
+      "title": "Your very own free AI Buddy",
+      "feature1Title": "Personalized Support",
+      "feature1Desc": "Get real-time response to your posts",
+      "feature2Title": "24/7 Expert advice on any topic",
+      "feature2Desc": "Remembers your earlier conversations.",
+      "feature3Title": "Customized diet plans",
+      "feature3Desc": "Remembers your earlier conversations.",
+      "feature4Title": "Flexible Dietary options",
+      "feature4Desc": "IF, Keto, Vegan, Mediterranean, Low-Carb, Paleo, DASH",
+      "feature5Title": "Comprehensive Resources",
+      "feature5Desc": "Discover guidelines, recipes, and shopping lists",
+      "feature6Title": "Tailored Fitness & Wellness",
+      "feature6Desc": "Personalized exercise plans, life coaching, and expert support",
+      "cancel": "Cancel",
+      "next": "Next"
+    },
+    "list": {
+      "title": "Choose an AI Buddy",
+      "explore": "Explore"
+    },
+    "details": {
+      "title": "AI Buddy Profile",
+      "about": "About Me",
+      "expertise": "Expertise",
+      "howToHelp": "How I Can Help",
+      "chooseButton": "Choose as AI Buddy",
+      "followButton": "Follow",
+      "posts": "Posts",
+      "following": "Following",
+      "followers": "Followers"
+    },
+    "settings": {
+      "title": "{{name}} AI Settings",
+      "subtitle": "Control how {{name}} remembers your activity and supports your interactions.",
+      "memory": "Memory",
+      "keepHistory": "Keep chat history for 30 days",
+      "keepHistoryDesc": "{{name}} can use recent conversations to provide more personalized support",
+      "eraseHistory": "Erase all AI history",
+      "eraseHistoryDesc": "Remove saved AI conversation history.",
+      "action": "AI Buddy Action",
+      "suggestLikes": "Suggest likes",
+      "suggestLikesDesc": "{{name}} can suggest when a post may be worth supporting",
+      "suggestComments": "Suggest comments",
+      "suggestCommentsDesc": "{{name}} can help draft supportive replies, but you choose what to post.",
+      "saveChanges": "Save Changes",
+      "cancel": "Cancel",
+      "viewDisclaimer": "View AI Disclaimer"
     }
   },
   "validation": {

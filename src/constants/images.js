@@ -76,4 +76,16 @@ export const APP_IMAGES = {
   weeklyPoints: require('../assets/icons/fire_outline.png'),
   buddyStatus: require('../assets/icons/group_users.png'),
   userAvatar: require('../assets/images/user.png'),
+
+  // AI Buddy
+  aiBuddyChat: require('../assets/icons/ai_chat_message.png'),
+  aiBuddySupport: require('../assets/icons/ai_support.png'),
+  aiBuddyDiet: require('../assets/icons/ai_diet_nutrition.png'),
+  aiBuddyResource: require('../assets/icons/ai_resource.png'),
+  aiBuddyWorkout: require('../assets/icons/ai_workout.png'),
+  aiBuddyActivity: require('../assets/icons/ai_recent_activity.png'), // used as a fallback for time/clock
+  aiBuddySettings: require('../assets/icons/ai_settings.png'),
+  aiBuddyDisclaimer: require('../assets/icons/ai_disclaimer.png'),
+  checkCircle: require('../assets/icons/support.png'), // fallback for check
+  trash: require('../assets/icons/logout.png'), // fallback for trash
 };

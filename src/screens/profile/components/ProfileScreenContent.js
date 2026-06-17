@@ -44,9 +44,11 @@ import createStyles from './ProfileScreenContentStyles';
 const ProfileScreenContent = ({
   navigation,
   isOwnProfile,
+  isAIBuddy,       // true for AI Buddy profiles
   profile,
   avatar,          // uri string (own profile only)
   onAvatarChange,  // (uri) => void  (own profile only)
+  headerTitle,     // optional custom title
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
@@ -121,16 +123,9 @@ const ProfileScreenContent = ({
     ];
 
     if (activeTab === 'Posts' || activeTab === 'All') {
-      const extendedPosts = [
-        ...feedData,
-        ...(feedData.length > 1 ? [
-          { ...feedData[0], id: 'post-6', timeAgo: '1w ago', likes: 532 },
-          { ...feedData[1], id: 'post-7', timeAgo: '2w ago', comments: 11 }
-        ] : [])
-      ];
       return [
         ...base,
-        ...extendedPosts.map(post => ({ id: post.id, type: 'post', data: post }))
+        ...feedData.map(post => ({ id: post.id, type: 'post', data: post }))
       ];
     } else {
       return [...base, { id: `empty-${activeTab}`, type: 'blank' }];
@@ -278,6 +273,14 @@ const ProfileScreenContent = ({
     ToastService.show({type: 'info', message: t('profile.toast.openingChat')});
   }, [t]);
 
+  const handleChooseBuddy = useCallback(() => {
+    ToastService.show({ type: 'success', message: t('aiBuddy.toast.chooseSuccess', 'AI Buddy selected successfully') });
+  }, [t]);
+
+  const handleFollow = useCallback(() => {
+    ToastService.show({ type: 'success', message: t('aiBuddy.toast.followSuccess', 'Following AI Buddy') });
+  }, [t]);
+
   const handleOpenMenu  = useCallback(() => setIsMenuVisible(true), []);
   const handleCloseMenu = useCallback(() => setIsMenuVisible(false), []);
 
@@ -319,6 +322,11 @@ const ProfileScreenContent = ({
         </TouchableOpacity>
       );
     }
+    
+    if (isAIBuddy) {
+      return null;
+    }
+
     return (
       <TouchableOpacity
         style={styles.menuButton}
@@ -360,6 +368,35 @@ const ProfileScreenContent = ({
         </View>
       );
     }
+
+    if (isAIBuddy) {
+      return (
+        <View style={styles.buttonsRow}>
+          <Button
+            testID="profile-choose-buddy-btn"
+            title={t('aiBuddy.details.chooseButton', 'Choose as AI Buddy')}
+            onPress={handleChooseBuddy}
+            variant="primary"
+            size="md"
+            fullWidth
+            style={styles.primaryButton}
+            accessibilityLabel="Choose as AI Buddy"
+          />
+          <Button
+            testID="profile-follow-btn"
+            title={t('aiBuddy.details.followButton', 'Follow')}
+            onPress={handleFollow}
+            variant="gray"
+            size="md"
+            fullWidth
+            style={styles.secondaryButton}
+            textStyle={{color: colors.textPrimary}}
+            accessibilityLabel="Follow AI Buddy"
+          />
+        </View>
+      );
+    }
+
     return (
       <View style={styles.buttonsRow}>
         <Button
@@ -400,7 +437,7 @@ const ProfileScreenContent = ({
       />
 
       <Header
-        title={t('profile.header.title')}
+        title={headerTitle || t('profile.header.title')}
         showBack
         transparent={true}
         rightComponent={renderRightComponent}
@@ -420,6 +457,7 @@ const ProfileScreenContent = ({
                 <ProfileInfoCard
                   profile={profile}
                   isOwnProfile={isOwnProfile}
+                  isAIBuddy={isAIBuddy}
                   avatarSource={avatarSource}
                   onPressCamera={isOwnProfile ? handlePressCamera : undefined}
                   onPressAvatar={handlePressAvatar}>
@@ -537,7 +575,7 @@ const ProfileScreenContent = ({
       )}
 
       {/* ── Other Profile: 3-Dot Options Menu ── */}
-      {!isOwnProfile && (
+      {!isOwnProfile && !isAIBuddy && (
         <>
           <AppModal
             visible={isMenuVisible}

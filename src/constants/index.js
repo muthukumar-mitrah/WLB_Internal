@@ -93,6 +93,11 @@ const ROUTES = {
   COUNTRY_SELECTION: 'CountrySelection',
   DOB_SELECTION: 'DobSelection',
   REPORT_USER: 'ReportUser',
+
+  // AI Buddy
+  CHOOSE_AI_BUDDY: 'ChooseAIBuddy',
+  AI_BUDDY_DETAILS: 'AIBuddyDetails',
+  AI_SETTINGS: 'AISettings',  
 };
 
 // Remove once the real login API is integrated.

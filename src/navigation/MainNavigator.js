@@ -19,6 +19,10 @@ import CountrySelectionScreen from '../screens/profile/CountrySelectionScreen';
 import DateOfBirthScreen from '../screens/profile/DateOfBirthScreen';
 import ReportUserScreen from '../screens/profile/ReportUserScreen';
 
+import ChooseAIBuddyScreen from '../screens/aiBuddy/ChooseAIBuddyScreen';
+import AIBuddyDetailsScreen from '../screens/aiBuddy/AIBuddyDetailsScreen';
+import AISettingsScreen from '../screens/aiBuddy/AISettingsScreen';
+
 const Stack = createNativeStackNavigator();
 
 const MainNavigator = () => (
@@ -40,6 +44,10 @@ const MainNavigator = () => (
     <Stack.Screen name={ROUTES.COUNTRY_SELECTION} component={CountrySelectionScreen} />
     <Stack.Screen name={ROUTES.DOB_SELECTION} component={DateOfBirthScreen} />
     <Stack.Screen name={ROUTES.REPORT_USER} component={ReportUserScreen} />
+    
+    <Stack.Screen name={ROUTES.CHOOSE_AI_BUDDY} component={ChooseAIBuddyScreen} />
+    <Stack.Screen name={ROUTES.AI_BUDDY_DETAILS} component={AIBuddyDetailsScreen} />
+    <Stack.Screen name={ROUTES.AI_SETTINGS} component={AISettingsScreen} />
   </Stack.Navigator>
 );
 

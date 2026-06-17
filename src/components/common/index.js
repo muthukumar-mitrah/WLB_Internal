@@ -26,3 +26,4 @@ export { default as CommonBottomSheet } from './BottomSheet/AppBottomSheet';
 export { default as CommentsBottomSheet } from '../../screens/home/CommentsBottomSheet';
 export { default as LikesBottomSheet } from '../../screens/home/LikesBottomSheet';
 export { default as PostOptionsSheet } from './PostOptionsSheet';
+export { default as AIBuddyIntroModal } from './AIBuddyIntroModal';

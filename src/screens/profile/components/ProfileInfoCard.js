@@ -38,8 +38,7 @@ const InfoCardItem = memo(({imageSource, label, value, colors, styles, positionS
   </View>
 ));
 
-const ProfileInfoCard = ({profile, isOwnProfile, avatarSource, onPressCamera, onPressAvatar, children}) => {
-  console.log("profile", profile);
+const ProfileInfoCard = ({profile, isOwnProfile, isAIBuddy, avatarSource, onPressCamera, onPressAvatar, children}) => {
   const {t} = useTranslation();
   const theme = useTheme();
   const {colors, spacing, borderRadius, shadows, isDark} = theme;
@@ -98,64 +97,66 @@ const ProfileInfoCard = ({profile, isOwnProfile, avatarSource, onPressCamera, on
       </View>
 
       {/* Info Grid */}
-      <View style={styles.infoGrid}>
-        <View style={styles.infoRow}>
-          <InfoCardItem
-            imageSource={APP_IMAGES.gender}
-            label={t('profile.infoCard.labels.gender')}
-            value={profile?.gender}
-            colors={colors}
-            styles={styles}
-            positionStyle={styles.infoCardLeft}
-          />
-          <InfoCardItem
-            imageSource={APP_IMAGES.country}
-            label={t('profile.infoCard.labels.country')}
-            value={profile?.country}
-            colors={colors}
-            styles={styles}
-            positionStyle={styles.infoCardRight}
-          />
-        </View>
+      {!isAIBuddy && (
+        <View style={styles.infoGrid}>
+          <View style={styles.infoRow}>
+            <InfoCardItem
+              imageSource={APP_IMAGES.gender}
+              label={t('profile.infoCard.labels.gender')}
+              value={profile?.gender}
+              colors={colors}
+              styles={styles}
+              positionStyle={styles.infoCardLeft}
+            />
+            <InfoCardItem
+              imageSource={APP_IMAGES.country}
+              label={t('profile.infoCard.labels.country')}
+              value={profile?.country}
+              colors={colors}
+              styles={styles}
+              positionStyle={styles.infoCardRight}
+            />
+          </View>
 
-        <View style={styles.infoRow}>
-          <InfoCardItem
-            imageSource={APP_IMAGES.dateOfBirth}
-            label={t('profile.infoCard.labels.dateOfBirth')}
-            value={profile?.dateOfBirth}
-            colors={colors}
-            styles={styles}
-            positionStyle={styles.infoCardLeft}
-          />
-          <InfoCardItem
-            imageSource={APP_IMAGES.totalPoints}
-            label={t('profile.infoCard.labels.totalPoints')}
-            value={String(profile.totalPoints ?? 0)}
-            colors={colors}
-            styles={styles}
-            positionStyle={styles.infoCardRight}
-          />
-        </View>
+          <View style={styles.infoRow}>
+            <InfoCardItem
+              imageSource={APP_IMAGES.dateOfBirth}
+              label={t('profile.infoCard.labels.dateOfBirth')}
+              value={profile?.dateOfBirth}
+              colors={colors}
+              styles={styles}
+              positionStyle={styles.infoCardLeft}
+            />
+            <InfoCardItem
+              imageSource={APP_IMAGES.totalPoints}
+              label={t('profile.infoCard.labels.totalPoints')}
+              value={String(profile.totalPoints ?? 0)}
+              colors={colors}
+              styles={styles}
+              positionStyle={styles.infoCardRight}
+            />
+          </View>
 
-        <View style={styles.infoRow}>
-          <InfoCardItem
-            imageSource={APP_IMAGES.currentWeight}
-            label={t('profile.infoCard.labels.currentWeight')}
-            value={`${profile?.currentWeight ?? 0} lbs`}
-            colors={colors}
-            styles={styles}
-            positionStyle={styles.infoCardLeft}
-          />
-          <InfoCardItem
-            imageSource={APP_IMAGES.weeklyPoints}
-            label={t('profile.infoCard.labels.weeklyPoints')}
-            value={String(profile?.weeklyPoints ?? 0)}
-            colors={colors}
-            styles={styles}
-            positionStyle={styles.infoCardRight}
-          />
+          <View style={styles.infoRow}>
+            <InfoCardItem
+              imageSource={APP_IMAGES.currentWeight}
+              label={t('profile.infoCard.labels.currentWeight')}
+              value={`${profile?.currentWeight ?? 0} lbs`}
+              colors={colors}
+              styles={styles}
+              positionStyle={styles.infoCardLeft}
+            />
+            <InfoCardItem
+              imageSource={APP_IMAGES.weeklyPoints}
+              label={t('profile.infoCard.labels.weeklyPoints')}
+              value={String(profile?.weeklyPoints ?? 0)}
+              colors={colors}
+              styles={styles}
+              positionStyle={styles.infoCardRight}
+            />
+          </View>
         </View>
-      </View>
+      )}
 
       {/* Action Buttons Row */}
       {children}

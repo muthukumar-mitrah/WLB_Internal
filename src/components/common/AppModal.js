@@ -102,10 +102,11 @@ const styles = StyleSheet.create({
   keyboardView: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#00000080'
+    alignItems: 'center',
   },
   overlay: {
     ...StyleSheet.absoluteFill,
+    backgroundColor: '#00000080',
   },
   container: {
     width: '100%',
@@ -115,11 +116,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    width: '100%',
   },
   centerContainer: {
     alignSelf: 'center',
     width: '90%',
-    marginBottom: 80,
+    maxWidth: 420,
   },
   handle: {
     width: 40,

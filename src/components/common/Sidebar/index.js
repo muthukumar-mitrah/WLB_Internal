@@ -11,6 +11,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { ROUTES } from '../../../constants';
 import { ToastService } from '../Toast';
 import AppText from '../AppText';
+import AIBuddyIntroModal from '../AIBuddyIntroModal';
 import createStyles, { ICON_SIZE } from './styles';
 
 const ASSET = {
@@ -66,6 +67,8 @@ const ROUTE_MAP = {
   contactUs: ROUTES.CONTACT_US,
   termsOfUse: ROUTES.TERMS_OF_USE,
   privacyPolicy: ROUTES.PRIVACY_POLICY,
+  chooseAiBuddy: ROUTES.CHOOSE_AI_BUDDY,
+  aiSettings: ROUTES.AI_SETTINGS,
 };
 
 const getGreetingKey = () => {
@@ -155,6 +158,7 @@ const Sidebar = (props) => {
 
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [supportOpen, setSupportOpen] = useState(false);
+  const [introVisible, setIntroVisible] = useState(false);
 
   const user = { name: 'User', email: 'user@email.com', avatar: null };
 
@@ -162,8 +166,13 @@ const Sidebar = (props) => {
 
   const handleItemPress = useCallback(
     (key) => {
-      navigation.closeDrawer();
+       navigation.closeDrawer();
+      if (key === 'chooseAiBuddy') {
+        setIntroVisible(true);
+        return;
+      }
       const route = ROUTE_MAP[key];
+
       if (route) {
         navigation.navigate(route);
       } else {
@@ -195,6 +204,18 @@ const Sidebar = (props) => {
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
     >
+      <AIBuddyIntroModal
+        visible={introVisible}
+        onClose={() => {
+          setIntroVisible(false);
+          navigation.closeDrawer();
+        }}
+        onNext={() => {
+          setIntroVisible(false);
+          navigation.closeDrawer();
+          navigation.navigate(ROUTES.CHOOSE_AI_BUDDY);
+        }}
+      />
       <View style={styles.header}>
         <AppText
           variant="bodyMedium"

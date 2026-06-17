@@ -26,6 +26,10 @@ const createStyles = ({colors, spacing, borderRadius, shadows}) =>
     buttonHalf: {
       flex: 1,
     },
+    primaryButton: {
+      flex: 1,
+      maxWidth: 200,
+    },
     secondaryButton: {
       flex: 1,
       backgroundColor: colors.backgroundSecondary,
