@@ -69,6 +69,9 @@ const ROUTE_MAP = {
   privacyPolicy: ROUTES.PRIVACY_POLICY,
   chooseAiBuddy: ROUTES.CHOOSE_AI_BUDDY,
   aiSettings: ROUTES.AI_SETTINGS,
+  blockedUsers: ROUTES.BLOCKED_USER,
+  awards: ROUTES.AWARDS,
+  leaderBoard: ROUTES.LEADER_BOARD
 };
 
 const getGreetingKey = () => {
@@ -166,7 +169,7 @@ const Sidebar = (props) => {
 
   const handleItemPress = useCallback(
     (key) => {
-       navigation.closeDrawer();
+      navigation.closeDrawer();
       if (key === 'chooseAiBuddy') {
         setIntroVisible(true);
         return;

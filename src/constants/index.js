@@ -79,6 +79,9 @@ const ROUTES = {
   TERMS_OF_USE: 'TermsOfUse',
   PRIVACY_POLICY: 'PrivacyPolicy',
   WEB_VIEW_SCREEN: 'WebViewScreen',
+  BLOCKED_USER: 'BlockedUser',
+  AWARDS: 'awards',
+  LEADER_BOARD: 'leaderBoard',
 
   // Profile
   PROFILE_NAVIGATOR: 'ProfileNavigator',
@@ -97,7 +100,7 @@ const ROUTES = {
   // AI Buddy
   CHOOSE_AI_BUDDY: 'ChooseAIBuddy',
   AI_BUDDY_DETAILS: 'AIBuddyDetails',
-  AI_SETTINGS: 'AISettings',  
+  AI_SETTINGS: 'AISettings',
 };
 
 // Remove once the real login API is integrated.

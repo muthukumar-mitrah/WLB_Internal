@@ -164,6 +164,12 @@ const textVariants = {
     lineHeight: lineHeight.sm,
     letterSpacing: letterSpacing.normal,
   },
+  captionSmall: {
+    fontFamily: fontFamily.medium,
+    fontSize: fontSize.xs,
+    lineHeight: lineHeight.xs,
+    letterSpacing: letterSpacing.normal,
+  },
 
   // Labels / Buttons
   label: {
@@ -201,4 +207,4 @@ const textVariants = {
   },
 };
 
-export {fontFamily, fontSize, fontWeight, lineHeight, letterSpacing, textVariants};
+export { fontFamily, fontSize, fontWeight, lineHeight, letterSpacing, textVariants };

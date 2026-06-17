@@ -797,5 +797,68 @@
       "feedback": "Feedback",
       "bugReport": "Bug Report"
     }
+  },
+  "blockedUsers": {
+    "title": "Blocked Users",
+    "blockedOn": "Blocked on {{date}}",
+    "unblock": "Unblock",
+    "unblockTitle": "Unblock {{name}}?",
+    "unblockDescription": "They may be able to message you, send buddy requests, and interact with your public posts again.",
+    "cancel": "Cancel",
+    "emptyTitle": "No Blocked Users",
+    "emptyDescription": "You haven't blocked anyone yet."
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "allTime": "All",
+    "points": "{{count}} pts",
+    "yourRank": "Your Rank",
+    "you": "You",
+    "pointsLabel": "points",
+    "motivation": "Keep going, small steps count."
+  },
+  "awards": {
+    "title": "Awards",
+    "yourTotalPoints": "Your Total Points",
+    "currentLevel": "Energizer",
+    "nextLevel": "Achiever",
+    "currentLevelLabel": "Current Level: {{level}}",
+    "nextLevelLabel": "Next: {{level}}",
+    "motivation": "Keep engaging to unlock your next award",
+    "awardLevels": "Award Levels",
+    "howToEarn": "How to Earn Points",
+    "levels": {
+      "starter": "Starter",
+      "starterPts": "0–99 pts",
+      "risingStar": "Rising Star",
+      "risingStarPts": "100–199 pts",
+      "supporter": "Supporter",
+      "supporterPts": "200–399 pts",
+      "energizer": "Energizer",
+      "energizerPts": "400–699 pts",
+      "achiever": "Achiever",
+      "achieverPts": "700–999 pts",
+      "champion": "Champion",
+      "championPts": "1,000–9,999 pts",
+      "legend": "Legend",
+      "legendPts": "10,000–19,999 pts",
+      "elite": "Elite",
+      "elitePts": "20,000+ pts"
+    },
+    "earn": {
+      "post": "Post",
+      "postPts": "+1",
+      "comment": "Comment",
+      "commentPts": "+1",
+      "liked": "Your Post Liked",
+      "likedPts": "+1",
+      "shared": "Your Post Shared outside the App",
+      "sharedPts": "+2",
+      "sharePost": "You Share a Post outside the App",
+      "sharePostPts": "+2",
+      "pts": "pt"
+    }
   }
 }
