@@ -101,6 +101,13 @@ const ROUTES = {
   CHOOSE_AI_BUDDY: 'ChooseAIBuddy',
   AI_BUDDY_DETAILS: 'AIBuddyDetails',
   AI_SETTINGS: 'AISettings',
+
+  // Settings — Change Password flow (authenticated users)
+  SETTINGS_CHANGE_PASSWORD: 'SettingsChangePassword',
+  SETTINGS_FORGOT_PASSWORD: 'SettingsForgotPassword',
+  SETTINGS_VERIFY_CODE: 'SettingsVerifyCode',
+  SETTINGS_CREATE_PASSWORD: 'SettingsCreatePassword',
+  SETTINGS_PASSWORD_SUCCESS: 'SettingsPasswordSuccess',
 };
 
 // Remove once the real login API is integrated.

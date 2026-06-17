@@ -337,7 +337,7 @@ const ProfileScreenContent = ({
         <Icon name="dots-vertical" size={20} color={colors.textPrimary} />
         </TouchableOpacity>
     );
-  }, [isOwnProfile, styles.menuButton, colors.textPrimary, handleOpenMenu, handleOpenDrawer]);
+  }, [isOwnProfile, isAIBuddy, styles.menuButton, colors.textPrimary, handleOpenMenu, handleOpenDrawer]);
 
   // ── Action buttons (inside ProfileInfoCard) ─────────────────────────────────
   const renderActionButtons = useMemo(() => {
@@ -423,8 +423,9 @@ const ProfileScreenContent = ({
       </View>
     );
   }, [
-    isOwnProfile, styles, colors, t,
+    isOwnProfile, isAIBuddy, styles, colors, t,
     handleUpdateProfile, handleViewPortrait,
+    handleChooseBuddy, handleFollow,
     handleRequestBuddy, handleMessage,
   ]);
 

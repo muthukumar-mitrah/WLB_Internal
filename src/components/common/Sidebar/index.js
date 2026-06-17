@@ -71,7 +71,8 @@ const ROUTE_MAP = {
   aiSettings: ROUTES.AI_SETTINGS,
   blockedUsers: ROUTES.BLOCKED_USER,
   awards: ROUTES.AWARDS,
-  leaderBoard: ROUTES.LEADER_BOARD
+  leaderBoard: ROUTES.LEADER_BOARD,
+  changePassword: ROUTES.SETTINGS_CHANGE_PASSWORD,
 };
 
 const getGreetingKey = () => {

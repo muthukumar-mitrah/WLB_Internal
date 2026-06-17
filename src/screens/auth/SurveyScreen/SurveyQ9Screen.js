@@ -139,7 +139,7 @@ const RatingCard = memo(({ index, question, leftLabel, rightLabel, value, onValu
       currentValue.current = value;
       thumbX.setValue(valueToX(value));
     }
-  }, [value]);
+  }, [value, thumbX]);
 
   const snapToValue = useCallback((newValue) => {
     const clamped = Math.max(1, Math.min(newValue, STAR_COUNT));

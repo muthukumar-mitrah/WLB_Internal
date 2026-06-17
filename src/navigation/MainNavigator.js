@@ -26,6 +26,12 @@ import ChooseAIBuddyScreen from '../screens/aiBuddy/ChooseAIBuddyScreen';
 import AIBuddyDetailsScreen from '../screens/aiBuddy/AIBuddyDetailsScreen';
 import AISettingsScreen from '../screens/aiBuddy/AISettingsScreen';
 
+import SettingsChangePasswordScreen from '../screens/settings/SettingsChangePasswordScreen';
+import SettingsForgotPasswordScreen from '../screens/settings/SettingsForgotPasswordScreen';
+import SettingsVerifyCodeScreen from '../screens/settings/SettingsVerifyCodeScreen';
+import SettingsCreatePasswordScreen from '../screens/settings/SettingsCreatePasswordScreen';
+import SettingsPasswordSuccessScreen from '../screens/settings/SettingsPasswordSuccessScreen';
+
 const Stack = createNativeStackNavigator();
 
 const MainNavigator = () => (
@@ -54,6 +60,13 @@ const MainNavigator = () => (
     <Stack.Screen name={ROUTES.CHOOSE_AI_BUDDY} component={ChooseAIBuddyScreen} />
     <Stack.Screen name={ROUTES.AI_BUDDY_DETAILS} component={AIBuddyDetailsScreen} />
     <Stack.Screen name={ROUTES.AI_SETTINGS} component={AISettingsScreen} />
+
+    {/* Settings — Change Password flow */}
+    <Stack.Screen name={ROUTES.SETTINGS_CHANGE_PASSWORD} component={SettingsChangePasswordScreen} />
+    <Stack.Screen name={ROUTES.SETTINGS_FORGOT_PASSWORD} component={SettingsForgotPasswordScreen} />
+    <Stack.Screen name={ROUTES.SETTINGS_VERIFY_CODE} component={SettingsVerifyCodeScreen} />
+    <Stack.Screen name={ROUTES.SETTINGS_CREATE_PASSWORD} component={SettingsCreatePasswordScreen} />
+    <Stack.Screen name={ROUTES.SETTINGS_PASSWORD_SUCCESS} component={SettingsPasswordSuccessScreen} />
   </Stack.Navigator>
 );
 

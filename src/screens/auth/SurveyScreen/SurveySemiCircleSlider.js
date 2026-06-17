@@ -44,7 +44,7 @@ const SurveySemiCircleSlider = ({
       friction: 7,
       tension: 70,
     }).start();
-  }, [selectedIndex]);
+  }, [selectedIndex, animatedAngle]);
 
   const ticks = Array.from({ length: TOTAL_TICKS }).map((_, i) => {
     const angle = -90 + (180 / (TOTAL_TICKS - 1)) * i;

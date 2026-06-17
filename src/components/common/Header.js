@@ -16,6 +16,7 @@ const Header = ({
   rightComponent,
   leftComponent,
   transparent = false,
+  titleAlign = 'center',
   style,
   testID,
 }) => {
@@ -46,7 +47,7 @@ const Header = ({
         style,
       ]}>
       {/* Left */}
-      <View style={styles.leftSide}>
+      <View style={[styles.leftSide, titleAlign === 'left' && { flex: 4, flexDirection: 'row', alignItems: 'center' }]}>
         {leftComponent ? (
           leftComponent
         ) : showBack ? (
@@ -54,11 +55,16 @@ const Header = ({
             <MaterialIcons name="arrow-back-ios-new" size={25} color={colors.textPrimary} />
           </TouchableOpacity>
         ) : null}
+        {titleAlign === 'left' && title && (
+          <AppText variant="title" color={colors.textPrimary} numberOfLines={1} style={{ marginLeft: spacing[3] }}>
+            {title}
+          </AppText>
+        )}
       </View>
 
       {/* Center */}
       <View style={styles.center}>
-        {title && (
+        {titleAlign === 'center' && title && (
           <AppText variant="title" color={colors.textPrimary} numberOfLines={1}>
             {title}
           </AppText>

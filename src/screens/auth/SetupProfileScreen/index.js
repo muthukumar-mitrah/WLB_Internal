@@ -97,7 +97,7 @@ const SetupProfileScreen = ({ navigation, route }) => {
     // });
 
     setShowSuccessModal(true);
-  }, [formData, email]);
+  }, [formData]);
 
   const handleLogin = useCallback(() => {
     if (navigation?.navigate) {
@@ -107,7 +107,7 @@ const SetupProfileScreen = ({ navigation, route }) => {
 
   const handleModalClose = useCallback(() => {
     setShowSuccessModal(false);
-  }, [navigation]);
+  }, []);
 
   const handleContinue = useCallback(() => {
     setShowSuccessModal(false);

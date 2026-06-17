@@ -1,3 +1,6 @@
+/**
+ * Screen 4: Create New Password (Settings Flow)
+ */
 import React, { memo, useCallback, useMemo, useRef, useState } from 'react';
 import {
   View,
@@ -5,21 +8,21 @@ import {
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useTheme } from '../../../theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../../theme';
+import { useTranslation } from '../../i18n/useTranslation';
 import {
   AppText,
   Button,
+  Header,
   InputBox,
-  SafeContainer,
-} from '../../../components/common';
-import { validatePassword, validatePasswordMatch } from '../../../utils/validation';
-import { ROUTES } from '../../../constants';
-import { useTranslation } from '../../../i18n/useTranslation';
+} from '../../components/common';
+import { validatePassword, validatePasswordMatch } from '../../utils/validation';
+import { ROUTES } from '../../constants';
 import createStyles from './styles';
 
-const ChangePasswordScreen = ({ navigation, route }) => {
-  const { colors, spacing, borderRadius, iconSize } = useTheme();
+const SettingsCreatePasswordScreen = ({ navigation, route }) => {
+  const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
   const email = route.params?.email || '';
 
@@ -35,13 +38,13 @@ const ChangePasswordScreen = ({ navigation, route }) => {
   const confirmRef = useRef(null);
 
   const newPasswordError = useMemo(() => {
-    if(!isDirty) return '';
+    if (!isDirty) return '';
     const result = validatePassword(newPassword);
     return result.valid ? '' : t(result.message);
   }, [newPassword, isDirty, t]);
 
   const confirmPasswordError = useMemo(() => {
-    if(!isDirty) return '';
+    if (!isDirty) return '';
     const result = validatePasswordMatch(newPassword, confirmPassword);
     return result.valid ? '' : t(result.message);
   }, [newPassword, confirmPassword, isDirty, t]);
@@ -54,50 +57,48 @@ const ChangePasswordScreen = ({ navigation, route }) => {
 
   const handleResetPassword = useCallback(() => {
     setIsDirty(true);
-    if(!isFormValid) return;
-    navigation.navigate(ROUTES.PASSWORD_RESET_SUCCESS);
+    if (!isFormValid) return;
+    navigation.navigate(ROUTES.SETTINGS_PASSWORD_SUCCESS);
   }, [isFormValid, navigation]);
 
-  const handleBack = useCallback(() => {
-    if(navigation.canGoBack()) {
-      navigation.goBack();
-    }
+  const handleCancel = useCallback(() => {
+    navigation.navigate(ROUTES.DRAWER);
   }, [navigation]);
 
-  const handleCancelBackToSignIn = useCallback(() => {
-    navigation.navigate(ROUTES.LOGIN);
+  const handleBack = useCallback(() => {
+    if (navigation.canGoBack()) navigation.goBack();
   }, [navigation]);
 
   return (
-    <SafeContainer avoidKeyboard edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: colors.background }}>
-      <StatusBar
-        barStyle={colors.statusBar}
-        backgroundColor={colors.background}
-        translucent={false}
+    <SafeAreaView
+      edges={['top', 'bottom']}
+      style={{ flex: 1, backgroundColor: colors.background }}
+    >
+      <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
+      <Header     
+        onBackPress={handleBack}
+        transparent={true}
       />
+
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.backButtonWrapper}>
-          <TouchableOpacity
-            onPress={handleBack}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            style={styles.backButton}>
-            <Ionicons name="chevron-back" size={iconSize.md} color={colors.textPrimary} />
-          </TouchableOpacity>
+        <AppText variant="h2" color={colors.textPrimary} >
+          {t('auth.settingsPassword.createPasswordTitle')}
+        </AppText>
+
+        <View style={[styles.headingSection, { marginTop: spacing[2] }]}>
+          <AppText variant="subtitle" color={colors.textSecondary} style={styles.subheading}>
+            {t('auth.settingsPassword.createPasswordSubheading')}
+          </AppText>
         </View>
-        <AppText variant="h2" color={colors.textPrimary} style={styles.changePasswordHeading}>
-          {t('auth.changePassword.heading')}
-        </AppText>
-        <AppText variant="subtitle" color={colors.textSecondary} style={styles.changePasswordSubheading}>
-          {t('auth.changePassword.subheading')}
-        </AppText>
+
         <View style={styles.inputSection}>
           <InputBox
-            testID="change-password-new-input"
-            placeholder={t('auth.changePassword.newPasswordPlaceholder')}
+            testID="settings-new-password-input"
+            placeholder={t('auth.settingsPassword.newPasswordPlaceholder')}
             value={newPassword}
             onChangeText={setNewPassword}
             error={newPasswordError}
@@ -108,11 +109,12 @@ const ChangePasswordScreen = ({ navigation, route }) => {
             onSubmitEditing={() => confirmRef.current?.focus()}
           />
         </View>
+
         <View style={styles.inputSection}>
           <InputBox
             ref={confirmRef}
-            testID="change-password-confirm-input"
-            placeholder={t('auth.changePassword.confirmPasswordPlaceholder')}
+            testID="settings-confirm-password-input"
+            placeholder={t('auth.settingsPassword.confirmPasswordPlaceholder')}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             error={confirmPasswordError}
@@ -123,25 +125,28 @@ const ChangePasswordScreen = ({ navigation, route }) => {
             onSubmitEditing={handleResetPassword}
           />
         </View>
+
         <Button
-          testID="change-password-reset-btn"
-          title={t('auth.changePassword.resetPassword')}
+          testID="settings-reset-password-btn"
+          title={t('auth.settingsPassword.resetPasswordBtn')}
           onPress={handleResetPassword}
           variant="primary"
           size="lg"
-          style={styles.changePasswordContinueBtn}
+          style={[styles.primaryBtn, { marginTop: spacing[2] }]}
         />
+
         <TouchableOpacity
-          onPress={handleCancelBackToSignIn}
+          onPress={handleCancel}
           activeOpacity={0.7}
-          style={styles.cancelRow}>
+          style={styles.cancelBtn}
+        >
           <AppText variant="bodyMedium" color={colors.primary}>
-            {t('auth.changePassword.cancelBackToSignIn')}
+            {t('auth.settingsPassword.cancelBtn')}
           </AppText>
         </TouchableOpacity>
       </ScrollView>
-    </SafeContainer>
+    </SafeAreaView>
   );
 };
 
-export default memo(ChangePasswordScreen);
+export default memo(SettingsCreatePasswordScreen);
