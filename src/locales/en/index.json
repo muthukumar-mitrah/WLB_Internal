@@ -323,7 +323,8 @@
       "female": "Female"
     },
     "q8": {
-      "question": "What age range do you prefer?"
+      "question": "What age range do you prefer?",
+      "questionPortrait": "Do you have an age preference?"
     },
     "q9": {
       "title": "Let's personalize your match",
@@ -344,7 +345,9 @@
       "q5Right": "Extremely important",
       "q6": "How much emotional support do you want in your journey?",
       "q6Left": "Not important",
-      "q6Right": "Very important"
+      "q6Right": "Very important",
+      "poundsToLoseLabel": "{{count}} lbs to lose",
+      "ageRangeLabel": "{{min}} to {{max}} years old"
     }
   },
   "home": {

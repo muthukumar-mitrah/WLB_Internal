@@ -1,6 +1,3 @@
-/**
- * BlockedUsersScreen — colocated styles
- */
 import { StyleSheet } from 'react-native';
 
 export const createStyles = ({ colors, spacing }) =>

@@ -152,4 +152,11 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       height: 45,
       resizeMode: 'contain',
     },
+    selectedFilterText: {
+      fontWeight: '600',
+    },
+    dropdownList: {
+      height: 180,
+      marginBottom: spacing[4],
+    },
   });

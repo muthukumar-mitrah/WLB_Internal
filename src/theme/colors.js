@@ -8,6 +8,8 @@ const palette = {
   primary: '#0B2EF3',
   primaryDark: '#1D4ED8',
   primaryLight: '#3B82F6',
+  primaryDeep: "#061986",
+  primaryNav: "#2b6cee",
   primarySurface: '#EFF6FF',
   primarySoft: '#A3C7E5',
 
@@ -169,4 +171,4 @@ const darkColors = {
   errorSurface: '#450A0A',
 };
 
-export {lightColors, darkColors, palette};
+export { lightColors, darkColors, palette };

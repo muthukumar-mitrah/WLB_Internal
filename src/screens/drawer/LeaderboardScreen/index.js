@@ -161,7 +161,7 @@ const LeaderboardScreen = () => {
         <AppText
           variant="body"
           color={isSelected ? colors.primary : colors.textPrimary}
-          style={isSelected ? { fontWeight: '600' } : undefined}
+          style={isSelected ? styles.selectedFilterText : undefined}
         >
           {t(item.labelKey)}
         </AppText>
@@ -228,7 +228,7 @@ const LeaderboardScreen = () => {
             keyExtractor={(item) => item.id}
             renderItem={renderFilterItem}
             showsVerticalScrollIndicator={false}
-            style={{ height: 180, marginBottom: spacing[4] }}
+            style={styles.dropdownList}
             keyboardShouldPersistTaps="handled"
           />
         </AppModal>
