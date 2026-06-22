@@ -28,3 +28,4 @@ export { default as LikesBottomSheet } from '../../screens/home/LikesBottomSheet
 export { default as PostOptionsSheet } from './PostOptionsSheet';
 export { default as RatingCard } from './RatingCard';
 export { default as AIBuddyIntroModal } from './AIBuddyIntroModal';
+export * from './BuddyFilters';

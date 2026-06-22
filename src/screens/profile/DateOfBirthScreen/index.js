@@ -7,7 +7,6 @@ import {
   Button,
   DateWheelPicker,
   InputBox,
-  AppModal,
 } from '../../../components/common';
 import {ROUTES} from '../../../constants';
 import {APP_IMAGES} from '../../../constants';

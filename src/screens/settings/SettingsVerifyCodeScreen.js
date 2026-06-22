@@ -51,7 +51,7 @@ const SettingsVerifyCodeScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView
       edges={['top', 'bottom']}
-      style={{ flex: 1, backgroundColor: colors.background }}
+      style={styles.container}
     >
       <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
       <Header onBackPress={handleBack} transparent={true} />
@@ -68,11 +68,11 @@ const SettingsVerifyCodeScreen = ({ navigation, route }) => {
           {t('auth.settingsPassword.verifyCodeTitle')}
         </AppText>
         
-        <View style={{ marginTop: spacing[2], marginBottom: spacing[6] }}>
+        <View style={styles.verifySubheadingContainer}>
           <AppText 
             variant="body" 
             color={colors.textSecondary} 
-            style={{ textAlign: 'center', lineHeight: 22, fontWeight: '400' }}
+            style={styles.verifySubheadingText}
           >
             {t('auth.settingsPassword.verifyCodeSubheadingPrefix')}
             <AppText variant="bodyMedium" color={colors.textPrimary}>
@@ -119,7 +119,7 @@ const SettingsVerifyCodeScreen = ({ navigation, route }) => {
           variant="primary"
           size="lg"
           disabled={otpCode.length < OTP_LENGTH}
-          style={[styles.primaryBtn, { marginBottom: spacing[4] }]}
+          style={styles.continueBtn}
         />
         <Button
           testID="settings-resend-code-btn"

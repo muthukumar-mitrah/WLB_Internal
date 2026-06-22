@@ -35,13 +35,13 @@ const SettingsPasswordSuccessScreen = ({ navigation }) => {
   return (
     <SafeAreaView
       edges={['top', 'bottom']}
-      style={{ flex: 1, backgroundColor: colors.background }}
+      style={styles.container}
     >
       <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
       <Header onBackPress={handleBack} transparent={true} />
 
       <ScrollView
-        contentContainerStyle={[styles.scrollContent, { flexGrow: 1, marginTop: spacing[20] }]}
+        contentContainerStyle={styles.successScrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >

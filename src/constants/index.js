@@ -73,6 +73,8 @@ const ROUTES = {
   HOME: 'Home',
   POST_FILTER: 'PostFilter',
   BUDDIES: 'Buddies',
+  FIND_SUPPORTIVE_BUDDIES: 'FindSupportiveBuddies',
+  BUDDY_SEARCH_RESULT: 'BuddySearchResult',
   CREATE_POST: 'CreatePost',
   NOTIFICATIONS: 'Notifications',
   ROBI: 'Robi',

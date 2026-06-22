@@ -141,7 +141,11 @@ const ProfileInfoCard = ({profile, isOwnProfile, isAIBuddy, avatarSource, onPres
             <InfoCardItem
               imageSource={APP_IMAGES.currentWeight}
               label={t('profile.infoCard.labels.currentWeight')}
-              value={`${profile?.currentWeight ?? 0} lbs`}
+              value={
+                 typeof profile?.currentWeight === 'number'
+                   ? `${profile.currentWeight} `
+                   : String(profile?.currentWeight ?? '')
+              }
               colors={colors}
               styles={styles}
               positionStyle={styles.infoCardLeft}

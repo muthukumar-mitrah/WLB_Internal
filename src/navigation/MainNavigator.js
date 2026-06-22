@@ -22,6 +22,7 @@ import BlockedUsersScreen from '../screens/drawer/BlockedUsersScreen';
 import AwardScreen from '../screens/drawer/AwardScreen';
 import LeaderboardScreen from '../screens/drawer/LeaderboardScreen';
 import PostFilterScreen from '../screens/home/PostFilterScreen';
+import BuddySearchResultScreen from '../screens/home/BuddiesSearchScreen/BuddySearchResultScreen';
 
 import ChooseAIBuddyScreen from '../screens/aiBuddy/ChooseAIBuddyScreen';
 import AIBuddyDetailsScreen from '../screens/aiBuddy/AIBuddyDetailsScreen';
@@ -46,6 +47,7 @@ const MainNavigator = () => (
     <Stack.Screen name={ROUTES.AWARDS} component={AwardScreen} />
     <Stack.Screen name={ROUTES.LEADER_BOARD} component={LeaderboardScreen} />
     <Stack.Screen name={ROUTES.POST_FILTER} component={PostFilterScreen} />
+    <Stack.Screen name={ROUTES.BUDDY_SEARCH_RESULT} component={BuddySearchResultScreen} />
 
     {/* Profile flow */}
     <Stack.Screen name={ROUTES.MY_PROFILE} component={ProfileNavigator} />

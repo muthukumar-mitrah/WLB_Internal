@@ -31,8 +31,8 @@ const SettingsChangePasswordScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
 
   const styles = useMemo(
-    () => createStyles({ colors, spacing, borderRadius }),
-    [colors, spacing, borderRadius],
+    () => createStyles({ colors, spacing, borderRadius, insets }),
+    [colors, spacing, borderRadius, insets],
   );
 
   const [currentPassword, setCurrentPassword] = useState('');
@@ -83,21 +83,12 @@ const SettingsChangePasswordScreen = ({ navigation }) => {
     else navigation.navigate(ROUTES.HOME);
   }, [navigation]);
 
-  const footerStyle = useMemo(() => ({
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    paddingHorizontal: spacing[6],
-    paddingBottom: Math.max(insets.bottom, spacing[4]),
-    paddingTop: spacing[3],
-    backgroundColor: colors.background,
-  }), [insets.bottom, spacing, colors.background]);
+
 
   return (
     <SafeAreaView
       edges={['top', 'bottom']}
-      style={{ flex: 1, backgroundColor: colors.background }}
+      style={styles.container}
     >
       <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
       <Header
@@ -108,7 +99,7 @@ const SettingsChangePasswordScreen = ({ navigation }) => {
       />
 
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={styles.keyboardView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={0}
       >
@@ -117,7 +108,7 @@ const SettingsChangePasswordScreen = ({ navigation }) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View style={[styles.inputSection, { marginTop: spacing[4] }]}>
+          <View style={styles.firstInputContainer}>
             <InputBox
               testID="settings-current-password-input"
               placeholder={t('auth.settingsPassword.currentPasswordPlaceholder')}
@@ -176,7 +167,7 @@ const SettingsChangePasswordScreen = ({ navigation }) => {
       </KeyboardAvoidingView>
 
       {/* Fixed footer — outside KeyboardAvoidingView so it never moves */}
-      <View style={footerStyle}>
+      <View style={styles.footerContainer}>
         <Button
           testID="settings-save-password-btn"
           title={t('auth.settingsPassword.savePasswordBtn')}

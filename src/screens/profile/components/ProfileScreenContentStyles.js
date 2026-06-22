@@ -51,7 +51,6 @@ const createStyles = ({colors, spacing, borderRadius, shadows}) =>
     },
     weightTitle: {
       marginBottom: spacing[1],
-      width:127,
       height:24,
       fontSize:16,
       fontWeight:'700',

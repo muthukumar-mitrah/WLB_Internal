@@ -862,7 +862,7 @@ const RangeRulerPicker = ({
         if (onValuesChangeFinish) onValuesChangeFinish();
       },
     }),
-    [min, PIXELS_PER_UNIT, leftX, onValuesChange, syncRulerToValue, getRulerOffsetForValue],
+    [min, PIXELS_PER_UNIT, leftX, onValuesChange, syncRulerToValue, getRulerOffsetForValue, onValuesChangeFinish, onValuesChangeStart],
   );
 
   const rightPanResponder = useMemo(

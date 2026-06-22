@@ -72,7 +72,7 @@ const SettingsCreatePasswordScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView
       edges={['top', 'bottom']}
-      style={{ flex: 1, backgroundColor: colors.background }}
+      style={styles.container}
     >
       <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
       <Header     
@@ -89,7 +89,7 @@ const SettingsCreatePasswordScreen = ({ navigation, route }) => {
           {t('auth.settingsPassword.createPasswordTitle')}
         </AppText>
 
-        <View style={[styles.headingSection, { marginTop: spacing[2] }]}>
+        <View style={styles.headingSectionTop}>
           <AppText variant="subtitle" color={colors.textSecondary} style={styles.subheading}>
             {t('auth.settingsPassword.createPasswordSubheading')}
           </AppText>
@@ -132,7 +132,7 @@ const SettingsCreatePasswordScreen = ({ navigation, route }) => {
           onPress={handleResetPassword}
           variant="primary"
           size="lg"
-          style={[styles.primaryBtn, { marginTop: spacing[2] }]}
+          style={styles.primaryBtnTop}
         />
 
         <TouchableOpacity

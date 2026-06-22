@@ -52,7 +52,7 @@ const SettingsForgotPasswordScreen = ({ navigation }) => {
   return (
     <SafeAreaView
       edges={['top', 'bottom']}
-      style={{ flex: 1, backgroundColor: colors.background }}
+      style={styles.container}
     >
       <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
       <Header onBackPress={handleBack} transparent={true} />
@@ -67,7 +67,7 @@ const SettingsForgotPasswordScreen = ({ navigation }) => {
         </AppText>
 
         <View style={styles.headingSection}>
-          <AppText variant="body" color={colors.textSecondary} style={[styles.subheading, { textAlign: 'center' }]}>
+          <AppText variant="body" color={colors.textSecondary} style={styles.subheadingCenter}>
             {t('auth.settingsPassword.forgotPasswordSubheading')}
           </AppText>
         </View>

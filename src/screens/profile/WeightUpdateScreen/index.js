@@ -23,14 +23,14 @@ const WeightUpdateScreen = ({navigation, route}) => {
   );
 
   // Parse initial weight and unit from route params
-  const initialWeightStr = String(route.params?.currentWeight || '144 lbs');
+const initialWeight = String(route.params?.currentWeight || '144');
+const initialUnit = route.params?.unit || 'lbs';
   const parsed = useMemo(() => {
-    const match = initialWeightStr.match(/^(\d+(?:\.\d+)?)\s*(lbs|kg)?$/i);
     return {
-      value: match ? match[1] : '144',
-      unit: match && match[2] ? match[2].toLowerCase() : 'lbs',
+      value: initialWeight,
+      unit: initialUnit.toLowerCase(),
     };
-  }, [initialWeightStr]);
+  }, [initialWeight, initialUnit]);
 
   const [weight, setWeight] = useState(parsed.value);
   const [unit, setUnit] = useState(parsed.unit);
@@ -56,9 +56,9 @@ const WeightUpdateScreen = ({navigation, route}) => {
 
 
   const handleSave = useCallback(() => {
-    const formattedWeight = `${weight} ${unit}`;
     navigation.navigate(ROUTES.UPDATE_PROFILE, {
-      updatedWeight: formattedWeight,
+      updatedWeight: Number(weight),
+      updatedWeightUnit: unit,
       updatedPrivacy: privacy,
     });
   }, [weight, unit, privacy, navigation]);

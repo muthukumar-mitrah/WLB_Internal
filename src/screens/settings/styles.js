@@ -1,15 +1,28 @@
 import { StyleSheet } from 'react-native';
 
-const createStyles = ({ colors, spacing, borderRadius }) =>
+const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } }) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background,
     },
+    keyboardView: {
+      flex: 1,
+    },
     scrollContent: {
       flexGrow: 1,
       paddingHorizontal: spacing[6],
       paddingBottom: 100, // room for absolute footer
+    },
+    successScrollContent: {
+      flexGrow: 1,
+      paddingHorizontal: spacing[6],
+      paddingBottom: 100,
+      marginTop: spacing[20],
+    },
+    firstInputContainer: {
+      marginBottom: spacing[1],
+      marginTop: spacing[4],
     },
     inputSection: {
       marginBottom: spacing[1],
@@ -19,18 +32,22 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       marginBottom: spacing[4],
     },
     // Sticky footer (Change Password screen only)
-    footer: {
+    footerContainer: {
       position: 'absolute',
       bottom: 0,
       left: 0,
       right: 0,
       paddingHorizontal: spacing[6],
-      paddingBottom: spacing[4],
+      paddingBottom: Math.max(insets.bottom, spacing[4]),
       paddingTop: spacing[3],
       backgroundColor: colors.background,
     },
     primaryBtn: {
       borderRadius: borderRadius.lg,
+    },
+    primaryBtnTop: {
+      borderRadius: borderRadius.lg,
+      marginTop: spacing[2],
     },
     cancelBtn: {
       alignSelf: 'center',
@@ -42,11 +59,19 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       marginTop: spacing[2],
       marginBottom: spacing[12],
     },
+    headingSectionTop: {
+      marginTop: spacing[2],
+      marginBottom: spacing[12],
+    },
     heading: {
       marginBottom: spacing[3],
     },
     subheading: {
       lineHeight: 18,
+    },
+    subheadingCenter: {
+      lineHeight: 18,
+      textAlign: 'center',
     },
     // Email icon
     emailIconContainer: {
@@ -66,6 +91,19 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       marginTop:spacing[2],
       marginBottom: spacing[8],
       flexWrap: 'wrap',
+    },
+    verifySubheadingContainer: {
+      marginTop: spacing[2],
+      marginBottom: spacing[6],
+    },
+    verifySubheadingText: {
+      textAlign: 'center',
+      lineHeight: 22,
+      fontWeight: '400',
+    },
+    continueBtn: {
+      borderRadius: borderRadius.lg,
+      marginBottom: spacing[4],
     },
     otpContainer: {
       marginBottom: spacing[6],

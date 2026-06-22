@@ -80,6 +80,7 @@ const UpdateProfileScreen = ({navigation, route}) => {
     setProfile(prev => {
       const next = {...prev};
       if (p.updatedWeight)  {next.currentWeight = p.updatedWeight;}
+      if (p.updatedWeightUnit)    {next.unit          = p.updatedWeightUnit;}
       if (p.updatedPrivacy) {next.privacy       = p.updatedPrivacy;}
       if (p.updatedGender)  {next.gender        = p.updatedGender;}
       if (p.updatedCountry) {next.country       = p.updatedCountry;}
@@ -92,9 +93,10 @@ const UpdateProfileScreen = ({navigation, route}) => {
   const handleWeightPress = useCallback(() => {
     navigation.navigate(ROUTES.WEIGHT_UPDATE, {
       currentWeight: profile.currentWeight,
+      unit: profile.unit,
       currentPrivacy: profile.privacy || 'Public',
     });
-  }, [navigation, profile.currentWeight, profile.privacy]);
+  }, [navigation, profile.currentWeight, profile.privacy, profile.unit]);
 
   const handleGenderPress = useCallback(() => {
     navigation.navigate(ROUTES.GENDER_SELECTION, {
@@ -200,7 +202,7 @@ const UpdateProfileScreen = ({navigation, route}) => {
           <EditCard
             imageSource={APP_IMAGES.currentWeight}
             label={t('profile.updateProfile.labels.currentWeight')}
-            value={profile.currentWeight}
+            value={`${profile.currentWeight} ${profile.unit}`}
             onPress={handleWeightPress}
             colors={colors}
             styles={styles}

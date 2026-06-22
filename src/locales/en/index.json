@@ -249,6 +249,27 @@
       "title": "Choose your country"
     }
   },
+  "buddiesSearch": {
+    "title": "Find Supportive Buddies",
+    "searchPlaceholder": "Search by Username",
+    "supportTypeTitle": "What kind of support do you need?",
+    "supportTypes": {
+      "dailyCheckIns": "Daily Check-ins",
+      "beginnerFriendly": "Beginner Friendly",
+      "similarGoals": "Similar Goals",
+      "walkingBuddy": "Walking Buddy",
+      "nonJudgmental": "Non-judgmental Support",
+      "mealSupport": "Meal Support",
+      "motivation": "Motivation"
+    },
+    "advancedSettings": "Advanced Settings",
+    "showMatches": "Show Matches",
+    "robiSuggestTitle": "Let Robi suggest some Buddies!",
+    "buddyRequestSuccess": "Buddy request sent successfully.",
+    "matchPercent": "{{percent}}% Match",
+    "viewProfile": "View Profile",
+    "requestBuddy": "Request Buddy"
+  },
   "basicInfo": {
     "heading": "Let's get a quick sense of you",
     "genderAll": "All",

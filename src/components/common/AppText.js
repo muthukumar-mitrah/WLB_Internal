@@ -3,7 +3,7 @@
  * Supports all textVariants from the theme
  */
 import React, {memo} from 'react';
-import {Text, StyleSheet} from 'react-native';
+import {Text} from 'react-native';
 import {useTheme} from '../../theme';
 
 const AppText = ({

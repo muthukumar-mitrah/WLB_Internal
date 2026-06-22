@@ -1,28 +1,14 @@
-import React, { memo, useMemo, useState, useCallback, useRef, forwardRef } from 'react';
-import { View, FlatList, TouchableOpacity } from 'react-native';
+import React, { memo, useMemo, useState, useCallback, forwardRef } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
-import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../../theme';
 import { AppText, InputBox, CommonBottomSheet } from '../../../components/common';
 import { COUNTRIES } from '../../../constants/countries';
-import createStyles from './styles';
 
-const DropdownField = ({ label, value, placeholder, onPress, styles, colors }) => (
-  <View style={styles.dropdownField}>
-    <AppText style={styles.label}>{label}</AppText>
-    <TouchableOpacity style={styles.dropdownButton} onPress={onPress} activeOpacity={0.7}>
-      <AppText style={value ? styles.dropdownButtonText : styles.dropdownButtonPlaceholder}>
-        {value || placeholder}
-      </AppText>
-      <Icon name="chevron-down" size={20} color={colors.textSecondary} />
-    </TouchableOpacity>
-  </View>
-);
 
 const CountryBottomSheet = forwardRef(({ onSelect }, ref) => {
-  const { colors, spacing, borderRadius } = useTheme();
-  const { t } = useTranslation();
+  const { colors } = useTheme();
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
@@ -32,10 +18,10 @@ const CountryBottomSheet = forwardRef(({ onSelect }, ref) => {
       : COUNTRIES;
   }, [query]);
 
-  const handleSelect = (item) => {
-    onSelect(item.label);
-    ref.current?.close();
-  };
+const handleSelect = useCallback((item) => {
+  onSelect(item.label);
+  ref.current?.close();
+}, [onSelect, ref]);
 
   const renderItem = useCallback(({ item }) => (
     <TouchableOpacity
