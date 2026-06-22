@@ -19,3 +19,7 @@ export const calculateWeightProgress = (startWeight, currentWeight, goalWeight) 
 
   return Math.max(0, Math.min(100, (lostWeight / totalToLose) * 100));
 };
+
+export const kgToLbs = (kg) => Math.round(kg * 2.20462);
+
+export const lbsToKg = (lbs) => Math.round(lbs / 2.20462);

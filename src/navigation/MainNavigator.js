@@ -21,6 +21,7 @@ import ReportUserScreen from '../screens/profile/ReportUserScreen';
 import BlockedUsersScreen from '../screens/drawer/BlockedUsersScreen';
 import AwardScreen from '../screens/drawer/AwardScreen';
 import LeaderboardScreen from '../screens/drawer/LeaderboardScreen';
+import PostFilterScreen from '../screens/home/PostFilterScreen';
 
 import ChooseAIBuddyScreen from '../screens/aiBuddy/ChooseAIBuddyScreen';
 import AIBuddyDetailsScreen from '../screens/aiBuddy/AIBuddyDetailsScreen';
@@ -44,6 +45,7 @@ const MainNavigator = () => (
     <Stack.Screen name={ROUTES.BLOCKED_USER} component={BlockedUsersScreen} />
     <Stack.Screen name={ROUTES.AWARDS} component={AwardScreen} />
     <Stack.Screen name={ROUTES.LEADER_BOARD} component={LeaderboardScreen} />
+    <Stack.Screen name={ROUTES.POST_FILTER} component={PostFilterScreen} />
 
     {/* Profile flow */}
     <Stack.Screen name={ROUTES.MY_PROFILE} component={ProfileNavigator} />

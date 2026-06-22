@@ -71,6 +71,7 @@ const ROUTES = {
   DRAWER: 'Drawer',
   HOME_TABS: 'HomeTabs',
   HOME: 'Home',
+  POST_FILTER: 'PostFilter',
   BUDDIES: 'Buddies',
   CREATE_POST: 'CreatePost',
   NOTIFICATIONS: 'Notifications',

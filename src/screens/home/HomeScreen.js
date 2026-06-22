@@ -21,6 +21,7 @@ import { useTheme } from '../../theme';
 import { PostPreviewModal, EmptyState, CommentsBottomSheet, LikesBottomSheet, PostOptionsSheet } from '../../components/common';
 import HomeHeader from '../../components/home/HomeHeader';
 import TopTabs from '../../components/home/TopTabs';
+import WlbActionBar from '../../components/home/WlbActionBar';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useFeed } from '../../context/FeedContext';
 import { ROUTES } from '../../constants';
@@ -150,6 +151,7 @@ const HomeScreen = ({ navigation }) => {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} translucent={false} />
       <HomeHeader />
       <TopTabs activeTab={activeTab} setActiveTab={setActiveTab} colors={colors} />
+      {activeTab === 'wlb' && <WlbActionBar />}
       <FlatList
         data={posts}
         renderItem={renderPost}

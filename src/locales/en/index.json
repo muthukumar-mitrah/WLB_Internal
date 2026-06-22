@@ -251,6 +251,7 @@
   },
   "basicInfo": {
     "heading": "Let's get a quick sense of you",
+    "genderAll": "All",
     "genderLabel": "Gender",
     "genderMale": "Male",
     "genderFemale": "Female",
@@ -263,7 +264,8 @@
     "unitFeet": "Feet",
     "unitMeters": "Meters",
     "unitKg": "Kg",
-    "unitLbs": "lbs"
+    "unitLbs": "lbs",
+    "seeAllPosts": "See All Posts"
   },
   "uploadImage": {
     "heading": "Upload Your Image",
