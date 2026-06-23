@@ -695,6 +695,7 @@
       "changePassword": "Change Password",
       "blog": "Blog",
       "tracker": "Tracker",
+      "trackProgress": "Tracker",
       "chooseAiBuddy": "Choose an AI Buddy",
       "savedPosts": "Saved Posts",
       "awards": "Awards",
@@ -983,9 +984,107 @@
       "pts": "pt"
     }
   },
-  "bottomSheet": {
-    "sharePost": "Share this post",
-    "copyLink": "Copy link",
-    "share": "Share"
+  "accountSettings": {
+    "title": "Account Settings",
+    "preferences": {
+      "tapToChange": "Tap to change",
+      "unit": "Unit",
+      "profileVisibility": "Profile visibility",
+      "weightVisibility": "Weight visibility",
+      "onlineVisibility": "Online visibility",
+      "kg": "Kg",
+      "lbs": "lbs",
+      "on": "On",
+      "off": "Off",
+      "public": "Public",
+      "buddiesOnly": "Buddies only",
+      "private": "Private",
+      "onlyMe": "Only me"
+    },
+    "sections": {
+      "preferences": "Preferences",
+      "appSettings": "App Settings",
+      "accountActions": "Account Actions"
+    },
+    "appSettings": {
+      "notifications": "Notifications",
+      "notificationsDesc": "Get updates about buddies, messages, and activity.",
+      "videosSound": "Videos start with sound",
+      "videosSoundDesc": "Play videos with sound by default.",
+      "allowSharing": "Allow sharing",
+      "allowSharingDesc": "Let others share your public posts."
+    },
+    "actions": {
+      "logout": "Log Out",
+      "logoutDesc": "Sign out of this device.",
+      "deleteAccount": "Delete Account",
+      "deleteAccountDesc": "Permanently remove your data and history.",
+      "confirmDeleteTitle": "Delete Account",
+      "confirmDeleteMessage": "Are you sure you want to permanently delete your account? This action is irreversible.",
+      "confirmDeleteYes": "Delete",
+      "confirmDeleteNo": "Cancel",
+      "deleteSuccess": "Account deleted successfully."
+    },
+    "visibility": {
+      "profile": {
+        "title": "Profile Visibility",
+        "chooseAudience": "Choose audience",
+        "publicTitle": "Public",
+        "publicDesc": "Anyone on or off WLB community.",
+        "buddiesTitle": "Buddies only",
+        "buddiesDesc": "Only your connected buddies can see this.",
+        "privateTitle": "Private",
+        "privateDesc": "No one can view my profile."
+      },
+      "weight": {
+        "title": "Weight Visibility",
+        "chooseAudience": "Choose audience",
+        "publicTitle": "Public",
+        "publicDesc": "Anyone on or off WLB community.",
+        "buddiesTitle": "Buddies only",
+        "buddiesDesc": "Only your connected buddies can see this.",
+        "privateTitle": "Only me",
+        "privateDesc": "Only me"
+      }
+    },
+    "tracker": {
+      "title": "Track Progress",
+      "updateWeightCard": {
+        "title": "Update your latest weight",
+        "subtitle": "Keep your journey up to date",
+        "button": "Update"
+      },
+      "bodyWeight": {
+        "title": "Body Weight",
+        "subtitle": "Slow and steady wins the race.",
+        "unitLbs": "lbs",
+        "unitKg": "Kg"
+      },
+      "bmi": {
+        "title": "Body Mass Index",
+        "subtitle": "It's not a diet. It's a lifestyle change.",
+        "badge": "BMI",
+        "ranges": {
+          "underweight": "Underweight",
+          "normal": "Normal",
+          "overweight": "Overweight",
+          "obese": "Obese",
+          "current": "Currently: {{range}} range"
+        }
+      },
+      "tabs": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly"
+      },
+      "bottomSheet": {
+        "title": "Update Weight",
+        "description": "Enter your current weight to keep your journey on track.",
+        "inputPlaceholder": "0.0",
+        "saveButton": "Save Weight",
+        "successToast": "Weight updated successfully.",
+        "errorToast": "Failed to update weight."
+      }
+    }
   }
 }

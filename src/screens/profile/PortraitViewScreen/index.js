@@ -49,7 +49,7 @@ const PERSONALIZATION_QUESTIONS = [
 
 const PortraitViewScreen = () => {
   const navigation = useNavigation();
-  const { colors, spacing, borderRadius } = useTheme();
+  const { colors, spacing, borderRadius, isDark } = useTheme();
   const { t } = useTranslation();
   const { surveyData } = useSurvey();
 
@@ -248,24 +248,24 @@ const PortraitViewScreen = () => {
         {/* Tab Bar */}
         <View style={styles.tabBar}>
           <TouchableOpacity
-            style={[styles.tabBtn, activeTab === 'journey' && styles.tabBtnActive]}
+            style={[styles.tabBtn, activeTab === 'journey' && (isDark ? styles.tabBtnActiveDark : styles.tabBtnActive)]}
             onPress={() => setActiveTab('journey')}
           >
             <AppText
               variant="bodySmall"
-              color={activeTab === 'journey' ? colors.primaryDeep : colors.textSecondary}
+              color={activeTab === 'journey' ? isDark ? colors.primary : colors.primaryDeep : colors.textSecondary}
               style={[activeTab === 'journey' && styles.tabText]}
             >
               Journey Answers
             </AppText>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.tabBtn, activeTab === 'readiness' && styles.tabBtnActive]}
+            style={[styles.tabBtn, activeTab === 'readiness' && (isDark ? styles.tabBtnActiveDark : styles.tabBtnActive)]}
             onPress={() => setActiveTab('readiness')}
           >
             <AppText
               variant="bodySmall"
-              color={activeTab === 'readiness' ? colors.primaryDeep : colors.textSecondary}
+              color={activeTab === 'readiness' ? isDark ? colors.primary : colors.primaryDeep : colors.textSecondary}
               style={[activeTab === 'readiness' && styles.tabText]}
             >
               Readiness Ratings

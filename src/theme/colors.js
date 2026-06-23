@@ -12,6 +12,8 @@ const palette = {
   primaryNav: "#2b6cee",
   primarySurface: '#EFF6FF',
   primarySoft: '#A3C7E5',
+  primaryLightSoft: '#e7eafe',
+  brandPrimary: '#0B2EF3',
 
   // Secondary
   secondary: '#7C3AED',
@@ -63,6 +65,10 @@ const palette = {
   transparent: 'transparent',
   overlay: 'rgba(0,0,0,0.5)',
   overlayLight: 'rgba(0,0,0,0.3)',
+
+  // BMI Section Icon Backgrounds
+  bmiIconBgLight: '#FEE2E2',
+  bmiIconBgDark: '#4A1D1D',
 };
 
 const lightColors = {
@@ -102,6 +108,7 @@ const lightColors = {
   // Warm surface (e.g. alignment boxes)
   warmSurface: '#FFF7E8',
   warmSurfaceBorder: '#F0E4D0',
+  bmiIconBg: palette.bmiIconBgLight,
 
   // Nav
   tabBarBackground: palette.white,
@@ -111,6 +118,12 @@ const lightColors = {
 
   // Status bar
   statusBar: 'dark-content',
+
+  // BMI Chart Shadow Colors
+  bmiShadowUnderweightDark: palette.info,
+  bmiShadowNormalDark: palette.success,
+  bmiShadowOverweightDark: palette.warning,
+  bmiShadowObeseDark: palette.error,
 
   ...palette,
 };
@@ -155,6 +168,7 @@ const darkColors = {
   // Warm surface (e.g. alignment boxes)
   warmSurface: '#3D2E1A',
   warmSurfaceBorder: '#5A4A35',
+  bmiIconBg: palette.bmiIconBgDark,
 
   // Nav
   tabBarBackground: palette.gray900,
@@ -169,6 +183,12 @@ const darkColors = {
   primarySurface: '#1E293B',
   successSurface: '#022C22',
   errorSurface: '#450A0A',
+
+  // BMI Chart Shadow Colors (Dark Mode specific brighter/lighter variants)
+  bmiShadowUnderweightDark: '#93C5FD',
+  bmiShadowNormalDark: '#86EFAC',
+  bmiShadowOverweightDark: '#FDBA74',
+  bmiShadowObeseDark: '#FCA5A5',
 };
 
 export { lightColors, darkColors, palette };

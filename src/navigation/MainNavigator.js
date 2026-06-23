@@ -34,6 +34,10 @@ import SettingsVerifyCodeScreen from '../screens/settings/SettingsVerifyCodeScre
 import SettingsCreatePasswordScreen from '../screens/settings/SettingsCreatePasswordScreen';
 import SettingsPasswordSuccessScreen from '../screens/settings/SettingsPasswordSuccessScreen';
 import CreateGroupScreen from '../screens/home/CreateGroupScreen'
+import AccountSettingScreen from '../screens/AccountSetting/AccountSettingScreen';
+import ProfileVisibilityScreen from '../screens/AccountSetting/ProfileVisibilityScreen';
+import WeightVisibilityScreen from '../screens/AccountSetting/WeightVisibilityScreen';
+import TrackProgressScreen from '../screens/TrackProgress/TrackProgressScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +65,7 @@ const MainNavigator = () => (
     <Stack.Screen name={ROUTES.COUNTRY_SELECTION} component={CountrySelectionScreen} />
     <Stack.Screen name={ROUTES.DOB_SELECTION} component={DateOfBirthScreen} />
     <Stack.Screen name={ROUTES.REPORT_USER} component={ReportUserScreen} />
+    <Stack.Screen name={ROUTES.TRACK_PROGRESS} component={TrackProgressScreen} />
 
     <Stack.Screen name={ROUTES.CHOOSE_AI_BUDDY} component={ChooseAIBuddyScreen} />
     <Stack.Screen name={ROUTES.AI_BUDDY_DETAILS} component={AIBuddyDetailsScreen} />
@@ -72,6 +77,11 @@ const MainNavigator = () => (
     <Stack.Screen name={ROUTES.SETTINGS_VERIFY_CODE} component={SettingsVerifyCodeScreen} />
     <Stack.Screen name={ROUTES.SETTINGS_CREATE_PASSWORD} component={SettingsCreatePasswordScreen} />
     <Stack.Screen name={ROUTES.SETTINGS_PASSWORD_SUCCESS} component={SettingsPasswordSuccessScreen} />
+
+    {/* Account Settings flow */}
+    <Stack.Screen name={ROUTES.ACCOUNT_SETTINGS} component={AccountSettingScreen} />
+    <Stack.Screen name={ROUTES.PROFILE_VISIBILITY} component={ProfileVisibilityScreen} />
+    <Stack.Screen name={ROUTES.WEIGHT_VISIBILITY} component={WeightVisibilityScreen} />
 
     {/* Group flow */}
     <Stack.Screen name={ROUTES.CREATE_GROUP} component={CreateGroupScreen} />

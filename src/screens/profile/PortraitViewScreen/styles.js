@@ -54,6 +54,9 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
     tabBtnActive: {
       borderBottomColor: colors.primaryDeep,
     },
+    tabBtnActiveDark: {
+      borderBottomColor: colors.primary,
+    },
     tabText: {
       fontWeight: '700',
     },

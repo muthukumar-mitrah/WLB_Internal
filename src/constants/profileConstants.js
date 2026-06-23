@@ -18,6 +18,14 @@ export const MOCK_PROFILE = {
   startWeight: 150,
   currentWeight: 144,
   goalWeight: 140,
+  email: 'jaclyn@gmail.com',
+  unit: 'lbs', // 'Kg' or 'lbs'
+  profileVisibility: 'Public', // 'Public' | 'Buddies only' | 'Private'
+  weightVisibility: 'Public', // 'Public' | 'Buddies only' | 'Only me'
+  onlineVisibility: true,
+  notificationsEnabled: true,
+  videosSoundEnabled: true,
+  allowSharing: true,
   posts: [
     {
       id: 'post-1',

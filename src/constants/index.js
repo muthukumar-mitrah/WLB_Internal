@@ -112,6 +112,12 @@ const ROUTES = {
   SETTINGS_VERIFY_CODE: 'SettingsVerifyCode',
   SETTINGS_CREATE_PASSWORD: 'SettingsCreatePassword',
   SETTINGS_PASSWORD_SUCCESS: 'SettingsPasswordSuccess',
+
+  // Account Settings
+  ACCOUNT_SETTINGS: 'AccountSettings',
+  PROFILE_VISIBILITY: 'ProfileVisibility',
+  WEIGHT_VISIBILITY: 'WeightVisibility',
+  TRACK_PROGRESS: 'TrackProgress',
 };
 
 // Remove once the real login API is integrated.

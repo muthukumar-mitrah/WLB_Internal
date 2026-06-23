@@ -41,7 +41,7 @@ const MENU_GROUPS = [
   ],
   [
     { key: 'blog', asset: 'blog' },
-    { key: 'tracker', asset: 'tracker' },
+    { key: 'trackProgress', asset: 'tracker' },
   ],
   [
     { key: 'chooseAiBuddy', vectorIcon: 'people-outline' },
@@ -73,6 +73,8 @@ const ROUTE_MAP = {
   awards: ROUTES.AWARDS,
   leaderBoard: ROUTES.LEADER_BOARD,
   changePassword: ROUTES.SETTINGS_CHANGE_PASSWORD,
+  accountSettings: ROUTES.ACCOUNT_SETTINGS,
+  trackProgress: ROUTES.TRACK_PROGRESS,
 };
 
 const getGreetingKey = () => {

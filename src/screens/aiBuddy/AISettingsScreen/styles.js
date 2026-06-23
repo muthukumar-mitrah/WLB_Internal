@@ -1,44 +1,40 @@
 import { StyleSheet } from 'react-native';
+import { fontSize, letterSpacing } from '../../../theme/fonts';
 
-export const createStyles = ({ colors, spacing }) => StyleSheet.create({
+export const createStyles = ({ colors, spacing, borderRadius, isDark }) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
   },
   contentContainer: {
-    padding: spacing[4],
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[1],
   },
-  icon: {
-    width: 24,
-    height: 24,
-  },
-  smallIcon: {
-    width: 20,
-    height: 20,
+  title: {
+    marginBottom: spacing[2],
   },
   sectionTitle: {
-    marginTop: spacing[5],
+    marginTop: spacing[2],
     marginBottom: spacing[3],
-    fontWeight: '600',
   },
   subtitle: {
     marginBottom: spacing[4],
-    lineHeight: 20,
   },
   // Memory Option Selected
   memoryOptionSelected: {
     flexDirection: 'row',
-    backgroundColor: colors.primary + '1A', // 10% opacity primary
+    backgroundColor: isDark ? colors.cardBackground : colors.primaryLightSoft,
     borderWidth: 1.5,
     borderColor: colors.primary,
-    borderRadius: 12,
+    borderRadius: borderRadius.lg,
     padding: spacing[4],
-    marginBottom: spacing[3],
-    alignItems: 'center',
+    marginBottom: spacing[1],
+    alignItems: 'flex-start',
   },
   memoryIconContainer: {
     marginRight: spacing[3],
     alignSelf: 'flex-start',
+    marginTop: 2,
   },
   memoryTextContainer: {
     flex: 1,
@@ -56,9 +52,13 @@ export const createStyles = ({ colors, spacing }) => StyleSheet.create({
   // Memory Option Default
   memoryOptionDefault: {
     flexDirection: 'row',
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+    borderRadius: borderRadius.lg,
     padding: spacing[4],
-    alignItems: 'center',
-    marginBottom: spacing[3],
+    alignItems: 'flex-start',
+    marginBottom: spacing[1],
   },
   memoryTitleDefault: {
     fontWeight: '700',
@@ -67,18 +67,22 @@ export const createStyles = ({ colors, spacing }) => StyleSheet.create({
   memoryDescDefault: {
     lineHeight: 18,
   },
+  checkmarkIcon: {
+    alignSelf: 'center',
+  },
+  checkmarkVisible: {
+    opacity: 1,
+  },
+  checkmarkHidden: {
+    opacity: 0,
+  },
   // Action Card
   actionCard: {
     backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginBottom: spacing[6],
-    borderWidth: colors.isDark ? 1 : 0,
+    borderRadius: borderRadius.lg,
+    borderWidth: 1,
     borderColor: colors.border,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
+    marginBottom: spacing[3],
   },
   actionItem: {
     flexDirection: 'row',
@@ -88,8 +92,8 @@ export const createStyles = ({ colors, spacing }) => StyleSheet.create({
   actionIconWrapper: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primary + '1A',
+    borderRadius: borderRadius.md,
+    backgroundColor: isDark ? colors.border : colors.primaryLightSoft,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: spacing[3],
@@ -118,11 +122,14 @@ export const createStyles = ({ colors, spacing }) => StyleSheet.create({
   buttonSpacer: {
     height: spacing[3],
   },
+  buttonText: {
+    fontSize: fontSize.base,
+  },
   disclaimerBtn: {
-    marginTop: spacing[4],
+    marginTop: spacing[3],
   },
   disclaimerText: {
-    color: colors.primary,
-    fontWeight: 'bold',
+    fontWeight: '700',
+    letterSpacing: letterSpacing.tight
   },
 });

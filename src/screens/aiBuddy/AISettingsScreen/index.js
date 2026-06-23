@@ -1,37 +1,30 @@
 import React, { useState, useMemo } from 'react';
-import { View, ScrollView, Switch, TouchableOpacity, Image } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { SafeContainer, Header, AppText, Button, ToastService } from '../../../components/common';
+import { SafeContainer, Header, AppText, Button, CommonToggle } from '../../../components/common';
 import { useTheme } from '../../../theme';
 import { createStyles } from './styles';
-import { ROUTES } from '../../../constants';
-import { APP_IMAGES } from '../../../constants/images';
+import AiBuddyDisclaimerModal from '../../../components/home/AiBuddyDisclaimerModal';
 
 const AISettingsScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const route = useRoute();
-  
-  // Safe default buddy object if params are missing
-  const buddy = route.params?.buddy || { name: 'AI Buddy' };
 
-  const { colors, spacing } = useTheme();
-  const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
+  // Safe default buddy object if params are missing
+  const buddy = route.params?.buddy || { name: 'Robi' };
+
+  const { colors, spacing, borderRadius, iconSize, isDark } = useTheme();
+  const styles = useMemo(() => createStyles({ colors, spacing, borderRadius, isDark }), [colors, spacing, borderRadius, isDark]);
 
   // Form State
   const [memoryMode, setMemoryMode] = useState('keep'); // 'keep' | 'erase'
   const [suggestLikes, setSuggestLikes] = useState(true);
   const [suggestComments, setSuggestComments] = useState(true);
-
-  const handleSaveChanges = () => {
-    // In a real app, save via service here
-    ToastService.show({ type: 'success', text1: 'Settings saved successfully' });
-    
-    // Navigate away or back to main flow after saving. For now, pop to top or home
-    navigation.navigate(ROUTES.MAIN); 
-  };
+  const [disclaimerVisible, setDisclaimerVisible] = useState(false);
 
   const handleCancel = () => {
     navigation.goBack();
@@ -42,17 +35,17 @@ const AISettingsScreen = () => {
 
   return (
     <SafeContainer edges={['top', 'bottom']}>
-      <Header title="" onBackPress={handleCancel} />
+      <Header title="" transparent={true} onBackPress={handleCancel} />
 
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-        
-        <AppText variant="h2" color={colors.textPrimary}>{title}</AppText>
-        <AppText variant="bodyMedium" color={colors.textSecondary} style={styles.subtitle}>
+
+        <AppText variant="h2" color={colors.textPrimary} style={styles.title}>{title}</AppText>
+        <AppText variant="body" color={colors.textSecondary} style={styles.subtitle}>
           {subtitle}
         </AppText>
 
         {/* Memory Section */}
-        <AppText variant="bodyMedium" color={colors.textSecondary} style={styles.sectionTitle}>
+        <AppText variant="subtitleMedium" color={colors.textSecondary} style={styles.sectionTitle}>
           {t('aiBuddy.settings.memory', 'Memory')}
         </AppText>
 
@@ -62,30 +55,37 @@ const AISettingsScreen = () => {
           onPress={() => setMemoryMode('keep')}
         >
           <View style={styles.memoryIconContainer}>
-            <Image 
-              source={APP_IMAGES.aiBuddyChat}
-              style={[styles.icon, { tintColor: memoryMode === 'keep' ? colors.primary : colors.textPrimary }]} 
+            <Ionicons
+              name="chatbubble-ellipses-outline"
+              size={iconSize.lg}
+              color={memoryMode === 'keep' ? colors.primary : colors.textPrimary}
             />
           </View>
           <View style={styles.memoryTextContainer}>
-            <AppText 
-              variant="bodyMedium" 
+            <AppText
+              variant="body"
               style={memoryMode === 'keep' ? styles.memoryTitleSelected : styles.memoryTitleDefault}
               color={memoryMode !== 'keep' ? colors.textPrimary : undefined}
             >
               {t('aiBuddy.settings.keepHistory', 'Keep chat history for 30 days')}
             </AppText>
-            <AppText 
-              variant="caption" 
+            <AppText
+              variant="caption"
               style={memoryMode === 'keep' ? styles.memoryDescSelected : styles.memoryDescDefault}
               color={memoryMode !== 'keep' ? colors.textSecondary : undefined}
             >
               {t('aiBuddy.settings.keepHistoryDesc', { name: buddy.name, defaultValue: `${buddy.name} can use recent conversations to provide more personalized support` })}
             </AppText>
           </View>
-          {memoryMode === 'keep' && (
-            <Image source={APP_IMAGES.checkCircle} style={[styles.icon, { tintColor: colors.primary }]} />
-          )}
+          <Ionicons
+            name="checkmark-circle"
+            size={iconSize.lg}
+            color={colors.primary}
+            style={[
+              styles.checkmarkIcon,
+              memoryMode === 'keep' ? styles.checkmarkVisible : styles.checkmarkHidden,
+            ]}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -94,30 +94,37 @@ const AISettingsScreen = () => {
           onPress={() => setMemoryMode('erase')}
         >
           <View style={styles.memoryIconContainer}>
-            <Image 
-              source={APP_IMAGES.trash} 
-              style={[styles.icon, { tintColor: memoryMode === 'erase' ? colors.primary : colors.textPrimary }]} 
+            <Ionicons
+              name="trash-outline"
+              size={iconSize.lg}
+              color={memoryMode === 'erase' ? colors.primary : colors.textPrimary}
             />
           </View>
           <View style={styles.memoryTextContainer}>
-            <AppText 
-              variant="bodyMedium" 
+            <AppText
+              variant="bodyMedium"
               style={memoryMode === 'erase' ? styles.memoryTitleSelected : styles.memoryTitleDefault}
               color={memoryMode !== 'erase' ? colors.textPrimary : undefined}
             >
               {t('aiBuddy.settings.eraseHistory', 'Erase all AI history')}
             </AppText>
-            <AppText 
-              variant="caption" 
+            <AppText
+              variant="caption"
               style={memoryMode === 'erase' ? styles.memoryDescSelected : styles.memoryDescDefault}
               color={memoryMode !== 'erase' ? colors.textSecondary : undefined}
             >
               {t('aiBuddy.settings.eraseHistoryDesc', 'Remove saved AI conversation history.')}
             </AppText>
           </View>
-          {memoryMode === 'erase' && (
-            <Image source={APP_IMAGES.checkCircle} style={[styles.icon, { tintColor: colors.primary }]} />
-          )}
+          <Ionicons
+            name="checkmark-circle"
+            size={iconSize.lg}
+            color={colors.primary}
+            style={[
+              styles.checkmarkIcon,
+              memoryMode === 'erase' ? styles.checkmarkVisible : styles.checkmarkHidden,
+            ]}
+          />
         </TouchableOpacity>
 
 
@@ -129,7 +136,7 @@ const AISettingsScreen = () => {
         <View style={styles.actionCard}>
           <View style={styles.actionItem}>
             <View style={styles.actionIconWrapper}>
-              <Image source={APP_IMAGES.likeIcon} style={[styles.smallIcon, { tintColor: colors.primary }]} />
+              <Ionicons name="heart-outline" size={iconSize.md} color={colors.primary} />
             </View>
             <View style={styles.actionTextContainer}>
               <AppText variant="bodyMedium" color={colors.textPrimary} style={styles.actionTitle}>
@@ -139,19 +146,17 @@ const AISettingsScreen = () => {
                 {t('aiBuddy.settings.suggestLikesDesc', { name: buddy.name, defaultValue: `${buddy.name} can suggest when a post may be worth supporting` })}
               </AppText>
             </View>
-            <Switch
+            <CommonToggle
               value={suggestLikes}
               onValueChange={setSuggestLikes}
-              trackColor={{ false: colors.border, true: colors.primary }}
-              thumbColor={colors.white}
             />
           </View>
-          
+
           <View style={styles.divider} />
 
           <View style={styles.actionItem}>
             <View style={styles.actionIconWrapper}>
-              <Image source={APP_IMAGES.commentIcon} style={[styles.smallIcon, { tintColor: colors.primary }]} />
+              <Ionicons name="chatbubble-outline" size={iconSize.md} color={colors.primary} />
             </View>
             <View style={styles.actionTextContainer}>
               <AppText variant="bodyMedium" color={colors.textPrimary} style={styles.actionTitle}>
@@ -161,11 +166,9 @@ const AISettingsScreen = () => {
                 {t('aiBuddy.settings.suggestCommentsDesc', { name: buddy.name, defaultValue: `${buddy.name} can help draft supportive replies, but you choose what to post.` })}
               </AppText>
             </View>
-            <Switch
+            <CommonToggle
               value={suggestComments}
               onValueChange={setSuggestComments}
-              trackColor={{ false: colors.border, true: colors.primary }}
-              thumbColor={colors.white}
             />
           </View>
         </View>
@@ -174,24 +177,34 @@ const AISettingsScreen = () => {
           <Button
             title={t('aiBuddy.settings.saveChanges', 'Save Changes')}
             variant="primary"
-            onPress={handleSaveChanges}
+            size="lg"
+            onPress={() => { }}
+            textStyle={styles.buttonText}
           />
           <View style={styles.buttonSpacer} />
           <Button
             title={t('aiBuddy.settings.cancel', 'Cancel')}
             variant="gray"
+            size="lg"
             onPress={handleCancel}
+            textStyle={styles.buttonText}
           />
           <Button
             title={t('aiBuddy.settings.viewDisclaimer', 'View AI Disclaimer')}
             variant="ghost"
             textStyle={styles.disclaimerText}
             style={styles.disclaimerBtn}
-            onPress={() => {}}
+            onPress={() => setDisclaimerVisible(true)}
           />
         </View>
-
       </ScrollView>
+
+      <AiBuddyDisclaimerModal
+        visible={disclaimerVisible}
+        onClose={() => setDisclaimerVisible(false)}
+        onContinue={() => setDisclaimerVisible(false)}
+        onAiSettings={() => setDisclaimerVisible(false)}
+      />
     </SafeContainer>
   );
 };
