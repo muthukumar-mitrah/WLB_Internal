@@ -242,6 +242,7 @@
     },
     "uploadProfilePhoto": {
       "title": "Upload Profile Photo",
+      "groupTitle": "Add group profile",
       "takePhoto": "Take Photo",
       "chooseGallery": "Choose from Gallery"
     },
@@ -387,6 +388,28 @@
       "buddies": "Buddies",
       "groups": "Groups"
     },
+    "groupTabs": {
+      "posts": "Posts",
+      "myGroups": "My Groups",
+      "allGroups": "All Groups",
+      "createGroup": "Create Group"
+    },
+    "myGroups": {
+      "searchPlaceholder": "Search group",
+      "filter": "Filter",
+      "all": "All",
+      "emptyGroups": "No groups found",
+      "emptyPosts": "No posts yet",
+      "emptySearchResults": "No groups match your search",
+      "members": "{{count}} members"
+    },
+    "allGroups": {
+      "searchPlaceholder": "Search group",
+      "members": "{{count}} members",
+      "joinNow": "Join Now",
+      "pending": "Pending",
+      "emptyList": "No groups found"
+    },
     "comingSoon": "Coming Soon",
     "emptyStates": {
       "buddies": {
@@ -407,6 +430,47 @@
       "hide": "Hide post",
       "report": "Report post",
       "block": "Block {{username}}'s profile"
+    },
+    "filterHeader": {
+      "skinnyNews": "Skinny News",
+      "filter": "Filter",
+      "askAnything": "Ask anything!",
+      "robi": "Robi"
+    },
+    "createGroupForm": {
+      "title": "Create Group",
+      "groupName": "Group Name",
+      "groupNamePlaceholder": "Weight loss Buddies",
+      "description": "Description",
+      "descriptionPlaceholder": "Building healthy habits one day at a time.",
+      "privacy": "Privacy",
+      "choosePrivacy": "Choose Privacy",
+      "public": "Public",
+      "private": "Private",
+      "requireApproval": "Require approval to join",
+      "submitButton": "Create Group",
+      "nameRequired": "Group name is required",
+      "descRequired": "Description is required",
+      "privacyRequired": "Privacy option is required",
+      "successMessage": "Group created successfully!"
+    },
+    "privacyInfo": {
+      "group": {
+        "title": "Choose privacy",
+        "publicTitle": "Public",
+        "publicDesc": "Accessible to all members of the community.",
+        "privateTitle": "Private",
+        "privateDesc": "No one can access the group and see group post from outside group"
+      },
+      "post": {
+        "title": "Who can see this post?",
+        "publicTitle": "Public",
+        "publicDesc": "Visible to everyone in the community.",
+        "buddiesTitle": "Buddies Only",
+        "buddiesDesc": "Only your connected buddies can see this.",
+        "onlyMeTitle": "Only Me",
+        "onlyMeDesc": "Private post for your own progress tracking."
+      }
     }
   },
   "drawer": {
@@ -918,5 +982,10 @@
       "sharePostPts": "+2",
       "pts": "pt"
     }
+  },
+  "bottomSheet": {
+    "sharePost": "Share this post",
+    "copyLink": "Copy link",
+    "share": "Share"
   }
 }

@@ -19,9 +19,6 @@ import AppModal from '../../components/common/AppModal';
 // Helper to generate a unique ID
 const generateId = () => Math.random().toString(36).substring(2, 9);
 
-const COMMON_EMOJIS = ['😀', '😂', '😍', '👍', '🔥', '❤️', '👏', '🎉', '🙌', '😢', '😮', '😡'];
-
-// Stable Footer Component to prevent focus loss and keyboard dismissal during typing
 const CommentInputFooter = memo(({
   footerProps,
   replyTarget,
@@ -32,7 +29,6 @@ const CommentInputFooter = memo(({
   inputTextRef,
 }) => {
   const [isInputEmpty, setIsInputEmpty] = useState(true);
-  const [showEmoji, setShowEmoji] = useState(false);
   const [inputText, setInputText] = useState('');
 
   const handleTextChange = useCallback((text) => {
@@ -42,41 +38,14 @@ const CommentInputFooter = memo(({
     setIsInputEmpty(isEmpty);
   }, [inputTextRef]);
 
-  const handleEmojiSelect = useCallback((emoji) => {
-    setInputText(prev => {
-      const nextText = prev + emoji;
-      inputTextRef.current = nextText;
-      setIsInputEmpty(false);
-      return nextText;
-    });
-  }, [inputTextRef]);
-
-  const handleEmojiToggle = useCallback(() => {
-    if (showEmoji) {
-      setShowEmoji(false);
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 50);
-    } else {
-      Keyboard.dismiss();
-      setShowEmoji(true);
-    }
-  }, [showEmoji, inputRef]);
-
   const onSendPress = useCallback(() => {
     handleSend();
     setInputText('');
     setIsInputEmpty(true);
-    setShowEmoji(false);
   }, [handleSend]);
 
   const footerPaddingBottom = useMemo(() => {
-    if (showEmoji) return 12;
-    return Platform.OS === 'ios' ? 28 : 12;
-  }, [showEmoji]);
-
-  const emojiPanelPaddingBottom = useMemo(() => {
-    return Platform.OS === 'ios' ? 24 : 8;
+    return Platform.OS === 'ios' ? 28 : 30;
   }, []);
 
   return (
@@ -108,45 +77,13 @@ const CommentInputFooter = memo(({
             value={inputText}
             onChangeText={handleTextChange}
             onSubmitEditing={onSendPress}
-            onFocus={() => {
-              setShowEmoji(false);
-            }}
             returnKeyType="send"
           />
-          <TouchableOpacity 
-            style={styles.emojiBtn} 
-            activeOpacity={0.7}
-            onPress={handleEmojiToggle}
-          >
-            <Icon 
-              name={showEmoji ? "keyboard-outline" : "happy-outline"} 
-              size={20} 
-              color={colors.iconSecondary} 
-            />
-          </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={onSendPress} style={styles.actionBtn}>
           <Icon name={isInputEmpty ? "mic-outline" : "send"} size={22} color={colors.textPrimary} />
         </TouchableOpacity>
       </View>
-
-      {/* Emoji Panel */}
-      {showEmoji && (
-        <View style={[styles.emojiPanel, { backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border, paddingBottom: emojiPanelPaddingBottom, height: Platform.OS === 'ios' ? 84 : 64 }]}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.emojiScrollContent}>
-            {COMMON_EMOJIS.map((emoji) => (
-              <TouchableOpacity
-                key={emoji}
-                style={styles.emojiItem}
-                onPress={() => handleEmojiSelect(emoji)}
-                activeOpacity={0.7}
-              >
-                <AppText style={styles.emojiText}>{emoji}</AppText>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      )}
     </BottomSheetFooter>
   );
 });
@@ -255,28 +192,25 @@ const CommentsBottomSheet = forwardRef(({ onCommentCountChange }, ref) => {
     open: () => {
       setIsSheetOpen(true);
       setSheetIndex(0);
-      // Use snapToIndex for reliable opening — expand() can be unreliable
-      // when the sheet was previously closed
-      setTimeout(() => {
-        sheetRef.current?.snapToIndex(0);
-      }, 0);
+      sheetRef.current?.present();
     },
     close: () => {
       Keyboard.dismiss();
       setSheetIndex(-1);
-      sheetRef.current?.close();
+      sheetRef.current?.dismiss();
     }
   }), []);
 
   // Track sheet state changes for reliable reopen
   const handleSheetChange = useCallback((index) => {
     setSheetIndex(index);
-    if (index === -1) {
+    if (index === -1 || index === undefined) {
       // Sheet fully closed — reset state
       setIsSheetOpen(false);
       setReplyTarget(null);
       inputTextRef.current = '';
       inputRef.current?.clear();
+      Keyboard.dismiss();
     }
   }, []);
 
@@ -723,9 +657,6 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.regular,
     fontSize: 14,
   },
-  emojiBtn: {
-    padding: 4,
-  },
   actionBtn: {
     marginLeft: 12,
     padding: 4,
@@ -759,22 +690,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     width: 18,
     textAlign: 'center',
-  },
-  emojiPanel: {
-    justifyContent: 'center',
-    paddingVertical: 8,
-  },
-  emojiScrollContent: {
-    paddingHorizontal: 16,
-    alignItems: 'center',
-  },
-  emojiItem: {
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emojiText: {
-    fontSize: 26,
   },
 });
 

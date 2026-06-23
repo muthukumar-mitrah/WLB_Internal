@@ -21,17 +21,15 @@ const RootNavigator = () => {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer>
-        <RootStack.Navigator screenOptions={{ headerShown: false }}>
-          {isAuthenticated ? (
-            <RootStack.Screen name={ROUTES.MAIN} component={MainNavigator} />
-          ) : (
-            <RootStack.Screen name={ROUTES.AUTH} component={AuthNavigator} />
-          )}
-        </RootStack.Navigator>
-      </NavigationContainer>
-    </GestureHandlerRootView>
+    <NavigationContainer>
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        {isAuthenticated ? (
+          <RootStack.Screen name={ROUTES.MAIN} component={MainNavigator} />
+        ) : (
+          <RootStack.Screen name={ROUTES.AUTH} component={AuthNavigator} />
+        )}
+      </RootStack.Navigator>
+    </NavigationContainer>
   );
 };
 

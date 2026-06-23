@@ -6,14 +6,15 @@ import {
     Platform,
     Alert,
     Linking,
+    Image,
 } from 'react-native';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../theme';
 import AppText from './AppText';
 import { t } from 'i18next';
+import { APP_IMAGES } from '../../constants';
 
 const PERM = Platform.select({
     ios: {
@@ -81,28 +82,34 @@ const MediaPicker = ({ onSelect, title }) => {
 
     const styles = StyleSheet.create({
         container: {
-            paddingHorizontal: spacing[4],
-            height: 180,
+            width: '100%',
+            paddingBottom: spacing[6],
         },
         optionRow: {
             flexDirection: 'row',
             alignItems: 'center',
-            paddingVertical: 5,
+            paddingVertical: spacing[3],
         },
         iconWrap: {
-            width: 35,
-            height: 35,
+            width: 40,
+            height: 40,
             borderRadius: 20,
             alignItems: 'center',
             justifyContent: 'center',
         },
         label: {
+            fontFamily: 'Inter-SemiBold',
             fontSize: 16,
             lineHeight: 20,
-            marginLeft: spacing[2],
+            marginLeft: spacing[4]
         },
         title: {
-            marginVertical: spacing[2],
+            fontFamily: 'Inter-Bold',
+            fontSize: 22,
+            lineHeight: 28,
+            fontWeight: '700',
+            marginTop: spacing[5],
+            marginBottom: spacing[6],
         },
     });
 
@@ -191,7 +198,7 @@ const MediaPicker = ({ onSelect, title }) => {
 
     return (
         <View style={styles.container}>
-            <AppText style={styles.title} variant='h3'>
+            <AppText style={styles.title} color={colors.textSecondary}>
                 {title}
             </AppText>
             <TouchableOpacity
@@ -199,9 +206,11 @@ const MediaPicker = ({ onSelect, title }) => {
                 activeOpacity={0.8}
                 onPress={handleCamera}
             >
-                <View style={[styles.iconWrap, { backgroundColor: `${colors.primaryLight}35` }]}>
-                    <Icon name="camera-outline" size={20} color={colors.primary} />
-                </View>
+                <Image
+                    source={APP_IMAGES.takePhoto}
+                    style={{ width: 40, height: 40 }}
+                    resizeMode="contain"
+                />
                 <AppText style={styles.label}>
                     {t('modals.uploadProfilePhoto.takePhoto')}
                 </AppText>
@@ -211,9 +220,11 @@ const MediaPicker = ({ onSelect, title }) => {
                 activeOpacity={0.8}
                 onPress={handleGallery}
             >
-                <View style={[styles.iconWrap, { backgroundColor: `${colors.primaryLight}35` }]}>
-                    <Icon name="image-outline" size={18} color={colors.primary} />
-                </View>
+                <Image
+                    source={APP_IMAGES.chooseGallery}
+                    style={{ width: 40, height: 40 }}
+                    resizeMode="contain"
+                />
                 <AppText style={styles.label}>
                     {t('modals.uploadProfilePhoto.chooseGallery')}
                 </AppText>

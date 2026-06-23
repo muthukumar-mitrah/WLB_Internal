@@ -33,6 +33,7 @@ import SettingsForgotPasswordScreen from '../screens/settings/SettingsForgotPass
 import SettingsVerifyCodeScreen from '../screens/settings/SettingsVerifyCodeScreen';
 import SettingsCreatePasswordScreen from '../screens/settings/SettingsCreatePasswordScreen';
 import SettingsPasswordSuccessScreen from '../screens/settings/SettingsPasswordSuccessScreen';
+import CreateGroupScreen from '../screens/home/CreateGroupScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -71,6 +72,9 @@ const MainNavigator = () => (
     <Stack.Screen name={ROUTES.SETTINGS_VERIFY_CODE} component={SettingsVerifyCodeScreen} />
     <Stack.Screen name={ROUTES.SETTINGS_CREATE_PASSWORD} component={SettingsCreatePasswordScreen} />
     <Stack.Screen name={ROUTES.SETTINGS_PASSWORD_SUCCESS} component={SettingsPasswordSuccessScreen} />
+
+    {/* Group flow */}
+    <Stack.Screen name={ROUTES.CREATE_GROUP} component={CreateGroupScreen} />
   </Stack.Navigator>
 );
 

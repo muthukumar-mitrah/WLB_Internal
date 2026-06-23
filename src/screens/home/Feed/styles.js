@@ -1,163 +1,154 @@
-import { StyleSheet, Platform } from "react-native";
-import { fontFamily } from "../../../theme/fonts";
+import { StyleSheet } from 'react-native';
+import { fontFamily } from '../../../theme/fonts';
 
-const styles = StyleSheet.create({
+const createStyles = ({ colors, spacing, borderRadius }) =>
+  StyleSheet.create({
     card: {
-        paddingHorizontal: 16,
-        paddingTop: 14,
-        paddingBottom: 10,
+      paddingHorizontal: spacing[4],
+      paddingTop: spacing[3] + 2,
+      paddingBottom: spacing[2] + 2,
+      backgroundColor: colors.background,
     },
+
+    // ── Header ─────────────────────────────────────────────────────────────────
     cardHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: spacing[2] + 2,
     },
-    cardAuthorRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
+    avatarContainer: {
+      position: 'relative',
+      marginRight: spacing[2] + 2,
     },
     avatar: {
-        width: 38,
-        height: 38,
-        borderRadius: 19,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 10,
+      width: 38,
+      height: 38,
+      borderRadius: 19,
+    },
+    onlineIndicator: {
+      position: 'absolute',
+      bottom: -1,
+      right: -1,
+      width: 12,
+      height: 12,
+      borderRadius: 6,
+      borderWidth: 2,
+      borderColor: colors.background,
     },
     avatarText: {
-        color: '#FFFFFF',
-        fontFamily: fontFamily.bold,
+      color: colors.white,
+      fontFamily: fontFamily.bold,
     },
     cardHeaderInfo: {
-        flex: 1,
+      flex: 1,
     },
     cardUsername: {
-        fontFamily: fontFamily.semiBold,
-        fontSize: 14,
-        lineHeight: 18,
+      fontFamily: fontFamily.semiBold,
+      fontSize: 14,
+      lineHeight: 18,
     },
     cardMeta: {
-        fontFamily: fontFamily.regular,
-        fontSize: 12,
-        marginTop: 1,
+      fontFamily: fontFamily.regular,
+      fontSize: 12,
+      marginTop: 1,
     },
     cardHeaderRight: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing[2],
     },
     chatBtn: {
-        paddingHorizontal: 14,
-        paddingVertical: 5,
-        borderRadius: 20,
+      paddingHorizontal: spacing[3] + 2,
+      paddingVertical: spacing[1] + 1,
+      borderRadius: borderRadius.full,
+      backgroundColor: colors.primary,
     },
     chatBtnLabel: {
-        color: '#FFFFFF',
-        fontFamily: fontFamily.semiBold,
-        fontSize: 13,
+      color: colors.white,
+      fontFamily: fontFamily.semiBold,
+      fontSize: 13,
     },
     menuBtn: {
-        padding: 2,
+      padding: 2,
     },
-    cardText: {
-        fontFamily: fontFamily.regular,
-        fontSize: 14,
-        lineHeight: 20,
-        marginBottom: 10,
+    menuIcon: {
+      width: 20,
+      height: 20,
+      resizeMode: 'contain',
     },
+
+    // ── Post content ───────────────────────────────────────────────────────────
     postContentContainer: {
-        position: 'relative',
-        width: '100%',
+      position: 'relative',
+      width: '100%',
     },
     textPressable: {
-        width: '100%',
+      width: '100%',
+    },
+    cardTitle: {
+      fontFamily: fontFamily.semiBold,
+      fontSize: 16,
+      lineHeight: 22,
+      marginBottom: spacing[1],
+    },
+    cardText: {
+      fontFamily: fontFamily.regular,
+      fontSize: 14,
+      lineHeight: 20,
+      marginBottom: spacing[2] + 2,
+    },
+    hashtag: {
+      color: colors.primary,
+      fontFamily: fontFamily.regular,
     },
     imageContainer: {
-        position: 'relative',
-        width: '100%',
-        borderRadius: 12,
-        overflow: 'hidden',
-        marginBottom: 10,
+      position: 'relative',
+      width: '100%',
+      borderRadius: borderRadius.lg,
+      overflow: 'hidden',
+      marginBottom: spacing[2] + 2,
     },
     imagePressable: {
-        width: '100%',
+      width: '100%',
     },
     postImage: {
-        width: '100%',
-        height: 220,
-        borderRadius: 12,
-    },
-    dimOverlay: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        borderRadius: 12,
-        zIndex: 9,
-        elevation: 4,
-    },
-    overlayContainer: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 10,
-        elevation: 5,
-    },
-    lottieOverlay: {
-        width: 160,
-        height: 160,
-    },
-    previewBackdrop: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        justifyContent: 'center',
-        alignItems: 'center',
+      width: '100%',
+      borderRadius: borderRadius.lg,
     },
 
-    previewContainer: {
-        flex: 1,
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    previewCloseBtn: {
-        position: 'absolute',
-        top: Platform.OS === 'ios' ? 60 : 40,
-        right: 20,
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 100,
-    },
-    previewImage: {
-        width: '100%',
-        height: '80%',
-    },
+    // ── Reactions row ──────────────────────────────────────────────────────────
     reactionsRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingTop: 4,
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingTop: spacing[1],
     },
     reactionBtn: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginRight: 16,
-        gap: 4,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginRight: spacing[4],
+      gap: spacing[1],
+    },
+    reactionIcon: {
+      width: 20,
+      height: 20,
+      resizeMode: 'contain',
     },
     reactionCount: {
-        fontFamily: fontFamily.medium,
-        fontSize: 13,
+      fontFamily: fontFamily.medium,
+      fontSize: 13,
     },
-})
+    robiContainer: {
+      marginRight: 0,
+    },
+    robiImage: {
+      width: 20,
+      height: 20,
+      resizeMode: 'contain',
+      borderRadius: 10,
+    },
+    spacer: {
+      flex: 1,
+    },
+  });
 
-export default styles;
+export default createStyles;

@@ -375,7 +375,6 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       backgroundColor: colors.background,
     },
     nextBtn: {
-      paddingVertical: 14,
       borderRadius: borderRadius.md,
     },
     // Camera/Gallery Bottom Sheet Modal Options

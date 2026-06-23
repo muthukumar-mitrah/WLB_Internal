@@ -88,4 +88,14 @@ export const APP_IMAGES = {
   aiBuddyDisclaimer: require('../assets/icons/ai_disclaimer.png'),
   checkCircle: require('../assets/icons/support.png'), // fallback for check
   trash: require('../assets/icons/logout.png'), // fallback for trash
+
+  // Group-related images
+  groupFilter: require('../assets/images/group_filter.png'),
+  search: require('../assets/images/search.png'),
+  
+  //Popup Images
+  takePhoto: require('../assets/images/takePhoto.png'),
+  chooseGallery: require('../assets/images/chooseGallery.png'),
+  world: require('../assets/images/world.png'),
+  lock: require('../assets/images/lock.png'),
 };

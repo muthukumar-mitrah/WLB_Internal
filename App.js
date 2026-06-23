@@ -15,6 +15,8 @@ import Toast from './src/components/common/Toast';
 import SplashScreen from 'react-native-splash-screen'
 import { GOOGLE_SIGN_IN_CONFIG } from './src/constants/index';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const AppCore = () => {
   const { colors } = useTheme();
@@ -38,19 +40,23 @@ const AppCore = () => {
 };
 
 const App = () => (
-  <SafeAreaProvider>
-    <ThemeProvider>
-      <AuthProvider>
-        <ProfileProvider>
-        <SurveyProvider>
-          <FeedProvider>
-            <AppCore />
-          </FeedProvider>
-        </SurveyProvider>
-        </ProfileProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  </SafeAreaProvider>
+  <GestureHandlerRootView style={{ flex: 1 }}>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <ProfileProvider>
+          <SurveyProvider>
+            <FeedProvider>
+              <BottomSheetModalProvider>
+                <AppCore />
+              </BottomSheetModalProvider>
+            </FeedProvider>
+          </SurveyProvider>
+          </ProfileProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  </GestureHandlerRootView>
 );
 
 const styles = StyleSheet.create({

@@ -80,9 +80,7 @@ const LikesBottomSheet = forwardRef(({ onBuddyAction }, ref) => {
     open: (selectedPostId) => {
       setPostId(selectedPostId);
       setSheetIndex(0);
-      setTimeout(() => {
-        sheetRef.current?.snapToIndex(0);
-      }, 0);
+      sheetRef.current?.present();
     },
     close: () => {
       setSheetIndex(-1);
@@ -255,10 +253,9 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   actionBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 16,
-    minWidth: 96,
+    paddingVertical: 12,
+    borderRadius: 10,
+    minWidth: 66,
     alignItems: 'center',
     justifyContent: 'center',
   },

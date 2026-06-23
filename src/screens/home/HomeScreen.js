@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useState,
   useRef,
+  useMemo,
 } from 'react';
 import {
   FlatList,
@@ -14,20 +15,25 @@ import {
   StyleSheet,
   View,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Share from 'react-native-share';
 import { useTheme } from '../../theme';
-import { PostPreviewModal, EmptyState, CommentsBottomSheet, LikesBottomSheet, PostOptionsSheet } from '../../components/common';
+import { PostPreviewModal, EmptyState, CommentsBottomSheet, LikesBottomSheet, PostOptionsSheet, ShareBottomSheet } from '../../components/common';
 import HomeHeader from '../../components/home/HomeHeader';
 import TopTabs from '../../components/home/TopTabs';
-import WlbActionBar from '../../components/home/WlbActionBar';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useFeed } from '../../context/FeedContext';
 import { ROUTES } from '../../constants';
 import PostCard from './Feed';
-
-
+import ProfileTabs from '../profile/components/ProfileTabs';
+import MyGroupsTabContent from './MyGroupsTabContent';
+import GroupPostsTabContent from './GroupPostsTabContent';
+import AllGroupsTabContent from './AllGroupsTabContent';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { AppText } from '../../components/common';
+import FilterHeader from './FilterHeader';
+import RobiQuickAnswerDisclaimerModal from './RobiQuickAnswerDisclaimerModal/index.js'
 
 const HomeScreen = ({ navigation }) => {
   const { colors } = useTheme();
@@ -42,10 +48,23 @@ const HomeScreen = ({ navigation }) => {
     refreshFeed,
   } = useFeed();
 
+  const [disclaimerVisible, setDisclaimerVisible] = useState(false);
+  const [activeGroupTab, setActiveGroupTab] = useState(t('home.groupTabs.posts'));
   const [menuPost, setMenuPost] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const commentsSheetRef = useRef(null);
   const likesSheetRef = useRef(null);
+  const shareSheetRef = useRef(null);
+
+  const groupTabs = useMemo(() => [
+    t('home.groupTabs.posts'),
+    t('home.groupTabs.myGroups'),
+    t('home.groupTabs.allGroups'),
+  ], [t]);
+
+  const handleDisclaimerClose = useCallback(() => {
+    setDisclaimerVisible(false);
+  }, []);
 
   const handleMenuPress = useCallback((post) => {
     setMenuPost(post);
@@ -58,21 +77,32 @@ const HomeScreen = ({ navigation }) => {
     commentsSheetRef.current?.open();
   }, []);
 
-  const handleSharePress = useCallback(async (post) => {
-    if (!post) return;
-    const shareMessage = post.text || 'Check out this post on WLB!';
-    const shareUrl = `https://wlb.app/post/${post.id}`;
-    
-    try {
-      await Share.open({
-        title: 'Share Post',
-        message: `Check out this post by @${post.username} on Weight Loss Buddy:\n\n"${shareMessage}"`,
-        url: shareUrl,
-        failOnCancel: false,
-      });
-    } catch (e) {
-      console.log('[SharePress] Native share error or cancelled:', e);
+const handleRobiFilterPress = useCallback(async () => {
+    const accepted = await storage.getItem(
+      STORAGE_KEYS.ROBI_QUICK_ANSWER_DISCLAIMER_ACCEPTED,
+      false,
+    );
+    if(accepted === true) {
+      robiSheetRef.current?.open();
+    } else {
+      setDisclaimerVisible(true);
     }
+  }, []);
+
+  const handleDisclaimerContinue = useCallback(async (dontShowAgain) => {
+    if(dontShowAgain) {
+      await storage.setItem(
+        STORAGE_KEYS.ROBI_QUICK_ANSWER_DISCLAIMER_ACCEPTED,
+        true,
+      );
+    }
+    setDisclaimerVisible(false);
+    robiSheetRef.current?.open();
+  }, []);
+
+  const handleSharePress = useCallback((post) => {
+    if (!post) return;
+    shareSheetRef.current?.open(post);
   }, []);
 
   const handleLikesCountPress = useCallback((post) => {
@@ -88,23 +118,35 @@ const HomeScreen = ({ navigation }) => {
     navigation.navigate(ROUTES.VIEW_PROFILE, { userId: post.userId || post.username });
   }, [navigation]);
 
-  const renderPost = useCallback(({ item }) => (
-    <PostCard
-      post={item}
-      colors={colors}
-      showChat={activeTab === 'buddies'}
-      onLikePress={likePost}
-      onSavePress={savePost}
-      onMenuPress={handleMenuPress}
-      onImagePreview={handleImagePreview}
-      onCommentPress={handleCommentPress}
-      onSharePress={handleSharePress}
-      onLikesCountPress={handleLikesCountPress}
-      onAvatarPress={() => handleAvatarPress(item)}
-    />
-  ), [colors, activeTab, likePost, savePost, handleMenuPress, handleImagePreview, handleCommentPress, handleSharePress, handleLikesCountPress, handleAvatarPress]);
+  const renderPost = useCallback(
+    ({ item }) => (
+      <PostCard
+        post={item}
+        showChat={activeTab === 'buddies'}
+        onLikePress={likePost}
+        onSavePress={savePost}
+        onMenuPress={handleMenuPress}
+        onImagePreview={handleImagePreview}
+        onCommentPress={handleCommentPress}
+        onSharePress={handleSharePress}
+        onLikesCountPress={handleLikesCountPress}
+      />
+    ),
+    [
+      activeTab,
+      likePost,
+      savePost,
+      handleMenuPress,
+      handleImagePreview,
+      handleCommentPress,
+      handleSharePress,
+      handleLikesCountPress,
+    ],
+  );
 
   const keyExtractor = useCallback((item) => item.id, []);
+
+  const isGroupsTab = activeTab === 'groups';
 
   const renderEmptyState = useCallback(() => {
     if (loading) {
@@ -120,7 +162,7 @@ const HomeScreen = ({ navigation }) => {
         <EmptyState
           icon={
             <Image
-              source={require('../../assets/images/No_Buddies_Found.png')}
+              source={require('../../assets/images/no_buddies_found.png')}
               style={styles.emptyRobiImage}
               resizeMode="contain"
             />
@@ -143,6 +185,36 @@ const HomeScreen = ({ navigation }) => {
     );
   }, [loading, activeTab, colors.primary, t, navigation]);
 
+  const renderListHeader = useCallback(() => {
+    if (activeTab === 'groups') {
+      const createGroupButton = (
+        <TouchableOpacity
+          style={styles.createGroupBtn}
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate(ROUTES.CREATE_GROUP)}
+        >
+          <Icon name="add-circle" size={22} color={colors.textPrimary} />
+          <AppText style={[styles.createGroupText, { color: colors.textPrimary }]}>
+            {t('home.groupTabs.createGroup')}
+          </AppText>
+        </TouchableOpacity>
+      );
+
+      return (
+        <ProfileTabs
+          tabs={groupTabs}
+          activeTab={activeGroupTab}
+          onTabChange={setActiveGroupTab}
+          createGroupButton={createGroupButton}
+        />
+      );
+    }
+    return null;
+  }, [activeTab, activeGroupTab, groupTabs, colors, t, navigation]);
+
+  // Determine what to show in FlatList
+  const listData = isGroupsTab ? [] : posts;
+
   return (
     <SafeAreaView
       style={[styles.screen, { backgroundColor: colors.backgroundSecondary }]}
@@ -151,19 +223,54 @@ const HomeScreen = ({ navigation }) => {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} translucent={false} />
       <HomeHeader />
       <TopTabs activeTab={activeTab} setActiveTab={setActiveTab} colors={colors} />
-      {activeTab === 'wlb' && <WlbActionBar />}
-      <FlatList
-        data={posts}
-        renderItem={renderPost}
-        keyExtractor={keyExtractor}
-        style={styles.feedList}
-        contentContainerStyle={posts.length === 0 ? styles.feedContentEmpty : styles.feedContent}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={{ height: 3 }} />}
-        ListEmptyComponent={renderEmptyState}
-        refreshing={loading}
-        onRefresh={refreshFeed}
-      />
+      {activeTab === 'wlb' && (
+        <FilterHeader
+          onRobiPress={handleRobiFilterPress}
+          onFilterPress={() => {}}
+        />
+      )}
+      {isGroupsTab ? (
+        <>
+          {renderListHeader()}
+          {activeGroupTab === t('home.groupTabs.posts') && (
+            <GroupPostsTabContent
+              onMenuPress={handleMenuPress}
+              onCommentPress={handleCommentPress}
+              onSharePress={handleSharePress}
+              onLikesCountPress={handleLikesCountPress}
+              onImagePreview={handleImagePreview}
+              onAvatarPress={handleAvatarPress}
+            />
+          )}
+          {activeGroupTab === t('home.groupTabs.myGroups') && (
+            <MyGroupsTabContent
+              onMenuPress={handleMenuPress}
+              onCommentPress={handleCommentPress}
+              onSharePress={handleSharePress}
+              onLikesCountPress={handleLikesCountPress}
+              onImagePreview={handleImagePreview}
+              onAvatarPress={handleAvatarPress}
+            />
+          )}
+          {activeGroupTab === t('home.groupTabs.allGroups') && (
+            <AllGroupsTabContent />
+          )}
+        </>
+      ) : (
+        <FlatList
+          data={listData}
+          renderItem={renderPost}
+          keyExtractor={keyExtractor}
+          style={styles.feedList}
+          contentContainerStyle={listData.length === 0 ? styles.feedContentEmpty : styles.feedContent}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={renderListHeader}
+          ItemSeparatorComponent={() => <View style={{ height: 3 }} />}
+          ListEmptyComponent={renderEmptyState}
+          refreshing={loading}
+          onRefresh={refreshFeed}
+        />
+      )}
       <PostOptionsSheet
         visible={!!menuPost}
         username={menuPost?.username ?? ''}
@@ -180,6 +287,14 @@ const HomeScreen = ({ navigation }) => {
       />
       <LikesBottomSheet
         ref={likesSheetRef}
+      />
+      <ShareBottomSheet
+        ref={shareSheetRef}
+      />
+      <RobiQuickAnswerDisclaimerModal
+        visible={disclaimerVisible}
+        onClose={handleDisclaimerClose}
+        onContinue={handleDisclaimerContinue}
       />
     </SafeAreaView>
   );
@@ -243,6 +358,17 @@ const styles = StyleSheet.create({
   feedContentEmpty: {
     flexGrow: 1,
     justifyContent: 'center',
+  },
+  createGroupBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingBottom: 8,
+  },
+  createGroupText: {
+    fontSize: 14,
+    fontFamily: 'Inter-SemiBold',
+    fontWeight: '700',
   },
 });
 

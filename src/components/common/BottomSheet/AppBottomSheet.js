@@ -9,7 +9,7 @@
  */
 import React, {forwardRef, useImperativeHandle, useRef, useCallback} from 'react';
 import {StyleSheet} from 'react-native';
-import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {BottomSheetModal, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {useTheme} from '../../../theme';
 
 const AppBottomSheet = forwardRef(
@@ -31,10 +31,11 @@ const AppBottomSheet = forwardRef(
     useImperativeHandle(
       ref,
       () => ({
-        expand: () => bottomSheetRef.current?.snapToIndex(snapPoints.length - 1),
+        expand: () => bottomSheetRef.current?.present(),
         collapse: () => bottomSheetRef.current?.snapToIndex(0),
-        close: () => bottomSheetRef.current?.close(),
+        close: () => bottomSheetRef.current?.dismiss(),
         snapToIndex: idx => bottomSheetRef.current?.snapToIndex(idx),
+        present: () => bottomSheetRef.current?.present(),
       }),
       [snapPoints.length],
     );
@@ -53,12 +54,12 @@ const AppBottomSheet = forwardRef(
     );
 
     return (
-      <BottomSheet
+      <BottomSheetModal
         ref={bottomSheetRef}
-        index={index}
+        index={Math.max(0, index)}
         snapPoints={snapPoints}
         onChange={onChange}
-        onClose={onClose}
+        onDismiss={onClose}
         enablePanDownToClose={enablePanDownToClose}
         backdropComponent={renderBackdrop}
         backgroundStyle={[styles.background, {backgroundColor: colors.surface}]}
@@ -72,7 +73,7 @@ const AppBottomSheet = forwardRef(
         enableDynamicSizing={false}
         footerComponent={footerComponent}>
         {children}
-      </BottomSheet>
+      </BottomSheetModal>
     );
   },
 );

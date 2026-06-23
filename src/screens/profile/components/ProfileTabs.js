@@ -4,20 +4,22 @@ import { useTheme } from '../../../theme';
 import { AppText } from '../../../components/common';
 import { useProfile } from '../../../context/ProfileContext';
 
-const ProfileTabs = ({ activeTab = 'Posts', onTabChange }) => {
+const ProfileTabs = ({ activeTab = 'Posts', onTabChange, tabs, createGroupButton }) => {
   const { colors, spacing } = useTheme();
   const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
-  const { tabs: TABS } = useProfile();
+  const { tabs: contextTabs } = useProfile();
+  const displayTabs = tabs || contextTabs;
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {TABS?.map((tab) => {
-          const isActive = tab === activeTab;
+      <View style={styles.headerRow}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {displayTabs?.map((tab) => {
+            const isActive = tab === activeTab;
           return (
             <TouchableOpacity
               key={tab}
@@ -34,7 +36,13 @@ const ProfileTabs = ({ activeTab = 'Posts', onTabChange }) => {
             </TouchableOpacity>
           );
         })}
-      </ScrollView>
+        </ScrollView>
+        {createGroupButton && (
+          <View style={styles.createGroupButtonContainer}>
+            {createGroupButton}
+          </View>
+        )}
+      </View>
     </View>
   );
 };
@@ -48,9 +56,17 @@ const createStyles = ({ colors, spacing }) =>
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
     },
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
     scrollContent: {
       paddingHorizontal: spacing[4],
       paddingBottom: 2,
+    },
+    createGroupButtonContainer: {
+      paddingRight: spacing[4],
     },
     tabBtn: {
       marginRight: spacing[5],
@@ -66,7 +82,7 @@ const createStyles = ({ colors, spacing }) =>
       left: 0,
       right: 0,
       height: 2,
-      backgroundColor: colors.primary,
+      backgroundColor: colors.textPrimary,
       borderRadius: 1,
     },
   });

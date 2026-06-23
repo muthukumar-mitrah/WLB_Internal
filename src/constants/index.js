@@ -85,6 +85,7 @@ const ROUTES = {
   BLOCKED_USER: 'BlockedUser',
   AWARDS: 'awards',
   LEADER_BOARD: 'leaderBoard',
+  CREATE_GROUP: 'CreateGroup',
 
   // Profile
   PROFILE_NAVIGATOR: 'ProfileNavigator',
