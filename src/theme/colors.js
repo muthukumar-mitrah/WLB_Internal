@@ -14,6 +14,7 @@ const palette = {
   primarySoft: '#A3C7E5',
   primaryLightSoft: '#e7eafe',
   brandPrimary: '#0B2EF3',
+  blue400: "#3C58F5",
 
   // Secondary
   secondary: '#7C3AED',

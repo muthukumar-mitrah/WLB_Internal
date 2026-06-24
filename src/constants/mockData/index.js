@@ -1,0 +1,90 @@
+﻿import { APP_IMAGES } from '../images';
+
+// ─── Blocked Users ───────────────────────────────────────────────────────────
+
+export const blockedUsersData = [
+  { id: '1', name: 'Sarah M.',   blockedDate: 'Jun 4, 2026', avatar: APP_IMAGES.userAvatar },
+  { id: '2', name: 'James L.',   blockedDate: 'Jun 4, 2026', avatar: APP_IMAGES.userAvatar },
+  { id: '3', name: 'Emily R.',   blockedDate: 'Jun 4, 2026', avatar: APP_IMAGES.userAvatar },
+  { id: '4', name: 'Michael T.', blockedDate: 'Jun 4, 2026', avatar: APP_IMAGES.userAvatar },
+  { id: '5', name: 'Olivia K.',  blockedDate: 'Jun 4, 2026', avatar: APP_IMAGES.userAvatar },
+];
+
+// ─── Awards ──────────────────────────────────────────────────────────────────
+
+export const awardLevels = [
+  { id: 'starter',    labelKey: 'awards.levels.starter',    pointsKey: 'awards.levels.starterPts',    imgUrl: APP_IMAGES.starter },
+  { id: 'risingStar', labelKey: 'awards.levels.risingStar', pointsKey: 'awards.levels.risingStarPts', imgUrl: APP_IMAGES.risingStar },
+  { id: 'supporter',  labelKey: 'awards.levels.supporter',  pointsKey: 'awards.levels.supporterPts',  imgUrl: APP_IMAGES.supporter },
+  { id: 'energizer',  labelKey: 'awards.levels.energizer',  pointsKey: 'awards.levels.energizerPts',  imgUrl: APP_IMAGES.energizerLight },
+  { id: 'achiever',   labelKey: 'awards.levels.achiever',   pointsKey: 'awards.levels.achieverPts',   imgUrl: APP_IMAGES.achiever },
+  { id: 'champion',   labelKey: 'awards.levels.champion',   pointsKey: 'awards.levels.championPts',   imgUrl: APP_IMAGES.champion },
+  { id: 'legend',     labelKey: 'awards.levels.legend',     pointsKey: 'awards.levels.legendPts',     imgUrl: APP_IMAGES.legend },
+  { id: 'elite',      labelKey: 'awards.levels.elite',      pointsKey: 'awards.levels.elitePts',      imgUrl: APP_IMAGES.elite },
+];
+
+export const awardLevelRanges = [
+  { id: 'starter',    min: 0,     max: 99,       labelKey: 'awards.levels.starter' },
+  { id: 'risingStar', min: 100,   max: 199,      labelKey: 'awards.levels.risingStar' },
+  { id: 'supporter',  min: 200,   max: 399,      labelKey: 'awards.levels.supporter' },
+  { id: 'energizer',  min: 400,   max: 699,      labelKey: 'awards.levels.energizer' },
+  { id: 'achiever',   min: 700,   max: 999,      labelKey: 'awards.levels.achiever' },
+  { id: 'champion',   min: 1000,  max: 9999,     labelKey: 'awards.levels.champion' },
+  { id: 'legend',     min: 10000, max: 19999,    labelKey: 'awards.levels.legend' },
+  { id: 'elite',      min: 20000, max: Infinity, labelKey: 'awards.levels.elite' },
+];
+
+export const earnPoints = [
+  { id: 'post',      labelKey: 'awards.earn.post',      pointsKey: 'awards.earn.postPts',      imageUrl: APP_IMAGES.post },
+  { id: 'comment',   labelKey: 'awards.earn.comment',   pointsKey: 'awards.earn.commentPts',   imageUrl: APP_IMAGES.comment },
+  { id: 'liked',     labelKey: 'awards.earn.liked',     pointsKey: 'awards.earn.likedPts',     imageUrl: APP_IMAGES.postLike },
+  { id: 'shared',    labelKey: 'awards.earn.shared',    pointsKey: 'awards.earn.sharedPts',    imageUrl: APP_IMAGES.sharePost },
+  { id: 'sharePost', labelKey: 'awards.earn.sharePost', pointsKey: 'awards.earn.sharePostPts', imageUrl: APP_IMAGES.sharePost },
+];
+
+// ─── Leaderboard ─────────────────────────────────────────────────────────────
+
+export const leaderboardFilterOptions = [
+  { id: 'allTime', labelKey: 'leaderboard.allTime' },
+  { id: 'week',    labelKey: 'leaderboard.thisWeek' },
+  { id: 'month',   labelKey: 'leaderboard.thisMonth' },
+];
+
+export const leaderboardData = {
+  week: [
+    { id: '1', rank: 1, name: 'Emma Carter',     points: 28400, avatar: APP_IMAGES.userAvatar },
+    { id: '2', rank: 2, name: 'Liam Reynolds',   points: 18000, avatar: APP_IMAGES.userAvatar },
+    { id: '3', rank: 3, name: 'Olivia Martinez', points: 5400,  avatar: APP_IMAGES.userAvatar },
+    { id: '4', rank: 4, name: 'Noah Thompson',   points: 800,   avatar: APP_IMAGES.userAvatar },
+    { id: '5', rank: 5, name: 'Ava Wilson',       points: 650,   avatar: APP_IMAGES.userAvatar },
+    { id: '6', rank: 6, name: 'Benjamin Davis',  points: 250,   avatar: APP_IMAGES.userAvatar },
+    { id: '7', rank: 7, name: 'Albert Flores',   points: 150,   avatar: APP_IMAGES.userAvatar },
+    { id: '8', rank: 8, name: 'Ralph Edwards',   points: 50,    avatar: APP_IMAGES.userAvatar },
+  ],
+  month: [
+    { id: '1', rank: 1, name: 'Noah Thompson',   points: 23499, avatar: APP_IMAGES.userAvatar },
+    { id: '2', rank: 2, name: 'Liam Reynolds',   points: 17500, avatar: APP_IMAGES.userAvatar },
+    { id: '3', rank: 3, name: 'Benjamin Davis',  points: 5200,  avatar: APP_IMAGES.userAvatar },
+    { id: '4', rank: 4, name: 'Ava Wilson',       points: 799,   avatar: APP_IMAGES.userAvatar },
+    { id: '5', rank: 5, name: 'Albert Flores',   points: 656,   avatar: APP_IMAGES.userAvatar },
+    { id: '6', rank: 6, name: 'Olivia Martinez', points: 269,   avatar: APP_IMAGES.userAvatar },
+    { id: '7', rank: 7, name: 'Emma Carter',     points: 130,   avatar: APP_IMAGES.userAvatar },
+    { id: '8', rank: 8, name: 'Ralph Edwards',   points: 20,    avatar: APP_IMAGES.userAvatar },
+  ],
+  allTime: [
+    { id: '1', rank: 1, name: 'Noah Thompson',   points: 25560, avatar: APP_IMAGES.userAvatar },
+    { id: '2', rank: 2, name: 'Emma Carter',     points: 16720, avatar: APP_IMAGES.userAvatar },
+    { id: '3', rank: 3, name: 'Liam Reynolds',   points: 5600,  avatar: APP_IMAGES.userAvatar },
+    { id: '4', rank: 4, name: 'Ava Wilson',       points: 769,   avatar: APP_IMAGES.userAvatar },
+    { id: '5', rank: 5, name: 'Olivia Martinez', points: 648,   avatar: APP_IMAGES.userAvatar },
+    { id: '6', rank: 6, name: 'Albert Flores',   points: 278,   avatar: APP_IMAGES.userAvatar },
+    { id: '7', rank: 7, name: 'Benjamin Davis',  points: 120,   avatar: APP_IMAGES.userAvatar },
+    { id: '8', rank: 8, name: 'Ralph Edwards',   points: 30,    avatar: APP_IMAGES.userAvatar },
+  ],
+};
+
+export const yourRankData = {
+  week:    { rank: 12, points: 580 },
+  month:   { rank: 8,  points: 25000 },
+  allTime: { rank: 24, points: 542 },
+};

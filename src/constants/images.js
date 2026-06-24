@@ -98,4 +98,36 @@ export const APP_IMAGES = {
   chooseGallery: require('../assets/images/chooseGallery.png'),
   world: require('../assets/images/world.png'),
   lock: require('../assets/images/lock.png'),
+
+  // Award level images
+  starter: require('../assets/images/starter.png'),
+  risingStar: require('../assets/images/rising_star.png'),
+  supporter: require('../assets/images/supporter.png'),
+  energizerLight: require('../assets/images/energizer_light.png'),
+  energizerDark: require('../assets/images/energizer_dark.png'),
+  achiever: require('../assets/images/achiever.png'),
+  champion: require('../assets/images/champion.png'),
+  legend: require('../assets/images/legend.png'),
+  elite: require('../assets/images/elite.png'),
+
+  // Earn-points action images
+  post: require('../assets/images/post.png'),
+  comment: require('../assets/images/comment.png'),
+  postLike: require('../assets/images/post_like.png'),
+  sharePost: require('../assets/images/share_post.png'),
+
+  // Tracker icons
+  unitIcon: require('../assets/icons/unit_icon.png'),
+  unitWhiteIcon: require('../assets/icons/unit_white_icon.png'),
+  bmiIcon: require('../assets/icons/bmi_icon.png'),
+
+  // Leaderboard rank icons
+  starterIcon: require('../assets/icons/starter_icon.png'),
+  risingStarIcon: require('../assets/icons/rising_star_icon.png'),
+  supporterIcon: require('../assets/icons/supporter_icon.png'),
+  energizerIcon: require('../assets/icons/energizer_icon.png'),
+  achieverIcon: require('../assets/icons/achiever_icon.png'),
+  championIcon: require('../assets/icons/champion_icon.png'),
+  legendIcon: require('../assets/icons/legend_icon.png'),
+  eliteIcon: require('../assets/icons/elite_icon.png'),
 };

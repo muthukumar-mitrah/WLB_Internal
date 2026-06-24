@@ -12,14 +12,8 @@ import {
   Header,
 } from '../../../components/common';
 import { createStyles } from './styles';
+import { blockedUsersData } from '../../../constants/mockData';
 
-const BLOCKED_USERS_DATA = [
-  { id: '1', name: 'Sarah M.', blockedDate: 'Jun 4, 2026', avatar: require('../../../assets/images/user.png') },
-  { id: '2', name: 'James L.', blockedDate: 'Jun 4, 2026', avatar: require('../../../assets/images/user.png') },
-  { id: '3', name: 'Emily R.', blockedDate: 'Jun 4, 2026', avatar: require('../../../assets/images/user.png') },
-  { id: '4', name: 'Michael T.', blockedDate: 'Jun 4, 2026', avatar: require('../../../assets/images/user.png') },
-  { id: '5', name: 'Olivia K.', blockedDate: 'Jun 4, 2026', avatar: require('../../../assets/images/user.png') },
-];
 
 const BlockedUserItem = memo(({ item, onUnblock, styles, colors, t }) => (
   <View style={styles.userRow}>
@@ -52,7 +46,7 @@ const BlockedUsersScreen = () => {
   const { t } = useTranslation();
   const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
 
-  const [blockedUsers, setBlockedUsers] = useState(BLOCKED_USERS_DATA);
+  const [blockedUsers, setBlockedUsers] = useState(blockedUsersData);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 

@@ -4,22 +4,7 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.backgroundTertiary,
-    },
-
-    // ── Header ──────────────────────────────────────────────────────────
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: spacing[5],
-      paddingVertical: spacing[3],
-    },
-    backBtn: {
-      width: 32,
-      height: 32,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginRight: spacing[2],
+      backgroundColor: colors.background,
     },
 
     scrollContent: {
@@ -33,7 +18,7 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       overflow: 'hidden',
     },
     pointsCardGradient: {
-      padding: spacing[5],
+      padding: spacing[3],
       borderRadius: borderRadius.xl,
       backgroundColor: colors.primaryDark,
     },
@@ -53,10 +38,7 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
-    totalPointsValue: {
-      marginTop: spacing[1],
-      marginBottom: spacing[3],
-    },
+
     levelRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -76,9 +58,11 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
     },
     currentLevelText: {
       marginBottom: spacing[4],
+      paddingBottom:spacing[4],
+      borderBottomColor: colors.blue400,
+      borderBottomWidth: 1,
     },
-    motivationText: {
-      marginTop: spacing[3],
+    motivationText: { 
     },
 
     // ── Award Levels ────────────────────────────────────────────────────
@@ -98,7 +82,7 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       backgroundColor: colors.cardBackground,
       borderRadius: borderRadius.xl,
       paddingVertical: spacing[2],
-      paddingHorizontal: spacing[3],
+      paddingHorizontal: spacing[2],
       marginBottom: spacing[3],
     },
     awardCardSelected: {

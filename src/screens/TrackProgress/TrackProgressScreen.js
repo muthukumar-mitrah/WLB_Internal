@@ -21,6 +21,7 @@ import {
 } from '../../components/common';
 import UpdateWeightBottomSheet from './components/UpdateWeightBottomSheet';
 import createStyles from './styles';
+import { APP_IMAGES } from '../../constants/images';
 
 // Helper to calculate BMI
 const calculateBmiValue = (weight, unit) => {
@@ -218,7 +219,7 @@ const TrackProgressScreen = () => {
         {/* Top Update Weight Banner */}
         <View style={styles.bannerCard}>
           <View style={styles.bannerIconWrapper}>
-            <Image source={require('../../assets/icons/unit_white_icon.png')} style={styles.bannerIcon} />
+            <Image source={APP_IMAGES.unitWhiteIcon} style={styles.bannerIcon} />
           </View>
           <View style={styles.bannerTextContainer}>
             <AppText variant="body" style={styles.bannerTitle}>
@@ -242,9 +243,9 @@ const TrackProgressScreen = () => {
         {/* 1. Body Weight Card */}
         <View style={styles.trackerCard}>
           <View style={styles.cardHeader}>
-            <View style={[styles.cardHeaderIconWrapper, { backgroundColor: isDark ? colors.backgroundTertiary : colors.primaryLightSoft }]}>
+            <View style={styles.cardHeaderIconWrapper}>
               {/* <MCIcon name="scale-bathroom" size={18} color={colors.primary} /> */}
-              <Image source={require('../../assets/icons/unit_icon.png')} style={styles.cardHeaderIcon} />
+              <Image source={APP_IMAGES.unitIcon} style={styles.cardHeaderIcon} />
             </View>
             <View style={styles.cardHeaderTextContainer}>
               <View style={styles.cardTitleRow}>
@@ -257,7 +258,7 @@ const TrackProgressScreen = () => {
                 {t('tracker.bodyWeight.subtitle', 'Slow and steady wins the race.')}
               </AppText>
             </View>
-            <View style={[styles.badge, { backgroundColor: isDark ? colors.backgroundTertiary : colors.primaryLightSoft }]}>
+            <View style={styles.badge}>
               <AppText variant="bodySmall" color={colors.primary} style={styles.badgeText}>
                 {currentWeight} <AppText variant="caption" color={colors.primary} style={styles.bodyWeightBadgeUnit}>{currentUnit}</AppText>
               </AppText>
@@ -311,7 +312,7 @@ const TrackProgressScreen = () => {
           <View style={styles.cardHeader}>
             <View style={styles.bmiIconContainer}>
               {/* <MCIcon name="fire" size={18} color={colors.error} /> */}
-              <Image source={require('../../assets/icons/bmi_icon.png')} style={styles.cardHeaderIcon} />
+              <Image source={APP_IMAGES.bmiIcon} style={styles.cardHeaderIcon} />
             </View>
             <View style={styles.cardHeaderTextContainer}>
               <View style={styles.cardTitleRow}>

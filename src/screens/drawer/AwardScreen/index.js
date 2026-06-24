@@ -7,104 +7,9 @@ import { useTranslation } from '../../../i18n/useTranslation';
 import { AppText, SafeContainer, Divider, Header } from '../../../components/common';
 import { useProfile } from '../../../context/ProfileContext';
 import { createStyles } from './styles';
+import { APP_IMAGES } from '../../../constants/images';
+import { awardLevels, awardLevelRanges, earnPoints } from '../../../constants/mockData';
 
-
-// ── Static data ─────────────────────────────────────────────────────────────
-
-const AWARD_LEVELS = [
-  {
-    id: 'starter',
-    labelKey: 'awards.levels.starter',
-    pointsKey: 'awards.levels.starterPts',
-    imgUrl: require('../../../assets/images/starter.png'),
-  },
-  {
-    id: 'risingStar',
-    labelKey: 'awards.levels.risingStar',
-    pointsKey: 'awards.levels.risingStarPts',
-    imgUrl: require('../../../assets/images/rising_star.png'),
-  },
-  {
-    id: 'supporter',
-    labelKey: 'awards.levels.supporter',
-    pointsKey: 'awards.levels.supporterPts',
-    imgUrl: require('../../../assets/images/supporter.png'),
-  },
-  {
-    id: 'energizer',
-    labelKey: 'awards.levels.energizer',
-    pointsKey: 'awards.levels.energizerPts',
-    imgUrl: require('../../../assets/images/energizer_light.png'),
-  },
-  {
-    id: 'achiever',
-    labelKey: 'awards.levels.achiever',
-    pointsKey: 'awards.levels.achieverPts',
-    imgUrl: require('../../../assets/images/achiever.png'),
-  },
-  {
-    id: 'champion',
-    labelKey: 'awards.levels.champion',
-    pointsKey: 'awards.levels.championPts',
-    imgUrl: require('../../../assets/images/champion.png'),
-  },
-  {
-    id: 'legend',
-    labelKey: 'awards.levels.legend',
-    pointsKey: 'awards.levels.legendPts',
-    imgUrl: require('../../../assets/images/legend.png'),
-  },
-  {
-    id: 'elite',
-    labelKey: 'awards.levels.elite',
-    pointsKey: 'awards.levels.elitePts',
-    imgUrl: require('../../../assets/images/elite.png'),
-  },
-];
-
-const LEVEL_RANGES = [
-  { id: 'starter', min: 0, max: 99, labelKey: 'awards.levels.starter' },
-  { id: 'risingStar', min: 100, max: 199, labelKey: 'awards.levels.risingStar' },
-  { id: 'supporter', min: 200, max: 399, labelKey: 'awards.levels.supporter' },
-  { id: 'energizer', min: 400, max: 699, labelKey: 'awards.levels.energizer' },
-  { id: 'achiever', min: 700, max: 999, labelKey: 'awards.levels.achiever' },
-  { id: 'champion', min: 1000, max: 9999, labelKey: 'awards.levels.champion' },
-  { id: 'legend', min: 10000, max: 19999, labelKey: 'awards.levels.legend' },
-  { id: 'elite', min: 20000, max: Infinity, labelKey: 'awards.levels.elite' },
-];
-
-const EARN_POINTS = [
-  {
-    id: 'post',
-    labelKey: 'awards.earn.post',
-    pointsKey: 'awards.earn.postPts',
-    imageUrl: require('../../../assets/images/post.png')
-  },
-  {
-    id: 'comment',
-    labelKey: 'awards.earn.comment',
-    pointsKey: 'awards.earn.commentPts',
-    imageUrl: require('../../../assets/images/comment.png')
-  },
-  {
-    id: 'liked',
-    labelKey: 'awards.earn.liked',
-    pointsKey: 'awards.earn.likedPts',
-    imageUrl: require('../../../assets/images/post_like.png')
-  },
-  {
-    id: 'shared',
-    labelKey: 'awards.earn.shared',
-    pointsKey: 'awards.earn.sharedPts',
-    imageUrl: require('../../../assets/images/share_post.png')
-  },
-  {
-    id: 'sharePost',
-    labelKey: 'awards.earn.sharePost',
-    pointsKey: 'awards.earn.sharePostPts',
-    imageUrl: require('../../../assets/images/share_post.png')
-  },
-];
 
 // ── Sub-components ──────────────────────────────────────────────────────────
 
@@ -166,28 +71,28 @@ const AwardScreen = () => {
   const totalPoints = profile?.totalPoints ?? 0;
 
   const currentIdx = useMemo(() => {
-    const idx = LEVEL_RANGES.findIndex(
+    const idx = awardLevelRanges.findIndex(
       (lvl) => totalPoints >= lvl.min && totalPoints <= lvl.max
     );
     return idx !== -1 ? idx : 0;
   }, [totalPoints]);
 
-  const currentLevelId = useMemo(() => LEVEL_RANGES[currentIdx].id, [currentIdx]);
+  const currentLevelId = useMemo(() => awardLevelRanges[currentIdx].id, [currentIdx]);
 
-  const currentLevel = useMemo(() => t(LEVEL_RANGES[currentIdx].labelKey), [currentIdx, t]);
+  const currentLevel = useMemo(() => t(awardLevelRanges[currentIdx].labelKey), [currentIdx, t]);
 
   const nextLevel = useMemo(() => {
-    if (currentIdx < LEVEL_RANGES.length - 1) {
-      return t(LEVEL_RANGES[currentIdx + 1].labelKey);
+    if (currentIdx < awardLevelRanges.length - 1) {
+      return t(awardLevelRanges[currentIdx + 1].labelKey);
     }
     return '';
   }, [currentIdx, t]);
 
   const progressPercent = useMemo(() => {
-    if (currentIdx === LEVEL_RANGES.length - 1) {
+    if (currentIdx === awardLevelRanges.length - 1) {
       return 1.0;
     }
-    const currentLvl = LEVEL_RANGES[currentIdx];
+    const currentLvl = awardLevelRanges[currentIdx];
     const range = currentLvl.max - currentLvl.min + 1;
     const pointsInLevel = totalPoints - currentLvl.min;
     const partialProgress = pointsInLevel / range;
@@ -216,12 +121,12 @@ const AwardScreen = () => {
                 <AppText variant="caption" color="rgba(255,255,255,0.85)">
                   {t('awards.yourTotalPoints')}
                 </AppText>
-                <AppText variant="display" color={colors.white} style={styles.totalPointsValue}>
+                <AppText variant="display" color={colors.white}>
                   {totalPoints.toLocaleString()}
                 </AppText>
               </View>
               <View style={styles.rewardIconWrapper}>
-                <Image source={require('../../../assets/images/energizer_dark.png')} style={styles.awardImage} />
+                <Image source={APP_IMAGES.energizerDark} style={styles.awardImage} />
               </View>
             </View>
 
@@ -260,7 +165,7 @@ const AwardScreen = () => {
         </AppText>
 
         <View style={styles.awardGrid}>
-          {AWARD_LEVELS.map((item) => (
+          {awardLevels.map((item) => (
             <AwardCard
               key={item.id}
               item={item}
@@ -278,10 +183,10 @@ const AwardScreen = () => {
         </AppText>
 
         <View style={styles.earnCard} >
-          {EARN_POINTS.map((item, index) => (
+          {earnPoints.map((item, index) => (
             <React.Fragment key={item.id}>
               <EarnRow item={item} styles={styles} colors={colors} t={t} />
-              {index < EARN_POINTS.length - 1 && (
+              {index < earnPoints.length - 1 && (
                 <Divider style={styles.earnDivider} />
               )}
             </React.Fragment>

@@ -6,76 +6,37 @@ import { useTranslation } from '../../../i18n/useTranslation';
 import { AppText, SafeContainer, AppModal, Header } from '../../../components/common';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createStyles } from './styles';
+import { APP_IMAGES } from '../../../constants/images';
+import {
+  leaderboardFilterOptions,
+  leaderboardData,
+  yourRankData,
+} from '../../../constants/mockData';
 
-const userAvatar = require('../../../assets/images/user.png');
 
-const FILTER_OPTIONS = [
-  { id: 'allTime', labelKey: 'leaderboard.allTime' },
-  { id: 'week', labelKey: 'leaderboard.thisWeek' },
-  { id: 'month', labelKey: 'leaderboard.thisMonth' },
-];
-
-const LEADERBOARD_DATA = {
-  week: [
-    { id: '1', rank: 1, name: 'Emma Carter', points: 28400, avatar: userAvatar },
-    { id: '2', rank: 2, name: 'Liam Reynolds', points: 18000, avatar: userAvatar },
-    { id: '3', rank: 3, name: 'Olivia Martinez', points: 5400, avatar: userAvatar },
-    { id: '4', rank: 4, name: 'Noah Thompson', points: 800, avatar: userAvatar },
-    { id: '5', rank: 5, name: 'Ava Wilson', points: 650, avatar: userAvatar },
-    { id: '6', rank: 6, name: 'Benjamin Davis', points: 250, avatar: userAvatar },
-    { id: '7', rank: 7, name: 'Albert Flores', points: 150, avatar: userAvatar },
-    { id: '8', rank: 8, name: 'Ralph Edwards', points: 50, avatar: userAvatar },
-  ],
-  month: [
-    { id: '1', rank: 1, name: 'Noah Thompson', points: 23499, avatar: userAvatar },
-    { id: '2', rank: 2, name: 'Liam Reynolds', points: 17500, avatar: userAvatar },
-    { id: '3', rank: 3, name: 'Benjamin Davis', points: 5200, avatar: userAvatar },
-    { id: '4', rank: 4, name: 'Ava Wilson', points: 799, avatar: userAvatar },
-    { id: '5', rank: 5, name: 'Albert Flores', points: 656, avatar: userAvatar },
-    { id: '6', rank: 6, name: 'Olivia Martinez', points: 269, avatar: userAvatar },
-    { id: '7', rank: 7, name: 'Emma Carter', points: 130, avatar: userAvatar },
-    { id: '8', rank: 8, name: 'Ralph Edwards', points: 20, avatar: userAvatar },
-  ],
-  allTime: [
-    { id: '1', rank: 1, name: 'Noah Thompson', points: 25560, avatar: userAvatar },
-    { id: '2', rank: 2, name: 'Emma Carter', points: 16720, avatar: userAvatar },
-    { id: '3', rank: 3, name: 'Liam Reynolds', points: 5600, avatar: userAvatar },
-    { id: '4', rank: 4, name: 'Ava Wilson', points: 769, avatar: userAvatar },
-    { id: '5', rank: 5, name: 'Olivia Martinez', points: 648, avatar: userAvatar },
-    { id: '6', rank: 6, name: 'Albert Flores', points: 278, avatar: userAvatar },
-    { id: '7', rank: 7, name: 'Benjamin Davis', points: 120, avatar: userAvatar },
-    { id: '8', rank: 8, name: 'Ralph Edwards', points: 30, avatar: userAvatar },
-  ],
-};
-
-const YOUR_RANK_DATA = {
-  week: { rank: 12, points: 580 },
-  month: { rank: 8, points: 25000 },
-  allTime: { rank: 15, points: 8920 },
-};
 
 const formatPoints = (pts) => pts.toLocaleString();
 
 const getRankIcon = (points) => {
-  if (points >= 20000) return { imgUrl: require('../../../assets/icons/elite_icon.png') };
-  if (points >= 10000) return { imgUrl: require('../../../assets/icons/legend_icon.png') };
-  if (points >= 1000) return { imgUrl: require('../../../assets/icons/champion_icon.png') };
-  if (points >= 700) return { imgUrl: require('../../../assets/icons/achiever_icon.png') };
-  if (points >= 400) return { imgUrl: require('../../../assets/icons/energizer_icon.png') };
-  if (points >= 200) return { imgUrl: require('../../../assets/icons/supporter_icon.png') };
-  if (points >= 100) return { imgUrl: require('../../../assets/icons/rising_star_icon.png') };
-  return { imgUrl: require('../../../assets/icons/starter_icon.png') };
+  if (points >= 20000) return { imgUrl: APP_IMAGES.eliteIcon };
+  if (points >= 10000) return { imgUrl: APP_IMAGES.legendIcon };
+  if (points >= 1000)  return { imgUrl: APP_IMAGES.championIcon };
+  if (points >= 700)   return { imgUrl: APP_IMAGES.achieverIcon };
+  if (points >= 400)   return { imgUrl: APP_IMAGES.energizerIcon };
+  if (points >= 200)   return { imgUrl: APP_IMAGES.supporterIcon };
+  if (points >= 100)   return { imgUrl: APP_IMAGES.risingStarIcon };
+  return { imgUrl: APP_IMAGES.starterIcon };
 };
 
 const getRankImage = (points) => {
-  if (points >= 20000) return require('../../../assets/images/elite.png');
-  if (points >= 10000) return require('../../../assets/images/legend.png');
-  if (points >= 1000) return require('../../../assets/images/champion.png');
-  if (points >= 700) return require('../../../assets/images/achiever.png');
-  if (points >= 400) return require('../../../assets/images/energizer_dark.png');
-  if (points >= 200) return require('../../../assets/images/supporter.png');
-  if (points >= 100) return require('../../../assets/images/rising_star.png');
-  return require('../../../assets/images/starter.png');
+  if (points >= 20000) return APP_IMAGES.elite;
+  if (points >= 10000) return APP_IMAGES.legend;
+  if (points >= 1000)  return APP_IMAGES.champion;
+  if (points >= 700)   return APP_IMAGES.achiever;
+  if (points >= 400)   return APP_IMAGES.energizerDark;
+  if (points >= 200)   return APP_IMAGES.supporter;
+  if (points >= 100)   return APP_IMAGES.risingStar;
+  return APP_IMAGES.starter;
 };
 
 const LeaderboardItem = memo(({ item, styles, colors, t, index }) => {
@@ -115,13 +76,13 @@ const LeaderboardScreen = () => {
   const navigation = useNavigation();
   const { colors, spacing, borderRadius, shadows } = useTheme();
   const { t } = useTranslation();
-  const styles = useMemo(() => createStyles({ colors, spacing, borderRadius }), [colors, spacing, borderRadius]);
+  const styles = useMemo(() => createStyles({ colors, spacing, borderRadius, shadows }), [colors, spacing, borderRadius, shadows]);
 
   const [selectedFilter, setSelectedFilter] = useState('allTime');
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const leaderboardData = useMemo(() => LEADERBOARD_DATA[selectedFilter], [selectedFilter]);
-  const yourRank = useMemo(() => YOUR_RANK_DATA[selectedFilter], [selectedFilter]);
+  const currentLeaderboard = useMemo(() => leaderboardData[selectedFilter], [selectedFilter]);
+  const yourRank = useMemo(() => yourRankData[selectedFilter], [selectedFilter]);
 
   const handlePrevious = useCallback(() => {
     if (navigation.canGoBack()) navigation.goBack();
@@ -141,7 +102,7 @@ const LeaderboardScreen = () => {
   }, []);
 
   const selectedLabel = useMemo(() => {
-    const opt = FILTER_OPTIONS.find(o => o.id === selectedFilter);
+    const opt = leaderboardFilterOptions.find(o => o.id === selectedFilter);
     return t(opt?.labelKey || 'leaderboard.thisWeek');
   }, [selectedFilter, t]);
 
@@ -218,7 +179,7 @@ const LeaderboardScreen = () => {
           title={t('leaderboard.title')}
         >
           <FlatList
-            data={FILTER_OPTIONS}
+            data={leaderboardFilterOptions}
             keyExtractor={(item) => item.id}
             renderItem={renderFilterItem}
             showsVerticalScrollIndicator={false}
@@ -228,7 +189,7 @@ const LeaderboardScreen = () => {
       </View>
 
       <FlatList
-        data={leaderboardData}
+        data={currentLeaderboard}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.listContent}
@@ -237,7 +198,7 @@ const LeaderboardScreen = () => {
         style={styles.list}
       />
 
-      <View style={[styles.yourRankCard, shadows.card, styles.rowSelected]}>
+      <View style={[styles.yourRankCard, styles.rowSelected]}>
         <View style={styles.topRow}>
           <View style={styles.yourRankLeft}>
             <AppText
@@ -260,12 +221,11 @@ const LeaderboardScreen = () => {
               </AppText>
             </View>
           </View>
-
           <Image source={getRankImage(yourRank?.points ?? 0)} style={styles.thumbnailImage} />
         </View>
 
         <View
-          style={[styles.separator, { backgroundColor: colors.border }]}
+          style={styles.separator}
           pointerEvents="none"
         />
 

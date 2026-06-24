@@ -1,19 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-export const createStyles = ({ colors, spacing, borderRadius }) =>
+export const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background,
     },
 
-    backBtn: {
-      width: 32,
-      height: 32,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginRight: spacing[2],
-    },
 
     // ── Filter dropdown ─────────────────────────────────────────────────
     filterContainer: {
@@ -119,7 +112,8 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       borderRadius: 12,
       borderWidth: 1,
       borderColor: colors.cardBorder,
-      marginTop: spacing[3]
+      marginTop: spacing[3],
+      ...shadows.card,
     },
     topRow: {
       flexDirection: 'row',
@@ -131,6 +125,7 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
     separator: {
       height: 1,
       marginVertical: spacing[1],
+      backgroundColor: colors.border,
     },
     yourRankLabel: {
       marginBottom: spacing[1],

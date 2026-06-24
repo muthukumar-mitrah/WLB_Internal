@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { fontSize, fontWeight } from '../../../theme/fonts';
 
 const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
   StyleSheet.create({
@@ -204,14 +205,15 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       marginBottom: 4,
     },
     buddyName: {
-      fontSize: 16,
-      fontWeight: 'bold',
+      fontSize: 14,
+      fontWeight: fontWeight.semiBold,
       color: colors.textPrimary,
     },
     descriptionText: {
-      fontSize: 14,
+      fontSize: 12,
+      fontWeight: fontWeight.regular,
       color: colors.textSecondary,
-      lineHeight: 20,
+      lineHeight: 18,
       marginBottom: 8,
     },
     matchBadge: {
@@ -224,14 +226,13 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       backgroundColor: 'rgba(22, 163, 74, 0.2)',
     },
     matchBadgeText: {
-      fontSize: 12,
-      fontWeight: '600',
+      fontSize: 10,
+      fontWeight: fontWeight.semiBold,
       color: '#16A34A',
     },
     infoRow: {
       flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
       gap: 6,
     },
     infoItem: {
@@ -252,12 +253,12 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       gap: 12,
-      marginTop: 16,
+      marginVertical:spacing[4]
     },
     viewProfileButton: {
       flex: 1,
       backgroundColor: '#F3F4F6',
-      height: 44,
+      height: 32,
       borderRadius: borderRadius.md,
       justifyContent: 'center',
       alignItems: 'center',
@@ -270,7 +271,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
     requestBuddyButton: {
       flex: 1,
       backgroundColor: colors.primary,
-      height: 44,
+      height: 32,
       borderRadius: borderRadius.md,
       justifyContent: 'center',
       alignItems: 'center',
