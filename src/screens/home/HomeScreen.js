@@ -77,6 +77,10 @@ const HomeScreen = ({ navigation }) => {
     commentsSheetRef.current?.open();
   }, []);
 
+  const handleFilterPress = () => {
+    navigation.navigate(ROUTES.POST_FILTER);
+  };
+
 const handleRobiFilterPress = useCallback(async () => {
     const accepted = await storage.getItem(
       STORAGE_KEYS.ROBI_QUICK_ANSWER_DISCLAIMER_ACCEPTED,
@@ -226,7 +230,7 @@ const handleRobiFilterPress = useCallback(async () => {
       {activeTab === 'wlb' && (
         <FilterHeader
           onRobiPress={handleRobiFilterPress}
-          onFilterPress={() => {}}
+          onFilterPress={handleFilterPress}
         />
       )}
       {isGroupsTab ? (

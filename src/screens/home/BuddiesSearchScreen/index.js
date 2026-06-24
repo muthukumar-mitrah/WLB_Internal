@@ -18,11 +18,11 @@ import {
   InputBox,
   Button,
   ToastService,
+  CountrySelector,
 } from '../../../components/common';
 import {
   GenderButtons,
   RangeSliderSection,
-  CountrySelector,
   generateScaleValues,
 } from '../../../components/common/BuddyFilters';
 import { useTranslation } from '../../../i18n/useTranslation';
@@ -63,9 +63,8 @@ const FindSupportiveBuddiesScreen = () => {
   const [gender, setGender] = useState('All');
   const [buddyAge, setBuddyAge] = useState({ min: 25, max: 45 });
   const [country, setCountry] = useState('');
-  const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [selectedSupportTypes, setSelectedSupportTypes] = useState([]);
-  const [advancedExpanded, setAdvancedExpanded] = useState(false);
+  const [advancedExpanded, setAdvancedExpanded] = useState(true);
 
   const [weightUnit, setWeightUnit] = useState('lbs');
   const [currentWeightKg, setCurrentWeightKg] = useState({ min: 78, max: 111 });
@@ -92,13 +91,6 @@ const FindSupportiveBuddiesScreen = () => {
     setWantsToLoseKg(loseUnit === 'lbs' ? lbsToKg(val) : val);
   }, [loseUnit]);
   const handleLoseUnit = useCallback(u => setLoseUnit(u), []);
-
-  const handleOpenCountry = useCallback(() => setCountryModalVisible(true), []);
-  const handleCloseCountry = useCallback(() => setCountryModalVisible(false), []);
-  const handleSelectCountry = useCallback(val => {
-    setCountry(val);
-    setCountryModalVisible(false);
-  }, []);
 
   const toggleSupportType = useCallback((type) => {
     setSelectedSupportTypes(prev =>
@@ -208,22 +200,15 @@ const FindSupportiveBuddiesScreen = () => {
               onInteractionStart={handleInteractionStart}
               onInteractionEnd={handleInteractionEnd}
               fixedScaleLabels={buddyAgeScale}
+              valueFormatter={(value) => `${value}`}
             />
           </View>
 
           {/* Country */}
           <View style={styles.sectionContainer}>
             <CountrySelector
-              country={country}
-              colors={colors}
-              spacing={spacing}
-              borderRadius={borderRadius}
-              t={t}
-              modalVisible={countryModalVisible}
-              onOpenModal={handleOpenCountry}
-              onCloseModal={handleCloseCountry}
-              onSelectCountry={handleSelectCountry}
-              styles={styles}
+              value={country}
+              onSelect={setCountry}
             />
           </View>
 
@@ -257,14 +242,14 @@ const FindSupportiveBuddiesScreen = () => {
           >
             <AppText style={styles.accordionTitle}>{t('buddiesSearch.advancedSettings')}</AppText>
             <IonIcon
-              name={advancedExpanded ? 'chevron-up' : 'chevron-down'}
+              name={advancedExpanded ? 'chevron-down' : 'chevron-up'}
               size={20}
               color={colors.textSecondary}
             />
           </TouchableOpacity>
           
           {advancedExpanded && (
-            <View style={styles.accordionContent}>
+            <View>
               {/* Current Weight */}
               <View style={styles.sectionContainer}>
                 <RangeSliderSection
@@ -281,6 +266,7 @@ const FindSupportiveBuddiesScreen = () => {
                   onInteractionStart={handleInteractionStart}
                   onInteractionEnd={handleInteractionEnd}
                   fixedScaleLabels={weightScale}
+                  valueFormatter={(value) => `${value} ${weightUnit}`}
                 />
               </View>
 
@@ -301,6 +287,7 @@ const FindSupportiveBuddiesScreen = () => {
                   onInteractionStart={handleInteractionStart}
                   onInteractionEnd={handleInteractionEnd}
                   fixedScaleLabels={loseScale}
+                  valueFormatter={(value) => `${value} ${loseUnit}`}
                 />
               </View>
             </View>

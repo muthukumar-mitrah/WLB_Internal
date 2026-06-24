@@ -6,6 +6,9 @@ export const AI_BUDDIES = [
     description: 'Melissa provides consistent support. Her reassurance is always there when needed.',
     about: 'Melissa is a reliable source of support. Her comforting presence is always available whenever you need it.',
     image: 'https://randomuser.me/api/portraits/women/44.jpg',
+        age: 28,
+    country: 'Canada',
+    goalLbs: 15,
     specialties: [
       'Weight Loss',
       'Daily Motivation',
@@ -19,6 +22,9 @@ export const AI_BUDDIES = [
     description: 'Alex is a sharp, strategic advisor for smart moves.',
     about: 'Alex offers well-researched advice and guides you to make smart, strategic choices.',
     image: 'https://randomuser.me/api/portraits/men/32.jpg',
+    age: 38,
+    country: 'USA',
+    goalLbs: 25,
     specialties: [
       'Nutrition',
       'Healthy Meals',
@@ -32,6 +38,9 @@ export const AI_BUDDIES = [
     description: 'Daniel is a dependable companion who supports you through challenges, always ready to help or share a laugh.',
     about: 'Daniel is a dependable companion who supports you through challenges, always ready to help or share a laugh.',
     image: 'https://randomuser.me/api/portraits/men/51.jpg',
+    age: 22,
+    country: 'UK',
+    goalLbs: 12,
     specialties: [
       'Mindfulness',
       'Stress Management',
@@ -45,6 +54,9 @@ export const AI_BUDDIES = [
     description: 'Keith is a calm advisor who helps users make sound decisions with insightful analysis and tailored recommendations.',
     about: 'Keith is a calm advisor who helps users make sound decisions with insightful analysis and tailored recommendations.',
     image: 'https://randomuser.me/api/portraits/men/45.jpg',
+    age: 25,
+    country: 'United States',
+    goalLbs: 25,
     specialties: [
       'Goal Tracking',
       'Motivation',
@@ -58,6 +70,9 @@ export const AI_BUDDIES = [
     description: 'Aria is a vibrant coach who empowers individuals to unlock their potential and embrace their strengths on a journey of self-discovery.',
     about: 'Aria is a vibrant coach who empowers individuals to unlock their potential and embrace their strengths on a journey of self-discovery.',
     image: 'https://randomuser.me/api/portraits/women/68.jpg',
+    age: 40,
+    country: 'United States',
+    goalLbs: 40,
     specialties: [
       'Weight Management',
       'Meal Planning',
@@ -71,6 +86,9 @@ export const AI_BUDDIES = [
     description: 'Naomi offers guidance grounded in experience today',
     about: 'Naomi offers guidance grounded in experience today',
     image: 'https://randomuser.me/api/portraits/women/25.jpg',
+    age: 25,
+    country: 'United States',
+    goalLbs: 15,
     specialties: [
       'Mindfulness',
       'Stress Management',
@@ -84,6 +102,9 @@ export const AI_BUDDIES = [
     description: 'Natalie motivates action with clear, supportive guidance.',
     about: 'Natalie motivates action with clear, supportive guidance.',
     image: 'https://randomuser.me/api/portraits/women/69.jpg',
+    age: 40,
+    country: 'United States',
+    goalLbs: 35,
     specialties: [
       'Goal Tracking',
       'Motivation',

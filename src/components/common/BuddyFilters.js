@@ -1,16 +1,7 @@
-import React, { memo, useMemo, useState, useCallback } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Switch,
-  StyleSheet,
-  TextInput,
-  FlatList,
-} from 'react-native';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-import { AppText, AppModal } from '.';
+import React, { memo, useMemo } from 'react';
+import { View, TouchableOpacity, Switch, StyleSheet } from 'react-native';
+import { AppText } from '.';
 import RulerPicker from './RulerPicker';
-import { COUNTRIES, countryCodeToFlag } from '../../constants/countries';
 
 export const generateScaleValues = (min, max, count = 6) => {
   const step = (max - min) / (count - 1);
@@ -49,7 +40,7 @@ export const SwitchRow = memo(({ label, subLabel, value, onValueChange, colors, 
   );
 });
 
-export const GenderButtons = memo(({ gender, onGenderChange, colors, borderRadius, t, styles }) => (
+export const GenderButtons = memo(({ gender, onGenderChange, t, styles }) => (
   <View style={styles?.genderRow}>
     {GENDER_OPTIONS.map(g => {
       const isActive = gender === g.value;
@@ -80,11 +71,11 @@ export const UnitToggle = memo(({ unit, onUnitChange, colors }) => {
       borderRadius: 6,
       borderWidth: 1,
       borderColor: colors.border,
-      padding: 2,
+      padding: 1,
     },
-    btn: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 4 },
+    btn: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 8 },
     btnActive: { backgroundColor: colors.primary },
-    text: { fontSize: 12, fontWeight: '600', color: colors.textSecondary },
+    text: { fontSize: 12, fontWeight: '500', color: colors.textSecondary },
     textActive: { color: '#FFFFFF' },
   }), [colors]);
 
@@ -112,7 +103,7 @@ export const RangeSliderSection = memo(({
   label, min, max, minValue, maxValue, onValuesChange,
   value, onValueChange, isRange = true,
   unit, showUnitToggle = false, onUnitChange, colors, styles, bgColor,
-  onInteractionStart, onInteractionEnd, fixedScaleLabels
+  onInteractionStart, onInteractionEnd, fixedScaleLabels, valueFormatter
 }) => {
   return (
     <View style={styles?.sliderRow} >
@@ -143,121 +134,9 @@ export const RangeSliderSection = memo(({
           valueUnit={!isRange ? unit : undefined}
           onValuesChangeStart={onInteractionStart}
           onValuesChangeFinish={onInteractionEnd}
+          valueFormatter={valueFormatter}
         />
       </View>
     </View>
-  );
-});
-
-export const CountrySelector = memo(({
-  country, colors, spacing, borderRadius, t,
-  modalVisible, onOpenModal, onCloseModal, onSelectCountry, styles
-}) => {
-  const [countrySearch, setCountrySearch] = useState('');
-
-  const selectedCountry = useMemo(
-    () => COUNTRIES.find(c => c.value === country) || null,
-    [country],
-  );
-
-  const filteredCountries = useMemo(() => {
-    const q = countrySearch.trim().toLowerCase();
-    if (!q) return COUNTRIES;
-    return COUNTRIES.filter(c => c.label.toLowerCase().includes(q));
-  }, [countrySearch]);
-
-  const handleOpen = useCallback(() => {
-    setCountrySearch('');
-    onOpenModal();
-  }, [onOpenModal]);
-
-  const renderItem = useCallback(({ item }) => {
-    const isSelected = item.value === country;
-    return (
-      <TouchableOpacity
-        style={[
-          styles?.countryItemRow,
-          isSelected && styles?.countryItemRowSelected
-        ]}
-        onPress={() => onSelectCountry(item.value)}
-        activeOpacity={0.7}
-      >
-        <View style={styles?.countryItemContent}>
-          <AppText style={styles?.countryItemFlag}>
-            {countryCodeToFlag(item.value)}
-          </AppText>
-          <AppText
-            variant="body"
-            color={isSelected ? colors.primary : colors.textPrimary}
-            style={isSelected ? styles?.countryItemTextSelected : undefined}
-          >
-            {item.label}
-          </AppText>
-        </View>
-        {isSelected ? <IonIcon name="checkmark-circle" size={20} color={colors.primary} /> : null}
-      </TouchableOpacity>
-    );
-  }, [country, colors, onSelectCountry, styles]);
-
-  const keyExtractor = useCallback(item => item.value, []);
-
-  return (
-    <>
-      <AppText style={styles?.formLabel}>
-        {t('basicInfo.countryLabel')}
-      </AppText>
-      <TouchableOpacity
-        style={styles?.countryDropdown}
-        onPress={handleOpen}
-        activeOpacity={0.8}
-      >
-        {selectedCountry ? (
-          <View style={styles?.countryDropdownContent}>
-            <AppText style={styles?.countryDropdownFlag}>
-              {countryCodeToFlag(selectedCountry.value)}
-            </AppText>
-            <AppText variant="body" style={styles?.countryDropdownText}>
-              {selectedCountry.label}
-            </AppText>
-          </View>
-        ) : (
-          <AppText variant="body" style={styles?.countryDropdownPlaceholder}>All Countries</AppText>
-        )}
-        <IonIcon name="chevron-down" size={18} color={colors.textSecondary} />
-      </TouchableOpacity>
-
-      <AppModal
-        visible={modalVisible}
-        onClose={onCloseModal}
-        title={t('modals.selectCountry.title')}
-      >
-        <View style={styles?.countrySearchContainerModal}>
-          <TextInput
-            style={styles?.countrySearchInputModal}
-            placeholder="Search country..."
-            placeholderTextColor={colors.textSecondary}
-            value={countrySearch}
-            onChangeText={setCountrySearch}
-            autoCorrect={false}
-            autoCapitalize="words"
-            clearButtonMode="while-editing"
-          />
-          <IonIcon name="search-outline" size={16} color={colors.textSecondary} />
-        </View>
-        <FlatList
-          data={filteredCountries}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          style={styles?.countryListContainer}
-          keyboardShouldPersistTaps="handled"
-          ListEmptyComponent={
-            <AppText variant="body" color={colors.textSecondary} style={styles?.countryEmptyText}>
-              No countries found
-            </AppText>
-          }
-        />
-      </AppModal>
-    </>
   );
 });

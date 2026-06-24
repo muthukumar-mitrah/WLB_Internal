@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-const createStyles = ({colors, spacing, borderRadius, shadows}) =>
+const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -32,10 +32,11 @@ const createStyles = ({colors, spacing, borderRadius, shadows}) =>
     },
     secondaryButton: {
       flex: 1,
-      backgroundColor: colors.backgroundSecondary,
+      backgroundColor: isDark
+        ? colors.surfaceElevated
+        : colors.backgroundTertiary,
       borderRadius: borderRadius.lg,
       borderWidth: 0,
-      ...shadows.sm,
     },
 
     /* ── Weight Progress Card (own profile) ── */

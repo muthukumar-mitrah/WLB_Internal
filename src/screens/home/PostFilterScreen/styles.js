@@ -45,7 +45,8 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       marginBottom: 12,
     },
     sectionContainer: {
-      marginTop: 8
+      paddingHorizontal: 5,
+      marginBottom: spacing[4],
     },
 
     // ── People Tab — compact non-scrolling layout ─────────────────────────────
@@ -122,22 +123,7 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       color: colors.textSecondary,
       marginTop: 2,
     },
-    // ── Country dropdown ──────────────────────────────────────────────────────
-    countryDropdown: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      backgroundColor: colors.card || colors.backgroundSecondary,
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: borderRadius.md || 8,
-      paddingHorizontal: 12,
-      paddingVertical: 12,
-    },
-    countryDropdownText: {
-      fontSize: 14,
-      color: colors.textPrimary,
-    },
+
     // ── Footer ────────────────────────────────────────────────────────────────
     footer: {
       paddingTop: 12,

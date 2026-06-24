@@ -22,41 +22,14 @@ import {
 } from '../../../components/common';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { ROUTES } from '../../../constants';
+import { AI_BUDDIES } from '../../../constants/aiBuddyConstants';
 import createStyles from './styles';
 
-// Mock Data
-const MOCK_BUDDIES = [
-  {
-    id: '1',
-    name: 'David J.',
-    matchPercent: 96,
-    description: 'Similar goal, prefers daily check-ins, and wants motivation support.',
-    age: 32,
-    country: 'United States',
-    goalLbs: 40,
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-  },
-  {
-    id: '2',
-    name: 'Sarah M.',
-    matchPercent: 88,
-    description: 'Looking for a walking buddy and someone to share healthy meals with.',
-    age: 28,
-    country: 'Canada',
-    goalLbs: 15,
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026703d',
-  },
-  {
-    id: '3',
-    name: 'Michael K.',
-    matchPercent: 75,
-    description: 'Beginner friendly support needed, focuses on consistency.',
-    age: 41,
-    country: 'United Kingdom',
-    goalLbs: 25,
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026702d',
-  },
-];
+// Enhance AI_BUDDIES with mock match percent for the result screen
+const AI_BUDDY_RESULTS = AI_BUDDIES.map((buddy, index) => ({
+  ...buddy,
+  matchPercent: 96 - (index * 3), // mock match percentage
+}));
 
 const BuddyCard = memo(({ item, t, colors, isDark, styles, onProfilePress, onRequestPress }) => {
   return (
@@ -64,7 +37,7 @@ const BuddyCard = memo(({ item, t, colors, isDark, styles, onProfilePress, onReq
       <View style={styles.cardHeader}>
         <View style={styles.avatarContainer}>
           <Image
-            source={{ uri: item.avatar }}
+            source={{ uri: item.image }}
             style={styles.avatar}
           />
         </View>
@@ -73,7 +46,7 @@ const BuddyCard = memo(({ item, t, colors, isDark, styles, onProfilePress, onReq
             <AppText style={styles.buddyName}>{item.name}</AppText>
             <View style={[styles.matchBadge, isDark && styles.matchBadgeDark]}>
               <AppText style={styles.matchBadgeText}>
-                {t('buddiesSearch.matchPercent', { percent: item.matchPercent })}
+                {t('buddiesSearch.matchPercent', { percent: item.matchPercent || 90 })}
               </AppText>
             </View>
           </View>
@@ -157,8 +130,7 @@ const BuddySearchResultScreen = () => {
   }, [loadingMore]);
 
   const handleViewProfile = useCallback((buddy) => {
-    // Navigating to profile requires userId, using 'VIEW_PROFILE' from routes
-    navigation.navigate(ROUTES.VIEW_PROFILE, { userId: buddy.id });
+    navigation.navigate(ROUTES.AI_BUDDY_DETAILS, { buddyId: buddy.id });
   }, [navigation]);
 
   const handleRequestBuddy = useCallback((buddy) => {
@@ -214,7 +186,7 @@ const BuddySearchResultScreen = () => {
         </View>
 
         <AppFlatList
-          data={MOCK_BUDDIES}
+          data={AI_BUDDY_RESULTS}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContainer}

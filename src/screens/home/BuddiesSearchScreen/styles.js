@@ -5,7 +5,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
     container: {
       flex: 1,
       backgroundColor: colors.background,
-      marginHorizontal:4
+      marginHorizontal:1
     },
     scrollViewContent: {
       paddingBottom: spacing[6],
@@ -36,6 +36,12 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
     },
     searchIcon: {
       padding: 4,
+    },
+    unitLabel: {
+      fontSize: 12,
+      fontWeight: '500',
+      color: colors.textPrimary,
+      marginTop: spacing[1],
     },
     formLabel: {
       fontSize: 16,
@@ -101,84 +107,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       color: colors.textSecondary,
       marginTop: 2,
     },
-    countryDropdown: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      backgroundColor: colors.card || colors.backgroundSecondary,
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: borderRadius.md || 8,
-      paddingHorizontal: 12,
-      paddingVertical: 12,
-    },
-    countryDropdownText: {
-      fontSize: 14,
-      color: colors.textPrimary,
-    },
-    countryItemRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingVertical: spacing[3],
-      paddingHorizontal: spacing[2],
-    },
-    countryItemRowSelected: {
-      backgroundColor: colors.primarySurface,
-      borderRadius: borderRadius.md,
-    },
-    countryItemContent: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
-    },
-    countryItemFlag: {
-      fontSize: 22,
-      marginRight: spacing[3],
-      lineHeight: 28,
-    },
-    countryItemTextSelected: {
-      fontWeight: '600',
-    },
-    countryDropdownContent: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
-    },
-    countryDropdownFlag: {
-      fontSize: 22,
-      marginRight: spacing[2],
-      lineHeight: 28,
-    },
-    countryDropdownPlaceholder: {
-      color: colors.textSecondary,
-    },
-    countrySearchContainerModal: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: colors.backgroundSecondary,
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: borderRadius.md,
-      paddingHorizontal: spacing[3],
-      marginBottom: spacing[3],
-      height: 42,
-    },
-    countrySearchInputModal: {
-      flex: 1,
-      fontSize: 14,
-      color: colors.textPrimary,
-      paddingVertical: 0,
-      height: '100%',
-    },
-    countryListContainer: {
-      height: 420,
-      marginBottom: spacing[4],
-    },
-    countryEmptyText: {
-      textAlign: 'center',
-      paddingVertical: spacing[6],
-    },
+
     chipGrid: {
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -190,7 +119,6 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       borderRadius: borderRadius.md,
       borderWidth: 1,
       borderColor: colors.border,
-      backgroundColor: colors.backgroundSecondary,
     },
     chipActive: {
       backgroundColor: colors.primary,
@@ -214,10 +142,6 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       fontSize: 16,
       fontWeight: '600',
       color: colors.textPrimary,
-    },
-    accordionContent: {
-      paddingHorizontal: spacing[5],
-      paddingTop: spacing[2],
     },
     footer: {
       paddingHorizontal: spacing[5],

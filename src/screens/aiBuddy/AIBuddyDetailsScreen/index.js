@@ -68,7 +68,7 @@ const AIBuddyDetailsScreen = () => {
   if (!buddy && !loading) {
     return (
       <SafeContainer edges={['top', 'bottom']}>
-        <Header title={t('aiBuddy.details.title', 'AI Buddy Profile')} onBackPress={() => navigation.goBack()} />
+        <Header title={t('aiBuddy.details.title')} onBackPress={() => navigation.goBack()} />
         <View style={styles.centerContainer}>
           <AppText variant="bodyLarge" color={colors.textSecondary}>Buddy not found</AppText>
         </View>
@@ -79,7 +79,7 @@ const AIBuddyDetailsScreen = () => {
   if (loading || !formattedProfile) {
     return (
       <SafeContainer edges={['top', 'bottom']}>
-        <Header title={t('aiBuddy.details.title', 'AI Buddy Profile')} onBackPress={() => navigation.goBack()} />
+        <Header title={t('aiBuddy.details.title')} onBackPress={() => navigation.goBack()} />
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
@@ -94,7 +94,7 @@ const AIBuddyDetailsScreen = () => {
       isAIBuddy={true}
       profile={formattedProfile}
       avatar={buddy.image}
-      headerTitle={t('aiBuddy.details.title', 'AI Buddy Profile')}
+      headerTitle={t('aiBuddy.details.title')}
     />
   );
 };

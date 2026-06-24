@@ -52,12 +52,12 @@ const ProfileScreenContent = ({
 }) => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const {colors, spacing, borderRadius, shadows} = theme;
+  const {colors, spacing, borderRadius, shadows, isDark} = theme;
   const { likePost, savePost } = useFeed();
 
   const styles = useMemo(
-    () => createStyles({colors, spacing, borderRadius, shadows}),
-    [colors, spacing, borderRadius, shadows],
+    () => createStyles({colors, spacing, borderRadius, shadows, isDark}),
+    [colors, spacing, borderRadius, shadows, isDark],
   );
 
   const commentsSheetRef = useRef(null);
@@ -374,7 +374,7 @@ const ProfileScreenContent = ({
         <View style={styles.buttonsRow}>
           <Button
             testID="profile-choose-buddy-btn"
-            title={t('aiBuddy.details.chooseButton', 'Choose as AI Buddy')}
+            title={t('aiBuddy.details.chooseButton')}
             onPress={handleChooseBuddy}
             variant="primary"
             size="md"
@@ -384,7 +384,7 @@ const ProfileScreenContent = ({
           />
           <Button
             testID="profile-follow-btn"
-            title={t('aiBuddy.details.followButton', 'Follow')}
+            title={t('aiBuddy.details.followButton')}
             onPress={handleFollow}
             variant="gray"
             size="md"

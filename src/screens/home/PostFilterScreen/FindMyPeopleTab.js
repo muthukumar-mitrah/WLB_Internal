@@ -9,20 +9,23 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { View,  ScrollView } from 'react-native';
+import {
+  View,
+  ScrollView,
+} from 'react-native';
 import { useTheme } from '../../../theme';
 import { AppText, Button } from '../../../components/common';
 import { useTranslation } from '../../../i18n/useTranslation';
 import createStyles from './styles';
 import { kgToLbs, lbsToKg } from '../../../utils/weightUtils';
+
 import {
   generateScaleValues,
   SwitchRow,
   GenderButtons,
   RangeSliderSection,
-  CountrySelector
 } from '../../../components/common/BuddyFilters';
-
+import { CountrySelector } from '../../../components/common';
 const AGE_MIN = 18;
 const AGE_MAX = 75;
 
@@ -32,8 +35,6 @@ const WEIGHT_MAX_KG = 127;
 const LOSE_MIN_KG = 2;
 const LOSE_MAX_KG = 27;
 
-
-// ── Main tab ───────────────────────────────────────────────────────────────────
 const FindMyPeopleTab = ({ onApply }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
@@ -41,8 +42,6 @@ const FindMyPeopleTab = ({ onApply }) => {
     () => createStyles({ colors, spacing, borderRadius }),
     [colors, spacing, borderRadius]
   );
-
-  // Filter state
   const [seeAll, setSeeAll] = useState(false);
   const [gender, setGender] = useState('All');
   const [buddyAge, setBuddyAge] = useState({ min: 25, max: 45 });
@@ -54,12 +53,10 @@ const FindMyPeopleTab = ({ onApply }) => {
   const [wantsToLoseKg, setWantsToLoseKg] = useState(18);
 
   const [country, setCountry] = useState('');
-  const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [following, setFollowing] = useState(false);
   const [followers, setFollowers] = useState(false);
   const [scrollEnabled, setScrollEnabled] = useState(true);
 
-  // Handlers — all memoized, no inline functions in JSX
   const handleInteractionStart = useCallback(() => setScrollEnabled(false), []);
   const handleInteractionEnd = useCallback(() => setScrollEnabled(true), []);
   const handleSeeAll = useCallback(v => setSeeAll(v), []);
@@ -80,12 +77,6 @@ const FindMyPeopleTab = ({ onApply }) => {
   
   const handleLoseUnit = useCallback(u => setLoseUnit(u), []);
 
-  const handleOpenCountry = useCallback(() => setCountryModalVisible(true), []);
-  const handleCloseCountry = useCallback(() => setCountryModalVisible(false), []);
-  const handleSelectCountry = useCallback(val => {
-    setCountry(val);
-    setCountryModalVisible(false);
-  }, []);
   const handleFollowing = useCallback(v => setFollowing(v), []);
   const handleFollowers = useCallback(v => setFollowers(v), []);
 
@@ -206,19 +197,11 @@ const FindMyPeopleTab = ({ onApply }) => {
         />
       </View>
 
-      {/* Country — same modal as BasicInfoScreen */}
+      {/* Country */}
       <View style={styles.sectionContainer}>
         <CountrySelector
-          country={country}
-          colors={colors}
-          spacing={spacing}
-          borderRadius={borderRadius}
-          t={t}
-          modalVisible={countryModalVisible}
-          onOpenModal={handleOpenCountry}
-          onCloseModal={handleCloseCountry}
-          onSelectCountry={handleSelectCountry}
-          styles={styles}
+          value={country}
+          onSelect={setCountry}
         />
       </View>
 

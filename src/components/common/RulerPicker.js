@@ -86,6 +86,8 @@ const SingleRulerPicker = ({
   minValue: minValueProp,
   maxValue: maxValueProp,
   allowManualScroll = false,
+  showScale = true,
+  showTicks = true,
 }) => {
   const { colors } = useTheme();
   const scrollRef = useRef(null);
@@ -317,7 +319,7 @@ const SingleRulerPicker = ({
       setTimeout(() => setRulerScrollEnabled(allowManualScroll), 100);
     }
   }, [allowManualScroll, getRulerOffsetFromValue, isScrollableScale, onValueChange, setThumbValue]);
-
+  
   const thumbGesture = useMemo(
     () => Gesture.Pan()
       .enabled(interaction === 'thumb')
@@ -326,41 +328,41 @@ const SingleRulerPicker = ({
       .runOnJS(true)
       .onBegin(() => {
         isDraggingThumb.current = true;
-        dragStartX.current = getXFromValue(currentValue.current);
-        if (isScrollableScale) {
-          setRulerScrollEnabled(false);
-        }
-      })
-      .onUpdate((e) => {
-        const width = trackWidthRef.current || trackWidth || RANGE_TRACK_WIDTH;
-        const nextX = Math.max(0, Math.min(dragStartX.current + e.translationX, width));
-        const newValue = getValueFromX(nextX);
-
-        thumbX.setValue(nextX);
-        if (newValue !== currentValue.current) {
-          currentValue.current = newValue;
-          updateValueLabel(newValue);
-          if (isScrollableScale && !isRulerUserScrolling.current) {
-            if (pendingRulerScroll.current) {
-              cancelAnimationFrame(pendingRulerScroll.current);
-            }
-            const offset = getRulerOffsetFromValue(newValue);
-            pendingRulerScroll.current = requestAnimationFrame(() => {
-              pendingRulerScroll.current = null;
-              rulerScrollRef.current?.scrollTo({ x: offset, animated: false });
-            });
+          dragStartX.current = getXFromValue(currentValue.current);
+          if (isScrollableScale) {
+            setRulerScrollEnabled(false);
           }
-        }
-      })
-      .onFinalize(() => {
-        if (isDraggingThumb.current) {
-          finishThumbDrag();
-        } else if (isScrollableScale) {
-          setRulerScrollEnabled(allowManualScroll);
-        }
-      }),
-    [allowManualScroll, finishThumbDrag, getValueFromX, getXFromValue, getRulerOffsetFromValue, interaction, isScrollableScale, thumbX, trackWidth, updateValueLabel],
-  );
+        })
+        .onUpdate((e) => {
+          const width = trackWidthRef.current || trackWidth || RANGE_TRACK_WIDTH;
+          const nextX = Math.max(0, Math.min(dragStartX.current + e.translationX, width));
+          const newValue = getValueFromX(nextX);
+  
+          thumbX.setValue(nextX);
+          if (newValue !== currentValue.current) {
+            currentValue.current = newValue;
+            updateValueLabel(newValue);
+            if (isScrollableScale && !isRulerUserScrolling.current) {
+              if (pendingRulerScroll.current) {
+                cancelAnimationFrame(pendingRulerScroll.current);
+              }
+              const offset = getRulerOffsetFromValue(newValue);
+              pendingRulerScroll.current = requestAnimationFrame(() => {
+                pendingRulerScroll.current = null;
+                rulerScrollRef.current?.scrollTo({ x: offset, animated: false });
+              });
+            }
+          }
+        })
+        .onFinalize(() => {
+          if (isDraggingThumb.current) {
+            finishThumbDrag();
+          } else if (isScrollableScale) {
+            setRulerScrollEnabled(allowManualScroll);
+          }
+        }),
+      [allowManualScroll, finishThumbDrag, getValueFromX, getXFromValue, getRulerOffsetFromValue, interaction, isScrollableScale, thumbX, trackWidth, updateValueLabel],
+    );
 
   if (interaction === 'thumb') {
     const activeWidth = thumbX.interpolate({
@@ -413,7 +415,7 @@ const SingleRulerPicker = ({
             ]}
           />
         </View>
-        {isScrollableScale ? (
+        {showScale && isScrollableScale ? (
           // ── Scrollable ruler (opt-in) ────────────────────────────────────
           <View style={[singleStyles.scrollableRulerContainer, { top: THUMB_RULER_TOP }]}>
             <ScrollView
@@ -429,7 +431,7 @@ const SingleRulerPicker = ({
               onScrollEndDrag={handleRulerScrollEndDrag}
               onScroll={handleRulerScroll}
               scrollEventThrottle={16}
-              contentContainerStyle={singleStyles.zeroPadding}
+              contentContainerStyle={{ paddingLeft: 0, paddingRight: 0 }}
             >
               {rulerData.map((val, index) => {
                 const isMajor = index % majorTickInterval === 0;
@@ -438,13 +440,15 @@ const SingleRulerPicker = ({
                 const shouldRenderLabel = index % Math.max(1, resolvedLabelInterval) === 0;
                 return (
                   <View key={index} style={[singleStyles.tickContainer, { width: itemWidth }]}>
-                    <View
-                      style={[
-                        singleStyles.tick,
-                        isLargeTick ? singleStyles.thumbModeTickLarge : singleStyles.thumbModeTickMinor,
-                        isLargeTick ? singleStyles.thumbModeTickMajorColor : singleStyles.thumbModeTickMinorColor,
-                      ]}
-                    />
+                    {showTicks && (
+                      <View
+                        style={[
+                          singleStyles.tick,
+                          isLargeTick ? singleStyles.thumbModeTickLarge : singleStyles.thumbModeTickMinor,
+                          isLargeTick ? singleStyles.thumbModeTickMajorColor : singleStyles.thumbModeTickMinorColor,
+                        ]}
+                      />
+                    )}
                     {shouldRenderLabel && renderLabel && (
                       <View style={[
                         singleStyles.labelContainer,
@@ -467,7 +471,7 @@ const SingleRulerPicker = ({
               })}
             </ScrollView>
           </View>
-        ) : (
+        ) : showScale ? (
           <View style={[singleStyles.fixedRuler, { top: THUMB_RULER_TOP }]} pointerEvents="none">
             {data.map((val, index) => {
               const isMajor = index % majorTickInterval === 0;
@@ -483,13 +487,15 @@ const SingleRulerPicker = ({
 
               return (
                 <View key={index} style={[singleStyles.fixedTickContainer, { left }]}>
-                  <View
-                    style={[
-                      singleStyles.tick,
-                      isLargeTick ? singleStyles.thumbModeTickLarge : singleStyles.thumbModeTickMinor,
-                      isLargeTick ? singleStyles.thumbModeTickMajorColor : singleStyles.thumbModeTickMinorColor,
-                    ]}
-                  />
+                  {showTicks && (
+                    <View
+                      style={[
+                        singleStyles.tick,
+                        isLargeTick ? singleStyles.thumbModeTickLarge : singleStyles.thumbModeTickMinor,
+                        isLargeTick ? singleStyles.thumbModeTickMajorColor : singleStyles.thumbModeTickMinorColor,
+                      ]}
+                    />
+                  )}
                   {shouldRenderLabel && renderLabel && (
                     <View style={[singleStyles.labelContainer, val === min && singleStyles.labelContainerStart]}>
                       <Text
@@ -509,7 +515,7 @@ const SingleRulerPicker = ({
               );
             })}
           </View>
-        )}
+        ) : null}
 
         {showValueLabel && (() => {
           const LABEL_W = 100;
@@ -523,7 +529,7 @@ const SingleRulerPicker = ({
           });
           return (
             <Animated.View
-              style={[singleStyles.floatingLabelWrapper, { transform: [{ translateX: labelLeft }] }]}
+              style={[singleStyles.floatingLabelWrapper, { top: THUMB_LABEL_TOP, left: 0, transform: [{ translateX: labelLeft }] }]}
               pointerEvents="none"
             >
               <ThumbValueLabel
@@ -545,7 +551,8 @@ const SingleRulerPicker = ({
               transform: [{ translateX: thumbX }],
             },
           ]}
-          pointerEvents="none"
+          hitSlop={{ top: 18, bottom: 18, left: 18, right: 18 }}
+          {...thumbPanResponder.panHandlers}
         >
           <View
             style={[
@@ -592,7 +599,7 @@ const SingleRulerPicker = ({
       <View
         style={[
           singleStyles.indicatorWrapper,
-          singleStyles.indicatorWrapperCenter,
+          { top: TRIANGLE_TOP, left: '50%', marginLeft: -(THUMB_SIZE / 2) },
         ]}
         pointerEvents="none"
       >
@@ -638,13 +645,15 @@ const SingleRulerPicker = ({
           const isMajor = index % majorTickInterval === 0;
           return (
             <View key={index} style={[singleStyles.tickContainer, { width: itemWidth }]}>
-              <View
-                style={[
-                  singleStyles.tick,
-                  isMajor ? singleStyles.tickMajor : singleStyles.tickMinor,
-                  { backgroundColor: colors.gray300 },
-                ]}
-              />
+              {showTicks && (
+                <View
+                  style={[
+                    singleStyles.tick,
+                    isMajor ? singleStyles.tickMajor : singleStyles.tickMinor,
+                    { backgroundColor: colors.gray300 },
+                  ]}
+                />
+              )}
               {isMajor && renderLabel && (
                 <View style={singleStyles.labelContainer}>
                   <Text
@@ -678,14 +687,24 @@ const RangeRulerPicker = ({
   minValue = 30,
   maxValue = 50,
   onValuesChange,
+  showTicks = true,
+  showScale = true,
+  unit = '',
+  fixedScaleLabels,
+  isRange = true,
+  value,
+  onValueChange,
+  onValuesChangeStart,
+  onValuesChangeFinish,
+  valueFormatter,
 }) => {
   const { colors } = useTheme();
 
   const RANGE = max - min;
   const PIXELS_PER_UNIT = RANGE_TRACK_WIDTH / RANGE;
 
-  const initialLeft = Math.max(min, Math.min(minValue, maxValue - MIN_DISTANCE));
-  const initialRight = Math.min(max, Math.max(maxValue, minValue + MIN_DISTANCE));
+  const initialLeft = isRange ? Math.max(min, Math.min(minValue, maxValue - MIN_DISTANCE)) : min;
+  const initialRight = isRange ? Math.min(max, Math.max(maxValue, minValue + MIN_DISTANCE)) : Math.max(min, Math.min(max, value !== undefined ? value : maxValue));
 
   const [leftVal, setLeftVal] = useState(initialLeft);
   const [rightVal, setRightVal] = useState(initialRight);
@@ -701,17 +720,26 @@ const RangeRulerPicker = ({
 
   // Sync from props when they change externally
   useEffect(() => {
-    if (currentLeft.current !== minValue || currentRight.current !== maxValue) {
-      const l = Math.max(min, Math.min(minValue, maxValue - MIN_DISTANCE));
-      const r = Math.min(max, Math.max(maxValue, minValue + MIN_DISTANCE));
-      currentLeft.current = l;
-      currentRight.current = r;
-      setLeftVal(l);
-      setRightVal(r);
-      leftX.setValue((l - min) * PIXELS_PER_UNIT);
-      rightX.setValue((r - min) * PIXELS_PER_UNIT);
+    if (isRange) {
+      if (currentLeft.current !== minValue || currentRight.current !== maxValue) {
+        const l = Math.max(min, Math.min(minValue, maxValue - MIN_DISTANCE));
+        const r = Math.min(max, Math.max(maxValue, minValue + MIN_DISTANCE));
+        currentLeft.current = l;
+        currentRight.current = r;
+        setLeftVal(l);
+        setRightVal(r);
+        leftX.setValue((l - min) * PIXELS_PER_UNIT);
+        rightX.setValue((r - min) * PIXELS_PER_UNIT);
+      }
+    } else {
+      if (value !== undefined && currentRight.current !== value) {
+        const r = Math.max(min, Math.min(max, value));
+        currentRight.current = r;
+        setRightVal(r);
+        rightX.setValue((r - min) * PIXELS_PER_UNIT);
+      }
     }
-  }, [minValue, maxValue, min, max, PIXELS_PER_UNIT, leftX, rightX]);
+  }, [minValue, maxValue, value, min, max, PIXELS_PER_UNIT, leftX, rightX, isRange]);
 
   // ── Scrollable ruler setup (must be before PanResponders) ──
   const ITEM_WIDTH = 12;
@@ -851,7 +879,7 @@ const RangeRulerPicker = ({
       .onFinalize(() => {
         finishRangeDrag();
       }),
-    [min, RANGE, PIXELS_PER_UNIT, leftX, rightX, syncRulerToValue, selectThumbForTouch, finishRangeDrag],
+    [min, RANGE, PIXELS_PER_UNIT, leftX, rightX, syncRulerToValue, selectThumbForTouch, finishRangeDrag]
   );
 
   return (
@@ -870,29 +898,41 @@ const RangeRulerPicker = ({
             ]}
           />
 
-          <Animated.View
+          {isRange && (
+           <Animated.View
             style={[rangeStyles.thumbWrapper, { transform: [{ translateX: leftX }] }]}
             pointerEvents="none"
           >
-            <View style={rangeStyles.thumbLabelContainer}>
+               <View style={rangeStyles.thumbLabelContainer}>
               <AppText variant="bodySmall" style={[rangeStyles.thumbLabel, { color: colors.primary }]}>
-                {leftVal}{' '}<AppText style={[rangeStyles.thumbLabelUnit, { color: colors.primary }]}>y</AppText>
+                {valueFormatter ? valueFormatter(leftVal) : leftVal}
+                {!valueFormatter && unit ? (
+                  <AppText style={[rangeStyles.thumbLabelUnit, { color: colors.primary }]}>
+                    {' '}{unit}
+                  </AppText>
+                ) : null}
               </AppText>
             </View>
-            <View style={[rangeStyles.pointer, { borderBottomColor: colors.primary }]} />
-            <View style={rangeStyles.thumbCenter}>
-              <View style={[rangeStyles.glow, { backgroundColor: `${colors.primary}40` }]} />
-              <View style={[rangeStyles.thumb, { backgroundColor: colors.primary, borderColor: colors.white }]} />
-            </View>
-          </Animated.View>
+              <View style={[rangeStyles.pointer, { borderBottomColor: colors.primary }]} />
+              <View style={rangeStyles.thumbCenter}>
+                <View style={[rangeStyles.glow, { backgroundColor: `${colors.primary}40` }]} />
+                <View style={[rangeStyles.thumb, { backgroundColor: colors.primary, borderColor: colors.white }]} />
+              </View>
+            </Animated.View>
+          )}
 
           <Animated.View
             style={[rangeStyles.thumbWrapper, { transform: [{ translateX: rightX }] }]}
             pointerEvents="none"
           >
-            <View style={rangeStyles.thumbLabelContainer}>
+             <View style={rangeStyles.thumbLabelContainer}>
               <AppText variant="bodySmall" style={[rangeStyles.thumbLabel, { color: colors.primary }]}>
-                {rightVal}{' '}<AppText style={[rangeStyles.thumbLabelUnit, { color: colors.primary }]}>y</AppText>
+                {valueFormatter ? valueFormatter(rightVal) : rightVal}
+                {!valueFormatter && unit ? (
+                  <AppText style={[rangeStyles.thumbLabelUnit, { color: colors.primary }]}>
+                    {' '}{unit}
+                  </AppText>
+                ) : null}
               </AppText>
             </View>
             <View style={[rangeStyles.pointer, { borderBottomColor: colors.primary }]} />
@@ -905,60 +945,74 @@ const RangeRulerPicker = ({
             <View style={rangeStyles.touchLayer} collapsable={false} />
           </GestureDetector>
         </View>
-        <View style={rangeStyles.rulerContainer} pointerEvents="none">
-          <ScrollView
-            ref={rulerScrollRef}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-            scrollEnabled={false}
-            scrollEventThrottle={16}
+
+        {showScale && fixedScaleLabels ? (
+          <View style={[rangeStyles.scaleContainer, { width: RANGE_TRACK_WIDTH }]} pointerEvents="none">
+            {fixedScaleLabels.map((item, index) => (
+              <Text key={index} style={[rangeStyles.scaleLabel, { fontFamily: fontFamily.regular, color: colors.textSecondary }]}>
+                {item.label}
+              </Text>
+            ))}
+          </View>
+        ) : showScale && (
+          <View style={[rangeStyles.rulerContainer, !showTicks && { marginTop: -15 }]} pointerEvents="none">
+            <ScrollView
+              ref={rulerScrollRef}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              bounces={false}
+              scrollEnabled={false}
+              scrollEventThrottle={16}
             contentContainerStyle={singleStyles.zeroPadding}
-          >
-            {rulerData.map((val, index) => {
-              const isMajor = index % MAJOR_TICK_INTERVAL === 0;
-              const isHalfMajor = (val - min) % MAJOR_TICK_INTERVAL === MAJOR_TICK_INTERVAL / 2;
-              const isLargeTick = isMajor || isHalfMajor;
-              const shouldRenderLabel = index % Math.max(1, LABEL_INTERVAL) === 0;
-              return (
-                <View key={index} style={[singleStyles.tickContainer, { width: ITEM_WIDTH }]}>
-                  <View
-                    style={[
-                      singleStyles.tick,
-                      isLargeTick ? singleStyles.thumbModeTickLarge : singleStyles.thumbModeTickMinor,
-                      isLargeTick ? singleStyles.thumbModeTickMajorColor : singleStyles.thumbModeTickMinorColor,
-                    ]}
-                  />
-                  {shouldRenderLabel && (
-                    <View style={[
-                      singleStyles.labelContainer,
-                      index === 0 && singleStyles.labelContainerFirst,
-                      index === rulerSteps && singleStyles.labelContainerLast,
-                    ]}>
-                      <Text
+            >
+              {rulerData.map((val, index) => {
+                const isMajor = index % MAJOR_TICK_INTERVAL === 0;
+                const isHalfMajor = (val - min) % MAJOR_TICK_INTERVAL === MAJOR_TICK_INTERVAL / 2;
+                const isLargeTick = isMajor || isHalfMajor;
+                const shouldRenderLabel = index % Math.max(1, LABEL_INTERVAL) === 0;
+                return (
+                  <View key={index} style={[singleStyles.tickContainer, { width: ITEM_WIDTH }, !showTicks && { height: 25 }]}>
+                    {showTicks && (
+                      <View
                         style={[
-                          singleStyles.label,
-                          { fontFamily: fontFamily.regular },
-                          singleStyles.thumbModeLabel,
+                          singleStyles.tick,
+                          isLargeTick ? singleStyles.thumbModeTickLarge : singleStyles.thumbModeTickMinor,
+                          isLargeTick ? singleStyles.thumbModeTickMajorColor : singleStyles.thumbModeTickMinorColor,
                         ]}
-                      >
-                        {String(val)}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              );
-            })}
-          </ScrollView>
-        </View>
+                      />
+                    )}
+                    {shouldRenderLabel && (
+                      <View style={[
+                        singleStyles.labelContainer,
+                        !showTicks && { bottom: 0 },
+                        index === 0 && singleStyles.labelContainerFirst,
+                        index === rulerSteps && singleStyles.labelContainerLast,
+                      ]}>
+                        <Text
+                          style={[
+                            singleStyles.label,
+                            { fontFamily: fontFamily.regular },
+                            singleStyles.thumbModeLabel,
+                          ]}
+                        >
+                          {String(val)}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+        )}
       </View>
     </View>
   );
 };
 
-const RulerPicker = ({ mode = 'single', ...props }) => {
+const RulerPicker = ({ mode = 'single', isRange = true, ...props }) => {
   if (mode === 'range') {
-    return <RangeRulerPicker {...props} />;
+    return <RangeRulerPicker isRange={isRange} {...props} />;
   }
   return <SingleRulerPicker {...props} />;
 };
@@ -1013,7 +1067,7 @@ const singleStyles = StyleSheet.create({
 });
 
 const rangeStyles = StyleSheet.create({
-  container: { width: '100%', alignItems: 'center', paddingVertical: 40 },
+  container: { width: '100%', alignItems: 'center', paddingVertical: 25 },
   trackOuter: { overflow: 'visible' },
   trackContainer: { height: 50, justifyContent: 'center', position: 'relative' },
   trackBackground: { position: 'absolute', left: 0, right: 0, height: 3, backgroundColor: '#E5E7EB', borderRadius: 1.5 },
@@ -1031,6 +1085,10 @@ const rangeStyles = StyleSheet.create({
   thumbCenter: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
   glow: { position: 'absolute', width: 32, height: 32, borderRadius: 16 },
   thumb: { width: 20, height: 20, borderRadius: 10, borderWidth: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 4, elevation: 4, zIndex: 30 },
+  scaleContainer: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 },
+  scaleLabel: { fontSize: 11 },
+  zeroPadding: { paddingLeft: 0, paddingRight: 0 },
+  indicatorWrapperCenter: { top: TRIANGLE_TOP, left: '50%', marginLeft: -(THUMB_SIZE / 2) },
   touchLayer: {
     position: 'absolute',
     left: 0,

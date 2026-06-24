@@ -92,8 +92,12 @@ const ProfileInfoCard = ({profile, isOwnProfile, isAIBuddy, avatarSource, onPres
         <StatItem count={profile.followingCount} label={t('profile.infoCard.following')} colors={colors} styles={styles} />
         <Divider orientation="vertical" color={colors.border} style={styles.statDivider} />
         <StatItem count={profile.followersCount} label={t('profile.infoCard.followers')} colors={colors} styles={styles} />
-        <Divider orientation="vertical" color={colors.border} style={styles.statDivider} />
-        <StatItem count={profile.buddiesCount} label={t('profile.infoCard.buddies')} colors={colors} styles={styles} />
+        {!isAIBuddy && (
+          <>
+            <Divider orientation="vertical" color={colors.border} style={styles.statDivider} />
+            <StatItem count={profile.buddiesCount} label={t('profile.infoCard.buddies')} colors={colors} styles={styles} />
+          </>
+        )}
       </View>
 
       {/* Info Grid */}
