@@ -1046,45 +1046,109 @@
         "privateTitle": "Only me",
         "privateDesc": "Only me"
       }
-    }    
+    }
   },
   "tracker": {
-      "title": "Track Progress",
-      "updateWeightCard": {
-        "title": "Update your latest weight",
-        "subtitle": "Keep your journey up to date",
-        "button": "Update"
-      },
-      "bodyWeight": {
-        "title": "Body Weight",
-        "subtitle": "Slow and steady wins the race.",
-        "unitLbs": "lbs",
-        "unitKg": "Kg"
-      },
-      "bmi": {
-        "title": "Body Mass Index",
-        "subtitle": "It's not a diet. It's a lifestyle change.",
-        "badge": "BMI",
-        "ranges": {
-          "underweight": "Underweight",
-          "normal": "Normal",
-          "overweight": "Overweight",
-          "obese": "Obese",
-          "current": "Currently: {{range}} range"
-        }
-      },
-      "tabs": {
-        "daily": "Daily",
-        "weekly": "Weekly",
-        "monthly": "Monthly"
-      },
-      "bottomSheet": {
-        "title": "Update Weight",
-        "description": "Enter your current weight to keep your journey on track.",
-        "inputPlaceholder": "0.0",
-        "saveButton": "Save Weight",
-        "successToast": "Weight updated successfully.",
-        "errorToast": "Failed to update weight."
+    "title": "Track Progress",
+    "updateWeightCard": {
+      "title": "Update your latest weight",
+      "subtitle": "Keep your journey up to date",
+      "button": "Update"
+    },
+    "bodyWeight": {
+      "title": "Body Weight",
+      "subtitle": "Slow and steady wins the race.",
+      "unitLbs": "lbs",
+      "unitKg": "Kg"
+    },
+    "bmi": {
+      "title": "Body Mass Index",
+      "subtitle": "It's not a diet. It's a lifestyle change.",
+      "badge": "BMI",
+      "ranges": {
+        "underweight": "Underweight",
+        "normal": "Normal",
+        "overweight": "Overweight",
+        "obese": "Obese",
+        "current": "Currently: {{range}} range"
       }
+    },
+    "tabs": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly"
+    },
+    "bottomSheet": {
+      "title": "Update Weight",
+      "description": "Enter your current weight to keep your journey on track.",
+      "inputPlaceholder": "0.0",
+      "saveButton": "Save Weight",
+      "successToast": "Weight updated successfully.",
+      "errorToast": "Failed to update weight."
     }
+  },
+  "groupDetails": {
+    "title": "Group Details",
+    "privateGroup": "Private Group",
+    "publicGroup": "Public Group",
+    "createPost": "Create post",
+    "viewAll": "View All",
+    "close": "Close",
+    "tabs": {
+      "posts": "Posts",
+      "userApproval": "User Approval",
+      "members": "Members",
+      "about": "About"
+    },
+    "options": {
+      "editGroup": "Edit Group",
+      "deleteGroup": "Delete Group",
+      "muteNotifications": "Mute Notifications",
+      "leaveGroup": "Leave Group",
+      "shareGroup": "Share Group",
+      "copyLink": "Copy Invite Link",
+      "selectNewAdmin": "Select New Admin",
+      "assignAndLeave": "Assign & Leave",
+      "cancel": "Cancel",
+      "viewProfile": "View Profile",
+      "message": "Message",
+      "makeHost": "Make Host",
+      "removeFromGroup": "Remove from Group",
+      "makeHostTitle": "Make {{name}} a Host?",
+      "makeHostDescription": "Hosts can help manage the group, welcome members, and moderate posts.",
+      "confirm": "Confirm",
+      "memberSince": "Member since {{date}}",
+      "assignNewAdminBeforeLeaving": "Assign a New Admin Before Leaving",
+      "assignNewAdminDescription": "Before leaving this group, please assign another member as the group admin. This ensures the group can continue to be managed without interruption.",
+      "assignAdmin": "Assign Admin",
+      "deleteGroupTitle": "Delete Group?",
+      "deleteGroupDescription": "Are you sure you want to delete this group?\nThis action cannot be undone. \nAll group posts, members, requests, and activity will be permanently removed.",
+      "sortGroupsTitle": "Sort Groups",
+      "sortNewestGroups": "Newest Groups",
+      "sortNewestGroupsDesc": "Recently created groups first.",
+      "sortMostMembers": "Most Members",
+      "sortMostMembersDesc": "Groups with more members first.",
+      "sortGroupNameAZ": "Group Name A-Z",
+      "sortGroupNameAZDesc": "Alphabetical order.",
+      "sortGroupNameZA": "Group Name Z-A",
+      "sortGroupNameZADesc": "Reverse alphabetical order.",
+      "apply": "Apply"
+    },
+    "admin": {
+      "title": "Hosted By",
+      "creatorRole": "Group Creator",
+      "badge": "Host"
+    },
+    "activity": {
+      "title": "Group Activity",
+      "postsToday": "Posts today",
+      "postsThisMonth": "Posts this month",
+      "totalMembers": "Total members",
+      "newMembersThisWeek": "New members this week",
+      "noNewPosts": "No new posts",
+      "noPosts": "No posts",
+      "member": "Member",
+      "members": "Members"
+    }
+  }
 }

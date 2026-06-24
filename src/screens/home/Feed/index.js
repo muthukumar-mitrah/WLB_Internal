@@ -88,6 +88,7 @@ const PostCard = memo(
     onCommentPress,
     onSharePress,
     onLikesCountPress,
+    onAvatarPress,
   }) => {
     const { colors, spacing, borderRadius } = useTheme();
     const { t } = useTranslation();
@@ -178,39 +179,44 @@ const PostCard = memo(
     return (
       <View style={styles.card}>
         <View style={styles.cardHeader}>
-          <View style={styles.avatarContainer}>
-            {post.avatar ? (
-              <Image
-                source={
-                  typeof post.avatar === 'number' || (typeof post.avatar === 'object' && post.avatar.test)
-                    ? post.avatar
-                    : typeof post.avatar === 'string'
-                    ? { uri: post.avatar }
-                    : post.avatar
-                }
-                style={styles.avatar}
-              />
-            ) : (
-              <AvatarPlaceholder
-                username={post.username}
-                size={38}
-                colors={colors}
-                style={{ marginRight: 0 }}
-              />
-            )}
-            {post.isOnline && (
-              <View style={[styles.onlineIndicator, { backgroundColor: colors.success }]} />
-            )}
-          </View>
-          <View style={styles.cardHeaderInfo}>
-            <AppText style={[styles.cardUsername, { color: colors.textPrimary }]}>
-              {post.username}
-            </AppText>
-            <AppText style={[styles.cardMeta, { color: colors.textSecondary }]}>
-              {post.currentWeight ? `${t('home.feed.cw')}${post.currentWeight} · ` : ''}
-              {post.timeAgo}
-            </AppText>
-          </View>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}
+            activeOpacity={0.7}
+            onPress={() => onAvatarPress?.(post)}>
+            <View style={styles.avatarContainer}>
+              {post.avatar ? (
+                <Image
+                  source={
+                    typeof post.avatar === 'number' || (typeof post.avatar === 'object' && post.avatar.test)
+                      ? post.avatar
+                      : typeof post.avatar === 'string'
+                      ? { uri: post.avatar }
+                      : post.avatar
+                  }
+                  style={styles.avatar}
+                />
+              ) : (
+                <AvatarPlaceholder
+                  username={post.username}
+                  size={38}
+                  colors={colors}
+                  style={{ marginRight: 0 }}
+                />
+              )}
+              {post.isOnline && (
+                <View style={[styles.onlineIndicator, { backgroundColor: colors.success }]} />
+              )}
+            </View>
+            <View style={styles.cardHeaderInfo}>
+              <AppText style={[styles.cardUsername, { color: colors.textPrimary }]}>
+                {post.username}
+              </AppText>
+              <AppText style={[styles.cardMeta, { color: colors.textSecondary }]}>
+                {post.currentWeight ? `${t('home.feed.cw')}${post.currentWeight} · ` : ''}
+                {post.timeAgo}
+              </AppText>
+            </View>
+          </TouchableOpacity>
           <View style={styles.cardHeaderRight}>
             {showChat && (
               <TouchableOpacity style={styles.chatBtn} activeOpacity={0.8}>

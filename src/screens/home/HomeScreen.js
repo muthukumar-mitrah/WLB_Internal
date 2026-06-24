@@ -24,12 +24,14 @@ import HomeHeader from '../../components/home/HomeHeader';
 import TopTabs from '../../components/home/TopTabs';
 import { useTranslation } from '../../i18n/useTranslation';
 import { useFeed } from '../../context/FeedContext';
-import { ROUTES } from '../../constants';
+import { ROUTES, STORAGE_KEYS } from '../../constants';
+import { storage } from '../../utils/storage';
 import PostCard from './Feed';
 import ProfileTabs from '../profile/components/ProfileTabs';
 import MyGroupsTabContent from './MyGroupsTabContent';
 import GroupPostsTabContent from './GroupPostsTabContent';
 import AllGroupsTabContent from './AllGroupsTabContent';
+import SortGroupsBottomSheet from './components/SortGroupsBottomSheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AppText } from '../../components/common';
 import FilterHeader from './FilterHeader';
@@ -52,9 +54,12 @@ const HomeScreen = ({ navigation }) => {
   const [activeGroupTab, setActiveGroupTab] = useState(t('home.groupTabs.posts'));
   const [menuPost, setMenuPost] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [selectedSortOption, setSelectedSortOption] = useState('newest');
   const commentsSheetRef = useRef(null);
   const likesSheetRef = useRef(null);
   const shareSheetRef = useRef(null);
+  const sortSheetRef = useRef(null);
+  const robiSheetRef = useRef(null);
 
   const groupTabs = useMemo(() => [
     t('home.groupTabs.posts'),
@@ -113,13 +118,25 @@ const handleRobiFilterPress = useCallback(async () => {
     likesSheetRef.current?.open(post.id);
   }, []);
 
+  const handleSortFilterPress = useCallback(() => {
+    sortSheetRef.current?.open();
+  }, []);
+
+  const handleSortApply = useCallback((val) => {
+    setSelectedSortOption(val);
+  }, []);
+
   const handleMenuSelect = useCallback((action) => {
     console.log('[FeedScreen] Post action:', action, 'on post:', menuPost?.id);
   }, [menuPost]);
 
   const handleAvatarPress = useCallback((post) => {
     if (!post) return;
-    navigation.navigate(ROUTES.VIEW_PROFILE, { userId: post.userId || post.username });
+    if (post.isGroupPost) {
+      navigation.navigate(ROUTES.GROUP_DETAILS, { groupId: post.groupId, groupName: post.username });
+    } else {
+      navigation.navigate(ROUTES.VIEW_PROFILE, { userId: post.userId || post.username });
+    }
   }, [navigation]);
 
   const renderPost = useCallback(
@@ -166,7 +183,7 @@ const handleRobiFilterPress = useCallback(async () => {
         <EmptyState
           icon={
             <Image
-              source={require('../../assets/images/No_Buddies_Found.png')}
+              source={require('../../assets/images/buddies_not_found.png')}
               style={styles.emptyRobiImage}
               resizeMode="contain"
             />
@@ -254,10 +271,15 @@ const handleRobiFilterPress = useCallback(async () => {
               onLikesCountPress={handleLikesCountPress}
               onImagePreview={handleImagePreview}
               onAvatarPress={handleAvatarPress}
+              selectedSortOption={selectedSortOption}
+              onFilterPress={handleSortFilterPress}
             />
           )}
           {activeGroupTab === t('home.groupTabs.allGroups') && (
-            <AllGroupsTabContent />
+            <AllGroupsTabContent
+              selectedSortOption={selectedSortOption}
+              onFilterPress={handleSortFilterPress}
+            />
           )}
         </>
       ) : (
@@ -299,6 +321,11 @@ const handleRobiFilterPress = useCallback(async () => {
         visible={disclaimerVisible}
         onClose={handleDisclaimerClose}
         onContinue={handleDisclaimerContinue}
+      />
+      <SortGroupsBottomSheet
+        ref={sortSheetRef}
+        selectedValue={selectedSortOption}
+        onApply={handleSortApply}
       />
     </SafeAreaView>
   );

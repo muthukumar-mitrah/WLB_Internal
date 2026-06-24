@@ -130,4 +130,12 @@ export const APP_IMAGES = {
   championIcon: require('../assets/icons/champion_icon.png'),
   legendIcon: require('../assets/icons/legend_icon.png'),
   eliteIcon: require('../assets/icons/elite_icon.png'),
+  
+  // Group Options Bottom Sheet Icons
+  leaveGroup: require('../assets/icons/leave_group.png'),
+  deleteIcon: require('../assets/icons/delete.png'),
+  deleteGroup: require('../assets/icons/delete_group.png'),
+  notificationIcon: require('../assets/icons/notification.png'),
+  copyLinkIcon: require('../assets/icons/copy_link.png'),
+  shareGroup: require('../assets/icons/share.png'),
 };

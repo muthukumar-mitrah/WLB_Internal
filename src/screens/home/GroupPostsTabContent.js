@@ -49,6 +49,8 @@ const GroupPostsTabContent = ({
         saved: gp.saved,
         currentWeight: '',
         userId: gp.userId,
+        groupId: gp.groupId,
+        isGroupPost: true,
       }));
       setGroupPosts(mapped);
     } catch (err) {

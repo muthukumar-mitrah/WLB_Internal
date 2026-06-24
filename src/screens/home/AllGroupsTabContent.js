@@ -19,8 +19,11 @@ import { AppText, InputBox, EmptyState } from '../../components/common';
 import { APP_IMAGES } from '../../constants/images';
 import { fontFamily } from '../../theme/fonts';
 import groupService from '../../api/services/groupService';
+import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../../constants';
 
 const GroupRowItem = memo(({ item, onJoinPress, colors, t }) => {
+  const navigation = useNavigation();
   const imageSource = typeof item.groupImage === 'string' ? { uri: item.groupImage } : item.groupImage;
 
   const formattedCount = item.totalMembers.toLocaleString();
@@ -34,15 +37,21 @@ const GroupRowItem = memo(({ item, onJoinPress, colors, t }) => {
 
   return (
     <View style={[styles.groupRow, { borderBottomColor: colors.divider }]}>
-      <Image source={imageSource} style={styles.rowImage} resizeMode="cover" />
-      <View style={styles.metadataContainer}>
-        <AppText style={[styles.groupNameText, { color: colors.textPrimary }]}>
-          {item.groupName}
-        </AppText>
-        <AppText style={[styles.membersText, { color: colors.textSecondary }]}>
-          {t('home.allGroups.members', { count: formattedCount })}
-        </AppText>
-      </View>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate(ROUTES.GROUP_DETAILS, { groupId: item.id, groupName: item.groupName })}
+        style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 10 }}
+      >
+        <Image source={imageSource} style={styles.rowImage} resizeMode="cover" />
+        <View style={styles.metadataContainer}>
+          <AppText style={[styles.groupNameText, { color: colors.textPrimary }]}>
+            {item.groupName}
+          </AppText>
+          <AppText style={[styles.membersText, { color: colors.textSecondary }]}>
+            {t('home.allGroups.members', { count: formattedCount })}
+          </AppText>
+        </View>
+      </TouchableOpacity>
       <TouchableOpacity
         style={[styles.joinBtn, { backgroundColor: colors.primarySurface }]}
         activeOpacity={0.7}
@@ -57,7 +66,7 @@ const GroupRowItem = memo(({ item, onJoinPress, colors, t }) => {
   );
 });
 
-const AllGroupsTabContent = () => {
+const AllGroupsTabContent = ({ selectedSortOption, onFilterPress }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
 
@@ -104,19 +113,38 @@ const AllGroupsTabContent = () => {
     });
   }, []);
 
-  const filteredGroups = useMemo(() => {
-    if (!searchQuery.trim()) return groups;
-    const q = searchQuery.toLowerCase().trim();
-    return groups.filter((g) => g.groupName.toLowerCase().includes(q));
-  }, [groups, searchQuery]);
+  const sortedAndFilteredGroups = useMemo(() => {
+    let result = [...groups];
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter((g) => g.groupName.toLowerCase().includes(q));
+    }
+    switch (selectedSortOption) {
+      case 'newest':
+        result.sort((a, b) => b.id.localeCompare(a.id));
+        break;
+      case 'members':
+        result.sort((a, b) => b.totalMembers - a.totalMembers);
+        break;
+      case 'alpha_asc':
+        result.sort((a, b) => a.groupName.localeCompare(b.groupName));
+        break;
+      case 'alpha_desc':
+        result.sort((a, b) => b.groupName.localeCompare(a.groupName));
+        break;
+      default:
+        break;
+    }
+    return result;
+  }, [groups, searchQuery, selectedSortOption]);
 
   const handleRefresh = useCallback(() => {
     fetchAllGroups(true);
   }, [fetchAllGroups]);
 
   const handleFilterPress = useCallback(() => {
-    console.log('[AllGroupsTabContent] Filter pressed');
-  }, []);
+    onFilterPress?.();
+  }, [onFilterPress]);
 
   const searchIcon = useMemo(
     () => (
@@ -198,12 +226,12 @@ const AllGroupsTabContent = () => {
       </View>
 
       <FlatList
-        data={filteredGroups}
+        data={sortedAndFilteredGroups}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         style={styles.list}
         contentContainerStyle={
-          filteredGroups.length === 0 ? styles.listEmptyContent : styles.listContent
+          sortedAndFilteredGroups.length === 0 ? styles.listEmptyContent : styles.listContent
         }
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={renderEmptyState}

@@ -19,6 +19,8 @@ import { AppText, InputBox, EmptyState } from '../../components/common';
 import { APP_IMAGES } from '../../constants/images';
 import { fontFamily } from '../../theme/fonts';
 import groupService from '../../api/services/groupService';
+import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../../constants';
 import PostCard from './Feed';
 
 const GroupItem = memo(({ group, isSelected, onPress, colors }) => {
@@ -61,9 +63,12 @@ const MyGroupsTabContent = ({
   onLikesCountPress,
   onImagePreview,
   onAvatarPress,
+  selectedSortOption,
+  onFilterPress,
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
   const [groups, setGroups] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -97,11 +102,30 @@ const MyGroupsTabContent = ({
     };
   }, []);
 
-  const filteredGroups = useMemo(() => {
-    if (!searchQuery.trim()) return groups;
-    const q = searchQuery.toLowerCase().trim();
-    return groups.filter((g) => g.groupName.toLowerCase().includes(q));
-  }, [groups, searchQuery]);
+  const sortedAndFilteredGroups = useMemo(() => {
+    let result = [...groups];
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter((g) => g.groupName.toLowerCase().includes(q));
+    }
+    switch (selectedSortOption) {
+      case 'newest':
+        result.sort((a, b) => b.id.localeCompare(a.id));
+        break;
+      case 'members':
+        result.sort((a, b) => b.totalMembers - a.totalMembers);
+        break;
+      case 'alpha_asc':
+        result.sort((a, b) => a.groupName.localeCompare(b.groupName));
+        break;
+      case 'alpha_desc':
+        result.sort((a, b) => b.groupName.localeCompare(a.groupName));
+        break;
+      default:
+        break;
+    }
+    return result;
+  }, [groups, searchQuery, selectedSortOption]);
 
   const filteredPosts = useMemo(() => {
     if (!selectedGroupId) return posts;
@@ -157,12 +181,12 @@ const MyGroupsTabContent = ({
   }, []);
 
   const handleGroupSelect = useCallback((group) => {
-    setSelectedGroupId((prev) => (prev === group.id ? null : group.id));
-  }, []);
+    navigation.navigate(ROUTES.GROUP_DETAILS, { groupId: group.id, groupName: group.groupName });
+  }, [navigation]);
 
   const handleFilterPress = useCallback(() => {
-    console.log('[MyGroupsTabContent] Filter pressed — placeholder action');
-  }, []);
+    onFilterPress?.();
+  }, [onFilterPress]);
 
   const transformToPostCardData = useCallback((groupPost) => ({
     id: groupPost.id,
@@ -179,6 +203,8 @@ const MyGroupsTabContent = ({
     saved: groupPost.saved,
     currentWeight: '',
     userId: groupPost.userId,
+    groupId: groupPost.groupId,
+    isGroupPost: true,
   }), []);
 
   const renderGroupItem = useCallback(
@@ -256,14 +282,14 @@ const MyGroupsTabContent = ({
     [colors.iconSecondary],
   );
 
-  const hasNoSearchResults = searchQuery.trim() && filteredGroups.length === 0;
+  const hasNoSearchResults = searchQuery.trim() && sortedAndFilteredGroups.length === 0;
 
   const renderListHeader = useCallback(() => {
     if (hasNoSearchResults) return null;
     return (
       <View style={[styles.groupsSection, { backgroundColor: colors.background }]}>
         <FlatList
-          data={filteredGroups}
+          data={sortedAndFilteredGroups}
           renderItem={renderGroupItem}
           keyExtractor={groupKeyExtractor}
           horizontal
@@ -272,7 +298,7 @@ const MyGroupsTabContent = ({
         />
       </View>
     );
-  }, [hasNoSearchResults, filteredGroups, renderGroupItem, groupKeyExtractor, colors]);
+  }, [hasNoSearchResults, sortedAndFilteredGroups, renderGroupItem, groupKeyExtractor, colors]);
 
   if (loading) {
     return (
