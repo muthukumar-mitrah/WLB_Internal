@@ -4,15 +4,9 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.backgroundTertiary,
+      backgroundColor: colors.background,
     },
 
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: spacing[4],
-      paddingVertical: spacing[3],
-    },
     backBtn: {
       width: 32,
       height: 32,
@@ -65,7 +59,8 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
     },
     listContent: {
       paddingHorizontal: spacing[4],
-      paddingBottom: spacing[4],
+      paddingVertical:spacing[2],
+      backgroundColor: colors.backgroundTertiary,
     },
     row: {
       flexDirection: 'row',
@@ -75,6 +70,7 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       marginBottom: spacing[2],
       backgroundColor: colors.background,
       borderRadius: 12,
+  
     },
     rowFirst: {
       borderWidth: 1,
@@ -95,7 +91,7 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       width: 40,
       height: 40,
       borderRadius: 20,
-      marginRight: spacing[3],
+      marginRight: spacing[2],
       backgroundColor: colors.primarySoft,
     },
     nameText: {
@@ -108,8 +104,8 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       fontWeight: 'bold'
     },
     awardImage: {
-      width: 18,
-      height: 18,
+      width: 16,
+      height: 16,
       resizeMode: 'contain',
     },
 
@@ -154,9 +150,5 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
     },
     selectedFilterText: {
       fontWeight: '600',
-    },
-    dropdownList: {
-      height: 180,
-      marginBottom: spacing[4],
     },
   });

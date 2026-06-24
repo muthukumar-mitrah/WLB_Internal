@@ -166,7 +166,7 @@ const handleRobiFilterPress = useCallback(async () => {
         <EmptyState
           icon={
             <Image
-              source={require('../../assets/images/no_buddies_found.png')}
+              source={require('../../assets/images/No_Buddies_Found.png')}
               style={styles.emptyRobiImage}
               resizeMode="contain"
             />

@@ -7,7 +7,6 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
         bottomSheetContent: {
             paddingHorizontal: spacing[4],
             paddingTop: spacing[2],
-            paddingBottom: spacing[6],
             backgroundColor: colors.surface,
         },
         bottomSheetTitle: {

@@ -204,15 +204,11 @@ const TrackProgressScreen = () => {
         translucent={false}
       />
       <Header
-        title={t('tracker.title', 'Track Progress')}
+        title={t('tracker.title')}
         showBack
         titleAlign="left"
         transparent={true}
-      // rightComponent={
-      //   <TouchableOpacity activeOpacity={0.7} style={styles.headerRightButton}>
-      //     <Ionicons name="ellipsis-vertical" size={20} color={colors.textPrimary} />
-      //   </TouchableOpacity>
-      // }
+
       />
 
       <ScrollView
@@ -225,11 +221,11 @@ const TrackProgressScreen = () => {
             <Image source={require('../../assets/icons/unit_white_icon.png')} style={styles.bannerIcon} />
           </View>
           <View style={styles.bannerTextContainer}>
-            <AppText variant="bodyMedium" style={styles.bannerTitle}>
-              {t('tracker.updateWeightCard.title', 'Update your latest weight')}
+            <AppText variant="body" style={styles.bannerTitle}>
+              {t('tracker.updateWeightCard.title')}
             </AppText>
             <AppText variant="caption" style={styles.bannerSubtitle}>
-              {t('tracker.updateWeightCard.subtitle', 'Keep your journey up to date')}
+              {t('tracker.updateWeightCard.subtitle')}
             </AppText>
           </View>
           <TouchableOpacity
@@ -257,7 +253,7 @@ const TrackProgressScreen = () => {
                 </AppText>
                 <Ionicons name="information-circle-outline" size={16} color={colors.textTertiary} />
               </View>
-              <AppText variant="caption" color={colors.textSecondary} style={styles.cardSubtitle}>
+              <AppText variant="caption" color={colors.textSecondary} >
                 {t('tracker.bodyWeight.subtitle', 'Slow and steady wins the race.')}
               </AppText>
             </View>

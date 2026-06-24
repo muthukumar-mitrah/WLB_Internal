@@ -132,10 +132,10 @@ const UpdateWeightBottomSheet = forwardRef(({
     >
       <BottomSheetView style={styles.bottomSheetContent}>
         <AppText variant="h3" color={colors.textPrimary} style={styles.bottomSheetTitle}>
-          {t('tracker.bottomSheet.title', 'Update Weight')}
+          {t('tracker.bottomSheet.title')}
         </AppText>
         <AppText variant="body" color={colors.textSecondary} style={styles.bottomSheetDesc}>
-          {t('tracker.bottomSheet.description', 'Enter your current weight to keep your journey on track.')}
+          {t('tracker.bottomSheet.description')}
         </AppText>
 
         {/* Weight Input Box with Nested Unit Selector */}
@@ -180,7 +180,7 @@ const UpdateWeightBottomSheet = forwardRef(({
           activeOpacity={0.8}
         >
           <AppText style={styles.saveButtonText}>
-            {t('tracker.bottomSheet.saveButton', 'Save Weight')}
+            {t('tracker.bottomSheet.saveButton')}
           </AppText>
         </TouchableOpacity>
       </BottomSheetView>

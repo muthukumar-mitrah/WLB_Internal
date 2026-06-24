@@ -7,26 +7,11 @@ export const createStyles = ({ colors, spacing }) =>
       backgroundColor: colors.background,
     },
 
-    // ── Header ──────────────────────────────────────────────────────────
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: spacing[4],
-      paddingVertical: spacing[3],
-    },
-    backBtn: {
-      width: 32,
-      height: 32,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginRight: spacing[2],
-    },
-
     // ── User list ───────────────────────────────────────────────────────
     listContent: {
-      paddingHorizontal: spacing[4],
+      paddingHorizontal: spacing[5],
       paddingTop: spacing[1],
-      paddingBottom: spacing[6],
+      paddingBottom: spacing[2],
     },
     userRow: {
       flexDirection: 'row',
@@ -77,7 +62,7 @@ export const createStyles = ({ colors, spacing }) =>
     modalDescription: {
       textAlign: 'center',
       marginBottom: spacing[5],
-      paddingHorizontal: spacing[2],
+      paddingHorizontal: spacing[1],
     },
     modalButtons: {
       flexDirection: 'row',

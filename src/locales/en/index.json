@@ -1046,8 +1046,9 @@
         "privateTitle": "Only me",
         "privateDesc": "Only me"
       }
-    },
-    "tracker": {
+    }    
+  },
+  "tracker": {
       "title": "Track Progress",
       "updateWeightCard": {
         "title": "Update your latest weight",
@@ -1086,5 +1087,4 @@
         "errorToast": "Failed to update weight."
       }
     }
-  }
 }

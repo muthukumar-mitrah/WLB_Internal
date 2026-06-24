@@ -11,7 +11,7 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
     header: {
       flexDirection: 'row',
       alignItems: 'center',
-      paddingHorizontal: spacing[4],
+      paddingHorizontal: spacing[5],
       paddingVertical: spacing[3],
     },
     backBtn: {

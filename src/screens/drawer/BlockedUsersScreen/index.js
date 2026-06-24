@@ -1,5 +1,5 @@
 import { memo, useState, useCallback, useMemo } from 'react';
-import { FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StatusBar, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../../theme';
 import { useTranslation } from '../../../i18n/useTranslation';
@@ -9,9 +9,9 @@ import {
   AppModal,
   Button,
   EmptyState,
+  Header,
 } from '../../../components/common';
 import { createStyles } from './styles';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const BLOCKED_USERS_DATA = [
   { id: '1', name: 'Sarah M.', blockedDate: 'Jun 4, 2026', avatar: require('../../../assets/images/user.png') },
@@ -95,19 +95,13 @@ const BlockedUsersScreen = () => {
   return (
     <SafeContainer edges={['top']} style={styles.container}>
 
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={handlePrevious}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          style={styles.backBtn}
-        >
-          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
+      <StatusBar
+        barStyle={colors.statusBar}
+        backgroundColor={colors.background}
+        translucent={false}
+      />
+      <Header title={t('blockedUsers.title')} showBack titleAlign="left" transparent={true} onBackPress={handlePrevious} />
 
-        <AppText variant="h3" color={colors.textPrimary}>
-          {t('blockedUsers.title')}
-        </AppText>
-      </View>
 
       {/* Blocked users list or empty state */}
       {blockedUsers.length > 0 ? (

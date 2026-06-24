@@ -9,24 +9,22 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
     },
     scrollContent: {
       flexGrow: 1,
-      paddingHorizontal: spacing[4],
-      paddingVertical: spacing[3],
-      paddingBottom: spacing[8],
+      paddingHorizontal: spacing[5],
     },
 
     // Top Banner Card
     bannerCard: {
       backgroundColor: colors.primaryNav,
       borderRadius: borderRadius.lg,
-      padding: spacing[4],
+      padding: spacing[2],
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: spacing[4],
+      marginBottom: spacing[2],
     },
     bannerIconWrapper: {
-      width: 44,
-      height: 44,
-      borderRadius: borderRadius.md,
+      width: 40,
+      height: 40,
+      borderRadius: borderRadius.lg,
       backgroundColor: 'rgba(255, 255, 255, 0.15)',
       justifyContent: 'center',
       alignItems: 'center',
@@ -44,13 +42,14 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
       color: colors.white,
       fontWeight: fontWeight.semiBold,
       marginBottom: 2,
+      fontSize:fontSize.base
     },
     bannerSubtitle: {
       color: colors.gray200,
     },
     bannerButton: {
       backgroundColor: colors.gray100,
-      paddingHorizontal: spacing[4],
+      paddingHorizontal: spacing[2],
       paddingVertical: spacing[2],
       borderRadius: borderRadius.md,
       alignItems: 'center',
@@ -58,7 +57,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
     },
     bannerButtonText: {
       color: colors.gray900,
-      fontWeight: fontWeight.bold,
+      fontWeight: fontWeight.semiBold,
       fontSize: fontSize.base,
     },
 
@@ -68,9 +67,10 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
       borderRadius: borderRadius.lg,
       borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing[4],
+      padding: spacing[2],
       marginBottom: spacing[4],
     },
+
     cardHeader: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -83,8 +83,8 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
       marginRight: spacing[3],
     },
     cardHeaderIcon: {
-      width: 44,
-      height: 44,
+      width: 36,
+      height: 36,
       resizeMode: 'contain',
     },
     cardHeaderTextContainer: {
@@ -95,11 +95,8 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
       alignItems: 'center',
     },
     cardTitle: {
-      fontWeight: fontWeight.bold,
+      fontWeight: fontWeight.semiBold,
       marginRight: 4,
-    },
-    cardSubtitle: {
-      marginTop: 2,
     },
     badge: {
       paddingHorizontal: spacing[3],
@@ -115,7 +112,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
       flexDirection: 'row',
       backgroundColor: isDark ? colors.backgroundTertiary : colors.backgroundSecondary,
       borderRadius: borderRadius.md,
-      padding: 3,
+      padding: 2,
       borderWidth: 0.5,
       borderColor: colors.border,
     },

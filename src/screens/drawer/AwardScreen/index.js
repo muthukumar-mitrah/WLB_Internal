@@ -1,10 +1,10 @@
 import React, { memo, useMemo, useCallback } from 'react';
-import { ScrollView, TouchableOpacity, View, Image } from 'react-native';
+import { ScrollView, TouchableOpacity, View, Image, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
 import { useTranslation } from '../../../i18n/useTranslation';
-import { AppText, SafeContainer, Divider } from '../../../components/common';
+import { AppText, SafeContainer, Divider, Header } from '../../../components/common';
 import { useProfile } from '../../../context/ProfileContext';
 import { createStyles } from './styles';
 
@@ -197,19 +197,12 @@ const AwardScreen = () => {
 
   return (
     <SafeContainer edges={['top']} style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={handleBack}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          style={styles.backBtn}
-        >
-          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-        <AppText variant="h3" color={colors.textPrimary}>
-          {t('awards.title')}
-        </AppText>
-      </View>
+      <StatusBar
+        barStyle={colors.statusBar}
+        backgroundColor={colors.background}
+        translucent={false}
+      />
+      <Header title={t('awards.title')} showBack titleAlign="left" transparent={true} onBackPress={handleBack} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}

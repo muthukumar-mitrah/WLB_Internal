@@ -1,9 +1,9 @@
 import { memo, useState, useCallback, useMemo } from 'react';
-import { FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, TouchableOpacity, View, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../../theme';
 import { useTranslation } from '../../../i18n/useTranslation';
-import { AppText, SafeContainer, AppModal } from '../../../components/common';
+import { AppText, SafeContainer, AppModal, Header } from '../../../components/common';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createStyles } from './styles';
 
@@ -185,18 +185,12 @@ const LeaderboardScreen = () => {
   return (
     <SafeContainer edges={['top']} style={styles.container}>
 
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={handlePrevious}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          style={styles.backBtn}
-        >
-          <Icon name="chevron-back" size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
-        <AppText variant="h3" color={colors.textPrimary}>
-          {t('leaderboard.title')}
-        </AppText>
-      </View>
+      <StatusBar
+        barStyle={colors.statusBar}
+        backgroundColor={colors.background}
+        translucent={false}
+      />
+      <Header title={t('leaderboard.title')} showBack titleAlign="left" transparent={true} onBackPress={handlePrevious} />
 
       <View style={styles.filterContainer}>
         <TouchableOpacity
@@ -213,7 +207,7 @@ const LeaderboardScreen = () => {
           </AppText>
           <Icon
             name={dropdownOpen ? 'chevron-up' : 'chevron-down'}
-            size={18}
+            size={14}
             color={colors.textSecondary}
           />
         </TouchableOpacity>
@@ -228,7 +222,6 @@ const LeaderboardScreen = () => {
             keyExtractor={(item) => item.id}
             renderItem={renderFilterItem}
             showsVerticalScrollIndicator={false}
-            style={styles.dropdownList}
             keyboardShouldPersistTaps="handled"
           />
         </AppModal>
