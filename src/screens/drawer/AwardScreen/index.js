@@ -15,8 +15,7 @@ import { awardLevels, awardLevelRanges, earnPoints } from '../../../constants/mo
 
 const AwardCard = memo(({ item, styles, colors, t, isSelected }) => {
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
+    <View
       style={[styles.awardCard, isSelected && styles.awardCardSelected]}
     >
       <View style={styles.awardIconWrapper}>
@@ -28,7 +27,7 @@ const AwardCard = memo(({ item, styles, colors, t, isSelected }) => {
       <AppText variant="captionMedium" color={colors.textSecondary}>
         {t(item.pointsKey)}
       </AppText>
-    </TouchableOpacity>
+    </View>
   );
 });
 
@@ -152,7 +151,6 @@ const AwardScreen = () => {
             <AppText
               variant="caption"
               color="rgba(255,255,255,0.7)"
-              style={styles.motivationText}
             >
               {t('awards.motivation')}
             </AppText>

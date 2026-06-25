@@ -23,7 +23,7 @@ export const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       borderRadius: borderRadius.md,
       paddingHorizontal: spacing[4],
       paddingVertical: spacing[4],
-      backgroundColor: colors.surface,
+      backgroundColor: colors.background,
     },
     filterPillActive: {
       borderColor: colors.primaryLight,
@@ -52,8 +52,7 @@ export const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
     },
     listContent: {
       paddingHorizontal: spacing[4],
-      paddingVertical:spacing[2],
-      backgroundColor: colors.backgroundTertiary,
+      paddingVertical: spacing[2],
     },
     row: {
       flexDirection: 'row',
@@ -63,7 +62,8 @@ export const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       marginBottom: spacing[2],
       backgroundColor: colors.background,
       borderRadius: 12,
-  
+      borderWidth: 1,
+      borderColor: colors.border
     },
     rowFirst: {
       borderWidth: 1,
@@ -108,12 +108,9 @@ export const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       marginBottom: spacing[4],
       paddingVertical: spacing[3],
       paddingHorizontal: spacing[4],
-      backgroundColor: colors.cardBackground,
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: colors.cardBorder,
       marginTop: spacing[3],
-      ...shadows.card,
     },
     topRow: {
       flexDirection: 'row',

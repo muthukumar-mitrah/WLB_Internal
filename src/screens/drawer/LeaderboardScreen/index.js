@@ -20,22 +20,22 @@ const formatPoints = (pts) => pts.toLocaleString();
 const getRankIcon = (points) => {
   if (points >= 20000) return { imgUrl: APP_IMAGES.eliteIcon };
   if (points >= 10000) return { imgUrl: APP_IMAGES.legendIcon };
-  if (points >= 1000)  return { imgUrl: APP_IMAGES.championIcon };
-  if (points >= 700)   return { imgUrl: APP_IMAGES.achieverIcon };
-  if (points >= 400)   return { imgUrl: APP_IMAGES.energizerIcon };
-  if (points >= 200)   return { imgUrl: APP_IMAGES.supporterIcon };
-  if (points >= 100)   return { imgUrl: APP_IMAGES.risingStarIcon };
+  if (points >= 1000) return { imgUrl: APP_IMAGES.championIcon };
+  if (points >= 700) return { imgUrl: APP_IMAGES.achieverIcon };
+  if (points >= 400) return { imgUrl: APP_IMAGES.energizerIcon };
+  if (points >= 200) return { imgUrl: APP_IMAGES.supporterIcon };
+  if (points >= 100) return { imgUrl: APP_IMAGES.risingStarIcon };
   return { imgUrl: APP_IMAGES.starterIcon };
 };
 
 const getRankImage = (points) => {
   if (points >= 20000) return APP_IMAGES.elite;
   if (points >= 10000) return APP_IMAGES.legend;
-  if (points >= 1000)  return APP_IMAGES.champion;
-  if (points >= 700)   return APP_IMAGES.achiever;
-  if (points >= 400)   return APP_IMAGES.energizerDark;
-  if (points >= 200)   return APP_IMAGES.supporter;
-  if (points >= 100)   return APP_IMAGES.risingStar;
+  if (points >= 1000) return APP_IMAGES.champion;
+  if (points >= 700) return APP_IMAGES.achiever;
+  if (points >= 400) return APP_IMAGES.energizerDark;
+  if (points >= 200) return APP_IMAGES.supporter;
+  if (points >= 100) return APP_IMAGES.risingStar;
   return APP_IMAGES.starter;
 };
 
@@ -44,8 +44,7 @@ const LeaderboardItem = memo(({ item, styles, colors, t, index }) => {
   const rankIcon = getRankIcon(item.points);
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
+    <View
       style={[
         styles.row,
         isFirst && styles.rowFirst,]}
@@ -68,7 +67,7 @@ const LeaderboardItem = memo(({ item, styles, colors, t, index }) => {
           {t('leaderboard.pointsLabel')}
         </AppText>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 });
 

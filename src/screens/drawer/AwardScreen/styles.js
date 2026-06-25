@@ -58,11 +58,9 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
     },
     currentLevelText: {
       marginBottom: spacing[4],
-      paddingBottom:spacing[4],
+      paddingBottom: spacing[4],
       borderBottomColor: colors.blue400,
       borderBottomWidth: 1,
-    },
-    motivationText: { 
     },
 
     // ── Award Levels ────────────────────────────────────────────────────
@@ -79,11 +77,12 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
     },
     awardCard: {
       width: '48%',
-      backgroundColor: colors.cardBackground,
+      borderWidth: 1,
+      borderColor: colors.border,
       borderRadius: borderRadius.xl,
       paddingVertical: spacing[2],
       paddingHorizontal: spacing[2],
-      marginBottom: spacing[3],
+      marginBottom: spacing[3]
     },
     awardCardSelected: {
       borderColor: colors.primary,
@@ -121,7 +120,8 @@ export const createStyles = ({ colors, spacing, borderRadius }) =>
       marginBottom: spacing[2],
     },
     earnCard: {
-      backgroundColor: colors.cardBackground,
+      borderWidth: 0.5,
+      borderColor: colors.border,
       borderRadius: borderRadius.sm,
       marginHorizontal: spacing[4],
       marginBottom: spacing[3],
