@@ -21,7 +21,7 @@ import createStyles from './styles';
 const OTP_LENGTH = 5;
 
 const SettingsVerifyCodeScreen = ({ navigation, route }) => {
-  const { colors, spacing, borderRadius, iconSize, fonts } = useTheme();
+  const { colors, spacing, borderRadius, iconSize } = useTheme();
   const { t } = useTranslation();
   const email = route.params?.email || '';
 

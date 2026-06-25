@@ -54,8 +54,8 @@ const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } })
     primaryBtnTop: {
       borderRadius: borderRadius.lg,
       marginTop: spacing[2],
-      fontSize:fontSize["md"],
-      fontWeight:fontWeight["semiBold"],
+      fontSize:fontSize.md,
+      fontWeight:fontWeight.semiBold,
       letterSpacing: -0.32,
     },
     cancelBtn: {
@@ -183,8 +183,8 @@ const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } })
     // Email label
     emailLabel: {
       marginBottom: spacing[2],
-      fontWeight: fontWeight["medium"],
-      fontSize:fontSize["md"],
+      fontWeight: fontWeight.medium,
+      fontSize:fontSize.md,
       letterSpacing: -0.32,
     },
     otpContainer: {

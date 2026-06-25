@@ -551,8 +551,7 @@ const SingleRulerPicker = ({
               transform: [{ translateX: thumbX }],
             },
           ]}
-          hitSlop={{ top: 18, bottom: 18, left: 18, right: 18 }}
-          {...thumbPanResponder.panHandlers}
+          pointerEvents="none"
         >
           <View
             style={[

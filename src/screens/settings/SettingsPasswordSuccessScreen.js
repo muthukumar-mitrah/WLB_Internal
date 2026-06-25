@@ -48,7 +48,7 @@ const SettingsPasswordSuccessScreen = ({ navigation }) => {
         <View style={styles.successWrapper}>
           <View style={styles.successIconOuter}>
             <View style={styles.successIconInner}>
-              <Ionicons name="checkmark" size={iconSize['lg']} color={colors.white} />
+              <Ionicons name="checkmark" size={iconSize.lg} color={colors.white} />
             </View>
           </View>
 

@@ -37,7 +37,7 @@ const AppBottomSheet = forwardRef(
         snapToIndex: idx => bottomSheetRef.current?.snapToIndex(idx),
         present: () => bottomSheetRef.current?.present(),
       }),
-      [snapPoints.length],
+      [],
     );
 
     const renderBackdrop = useCallback(

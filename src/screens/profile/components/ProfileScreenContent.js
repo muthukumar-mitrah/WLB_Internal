@@ -352,7 +352,7 @@ const ProfileScreenContent = ({
             variant="primary"
             size="md"
             fullWidth
-            style={styles.flex1}
+            style={styles.buttonHalf}
             accessibilityLabel={t('profile.buttons.updateProfile')}
           />
           <Button
