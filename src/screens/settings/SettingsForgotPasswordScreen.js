@@ -62,18 +62,18 @@ const SettingsForgotPasswordScreen = ({ navigation }) => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <AppText variant="h3" color={colors.textPrimary} style={styles.successTitle}>
+        <AppText variant="h4" color={colors.textPrimary} style={styles.successTitle}>
           {t('auth.settingsPassword.forgotPasswordTitle')}
         </AppText>
 
         <View style={styles.headingSection}>
-          <AppText variant="body" color={colors.textSecondary} style={styles.subheadingCenter}>
+          <AppText variant="body" color={colors.textSecondary} style={[styles.subheading, styles.textAlignCenter]}>
             {t('auth.settingsPassword.forgotPasswordSubheading')}
           </AppText>
         </View>
 
         <View style={styles.inputSection}>
-          <AppText variant="titleMedium" color={colors.textPrimary} style={styles.emailLabel}>
+          <AppText variant="body" color={colors.textPrimary} style={styles.emailLabel}>
             {t('auth.settingsPassword.emailLabel')}
           </AppText>
           <InputBox
@@ -98,6 +98,7 @@ const SettingsForgotPasswordScreen = ({ navigation }) => {
           variant="primary"
           size="lg"
           style={styles.primaryBtn}
+          textStyle={styles.primaryBtnText}
           rightIcon={<Ionicons name="arrow-forward" size={iconSize.md} color={colors.white} />}
         />
       </ScrollView>

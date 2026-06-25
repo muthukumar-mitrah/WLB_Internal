@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { fontSize, fontWeight } from '../../theme/fonts';
 
 const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } }) =>
   StyleSheet.create({
@@ -11,8 +12,8 @@ const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } })
     },
     scrollContent: {
       flexGrow: 1,
-      paddingHorizontal: spacing[6],
-      paddingBottom: 100, // room for absolute footer
+      paddingHorizontal: spacing[5],
+      paddingBottom: 100,
     },
     successScrollContent: {
       flexGrow: 1,
@@ -45,9 +46,17 @@ const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } })
     primaryBtn: {
       borderRadius: borderRadius.lg,
     },
+    primaryBtnText: {
+      fontSize: fontSize.md,
+      fontWeight: fontWeight.semiBold,
+      letterSpacing: -0.32,
+    },
     primaryBtnTop: {
       borderRadius: borderRadius.lg,
       marginTop: spacing[2],
+      fontSize:fontSize["md"],
+      fontWeight:fontWeight["semiBold"],
+      letterSpacing: -0.32,
     },
     cancelBtn: {
       alignSelf: 'center',
@@ -60,17 +69,19 @@ const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } })
       marginBottom: spacing[12],
     },
     headingSectionTop: {
-      marginTop: spacing[2],
-      marginBottom: spacing[12],
+      marginTop: spacing[1.5],
+      marginBottom: spacing[10],
     },
     heading: {
       marginBottom: spacing[3],
     },
     subheading: {
-      lineHeight: 18,
+      fontSize: fontSize.base,
+      fontWeight: fontWeight.regular,
+      letterSpacing: -0.32,
+      lineHeight: 21,
     },
-    subheadingCenter: {
-      lineHeight: 18,
+    textAlignCenter: {
       textAlign: 'center',
     },
     // Email icon
@@ -93,21 +104,22 @@ const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } })
       flexWrap: 'wrap',
     },
     verifySubheadingContainer: {
-      marginTop: spacing[2],
+      marginTop: spacing[1],
       marginBottom: spacing[6],
     },
     verifySubheadingText: {
       textAlign: 'center',
       lineHeight: 22,
       fontWeight: '400',
+      fontSize:fontSize.base
     },
     continueBtn: {
       borderRadius: borderRadius.lg,
       marginBottom: spacing[4],
     },
-    otpContainer: {
+    otpWrapper: {
       marginBottom: spacing[6],
-      width: '100%',
+      alignItems: 'center',
     },
     // Password rules
     rulesContainer: {
@@ -145,12 +157,24 @@ const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } })
     },
     successTitle: {
       textAlign: 'center',
-      fontWeight: '700'
+      fontWeight: fontWeight.bold,
+      fontSize: fontSize['2xl'],
+      lineHeight: 28,
+      letterSpacing: -0.96,
+      marginBottom: spacing[2],
+    },
+
+    pageTitle: {
+      fontWeight: fontWeight.bold,
+      fontSize: fontSize['2xl'],
+      lineHeight: 26,
+      letterSpacing: -0.96,
+      marginBottom: spacing[2],
+      marginTop: spacing[6],
     },
     successMessage: {
       textAlign: 'center',
-      marginBottom: spacing[8],
-      lineHeight: 22,
+      marginBottom: spacing[6],
     },
     successBtn: {
       borderRadius: borderRadius.lg,
@@ -159,7 +183,31 @@ const createStyles = ({ colors, spacing, borderRadius, insets = { bottom: 0 } })
     // Email label
     emailLabel: {
       marginBottom: spacing[2],
-      fontWeight: '600',
+      fontWeight: fontWeight["medium"],
+      fontSize:fontSize["md"],
+      letterSpacing: -0.32,
+    },
+    otpContainer: {
+      width: 300,
+      alignSelf: 'center',
+      justifyContent: 'space-between',
+    },
+    pinCodeContainer: {
+      width: 52,
+      height: 56,
+      borderRadius: borderRadius.md,
+      borderWidth: 1,
+      borderColor: colors.inputBorder,
+      backgroundColor: colors.inputBackground,
+      marginHorizontal: spacing[1],
+    },
+    focusedPinCodeContainer: {
+      borderColor: colors.borderFocused,
+      borderWidth: 2,
+    },
+    pinCodeText: {
+      fontSize: fontSize.xl,
+      color: colors.textPrimary,
     },
   });
 

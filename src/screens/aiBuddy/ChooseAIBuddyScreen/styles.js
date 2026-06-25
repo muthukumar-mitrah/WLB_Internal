@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
+import { fontSize, fontWeight } from '../../../theme/fonts';
 
 export const createStyles = ({ colors, spacing }) => StyleSheet.create({
   listContainer: {
-    padding: spacing[4],
+    padding: spacing[5],
   },
   cardContainer: {
     backgroundColor: colors.surface,
     borderRadius: 16,
-    padding: spacing[2],
+    padding: spacing[3],
     marginBottom: spacing[2],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -16,6 +17,7 @@ export const createStyles = ({ colors, spacing }) => StyleSheet.create({
     elevation: 2,
     borderWidth: colors.isDark ? 1 : 0,
     borderColor: colors.border,
+    gap:12
   },
   cardHeader: {
     flexDirection: 'row',
@@ -33,23 +35,33 @@ export const createStyles = ({ colors, spacing }) => StyleSheet.create({
     marginRight: spacing[2],
   },
   nameText: {
-    fontWeight: '700',
-    fontSize: 15,
+    fontWeight: fontWeight.semiBold,
+    fontSize: fontSize.md,
+    lineHeight: 18,
     marginBottom: 2,
+    letterSpacing: -0.32,
   },
   exploreBtn: {
     paddingHorizontal: spacing[2],
-    height: 40,
-    borderRadius: 8
+    height: 35,
+    borderRadius: 8,
+  },
+
+  exploreBtnText: {
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.semiBold,
+    lineHeight: 13,
+    letterSpacing: -0.24,
   },
   cardBody: {
-    marginTop: spacing[3],
     backgroundColor: colors.backgroundSecondary,
-    padding: spacing[3],
+    padding: spacing[2],
     borderRadius: 16,
   },
   descriptionText: {
-    lineHeight: 16,
-    fontSize: 12,
+    lineHeight: 17.5,
+    letterSpacing: -0.28,
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.regular,
   },
 });

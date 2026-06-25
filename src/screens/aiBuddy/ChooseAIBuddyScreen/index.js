@@ -27,6 +27,7 @@ const BuddyCard = React.memo(({ item, onPress, colors, styles }) => (
         fullWidth={false}
         onPress={() => onPress(item.id)}
         style={styles.exploreBtn}
+         textStyle={styles.exploreBtnText}
       />
     </View>
     <View style={styles.cardBody}>

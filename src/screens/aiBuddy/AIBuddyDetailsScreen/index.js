@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, StatusBar } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SafeContainer, Header, AppText } from '../../../components/common';
@@ -16,7 +16,7 @@ const AIBuddyDetailsScreen = () => {
 
   const { colors, spacing } = useTheme();
   const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
-  
+
   const [buddy, setBuddy] = useState(null);
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -65,25 +65,34 @@ const AIBuddyDetailsScreen = () => {
     };
   }, [buddy, feed]);
 
+  const renderScreenState = content => (
+    <SafeContainer edges={['top', 'bottom']}>
+      <StatusBar
+        barStyle={colors.statusBar}
+        backgroundColor={colors.primarySurface}
+        translucent={false}
+      />
+      <Header
+        title={t('aiBuddy.details.title')}
+        onBackPress={() => navigation.goBack()}
+      />
+      {content}
+    </SafeContainer>
+  );
+
   if (!buddy && !loading) {
-    return (
-      <SafeContainer edges={['top', 'bottom']}>
-        <Header title={t('aiBuddy.details.title')} onBackPress={() => navigation.goBack()} />
-        <View style={styles.centerContainer}>
-          <AppText variant="bodyLarge" color={colors.textSecondary}>Buddy not found</AppText>
-        </View>
-      </SafeContainer>
+    return renderScreenState(
+      <View style={styles.centerContainer}>
+        <AppText variant="bodyLarge" color={colors.textSecondary}>Buddy not found</AppText>
+      </View>
     );
   }
 
   if (loading || !formattedProfile) {
-    return (
-      <SafeContainer edges={['top', 'bottom']}>
-        <Header title={t('aiBuddy.details.title')} onBackPress={() => navigation.goBack()} />
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
-      </SafeContainer>
+    return renderScreenState(
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
     );
   }
 

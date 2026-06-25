@@ -64,7 +64,7 @@ const PasswordResetSuccessScreen = ({ navigation }) => {
           <AppText variant="h2" color={colors.textPrimary} style={styles.heading}>
             {t('auth.passwordResetSuccess.heading')}
           </AppText>
-          <AppText variant="subtitle" color={colors.textSecondary} style={styles.subheading}>
+          <AppText variant="body" color={colors.textSecondary} style={[styles.subheading, styles.textAlignCenter]}>
             {t('auth.passwordResetSuccess.subheading')}
           </AppText>
           <Button

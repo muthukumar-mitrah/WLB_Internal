@@ -6,12 +6,12 @@
  *                 camera badge on avatar, MediaPicker modal
  *  - Other profile: Request Buddy + Message buttons, 3-dot menu, Block/Report modals
  */
-import React, {memo, useCallback, useMemo, useState, useRef} from 'react';
-import {View, StatusBar, TouchableOpacity, Clipboard} from 'react-native';
+import React, { memo, useCallback, useMemo, useState, useRef } from 'react';
+import { View, StatusBar, TouchableOpacity, Clipboard } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Share from 'react-native-share';
-import {DrawerActions} from '@react-navigation/native';
-import {useTheme} from '../../../theme';
+import { DrawerActions } from '@react-navigation/native';
+import { useTheme } from '../../../theme';
 import {
   AppText,
   Button,
@@ -30,9 +30,9 @@ import {
 } from '../../../components/common';
 import PostCard from '../../home/Feed';
 import MediaPicker from '../../../components/common/MediaPicker';
-import {ROUTES} from '../../../constants';
-import {APP_IMAGES} from '../../../constants';
-import {useTranslation} from 'react-i18next';
+import { ROUTES } from '../../../constants';
+import { APP_IMAGES } from '../../../constants';
+import { useTranslation } from 'react-i18next';
 import { useFeed } from '../../../context/FeedContext';
 
 import { calculateWeightProgress } from '../../../utils/weightUtils';
@@ -49,14 +49,15 @@ const ProfileScreenContent = ({
   avatar,          // uri string (own profile only)
   onAvatarChange,  // (uri) => void  (own profile only)
   headerTitle,     // optional custom title
+  isShowHeader = true
 }) => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const theme = useTheme();
-  const {colors, spacing, borderRadius, shadows, isDark} = theme;
+  const { colors, spacing, borderRadius, shadows, isDark } = theme;
   const { likePost, savePost } = useFeed();
 
   const styles = useMemo(
-    () => createStyles({colors, spacing, borderRadius, shadows, isDark}),
+    () => createStyles({ colors, spacing, borderRadius, shadows, isDark }),
     [colors, spacing, borderRadius, shadows, isDark],
   );
 
@@ -75,9 +76,9 @@ const ProfileScreenContent = ({
   const [previewImage, setPreviewImage] = useState(null);
 
   // ── Weight progress (own profile) ───────────────────────────────────────────
-  const startWeight   = profile?.startWeight   ?? 150;
+  const startWeight = profile?.startWeight ?? 150;
   const currentWeight = profile?.currentWeight ?? 144;
-  const goalWeight    = profile?.goalWeight    ?? 140;
+  const goalWeight = profile?.goalWeight ?? 140;
   const progressPercent = calculateWeightProgress(startWeight, currentWeight, goalWeight);
 
   // ── Tabs & Feed State ───────────────────────────────────────────────────────
@@ -89,7 +90,7 @@ const ProfileScreenContent = ({
       const resolvedAvatar = avatar
         ? { uri: avatar }
         : (post.authorAvatar ?? APP_IMAGES.userAvatar);
-        
+
       const localUpdate = localPostUpdates[post.id];
       const liked = localUpdate?.liked !== undefined ? localUpdate.liked : (post.liked ?? false);
       const likesCount = localUpdate?.likes !== undefined ? localUpdate.likes : (post.likesCount ?? 0);
@@ -134,7 +135,7 @@ const ProfileScreenContent = ({
 
   // ── Avatar source ───────────────────────────────────────────────────────────
   const avatarSource = useMemo(
-    () => avatar ? {uri: avatar} : APP_IMAGES.userAvatar,
+    () => avatar ? { uri: avatar } : APP_IMAGES.userAvatar,
     [avatar],
   );
 
@@ -172,7 +173,7 @@ const ProfileScreenContent = ({
     if (!post) return;
     const shareMessage = post.text || 'Check out this post on WLB!';
     const shareUrl = `https://wlb.app/post/${post.id}`;
-    
+
     try {
       await Share.open({
         title: 'Share Post',
@@ -245,7 +246,7 @@ const ProfileScreenContent = ({
   }, [navigation]);
 
   const handleViewPortrait = useCallback(() => {
-    navigation.navigate(ROUTES.PORTRAIT_VIEW, {imageUri: avatarSource});
+    navigation.navigate(ROUTES.PORTRAIT_VIEW, { imageUri: avatarSource });
   }, [navigation, avatarSource]);
 
   const handlePressAvatar = useCallback(() => {
@@ -266,11 +267,11 @@ const ProfileScreenContent = ({
 
   // ── Other-profile handlers ──────────────────────────────────────────────────
   const handleRequestBuddy = useCallback(() => {
-    ToastService.show({type: 'success', message: t('profile.toast.requestSent')});
+    ToastService.show({ type: 'success', message: t('profile.toast.requestSent') });
   }, [t]);
 
   const handleMessage = useCallback(() => {
-    ToastService.show({type: 'info', message: t('profile.toast.openingChat')});
+    ToastService.show({ type: 'info', message: t('profile.toast.openingChat') });
   }, [t]);
 
   const handleChooseBuddy = useCallback(() => {
@@ -281,7 +282,7 @@ const ProfileScreenContent = ({
     ToastService.show({ type: 'success', message: t('aiBuddy.toast.followSuccess', 'Following AI Buddy') });
   }, [t]);
 
-  const handleOpenMenu  = useCallback(() => setIsMenuVisible(true), []);
+  const handleOpenMenu = useCallback(() => setIsMenuVisible(true), []);
   const handleCloseMenu = useCallback(() => setIsMenuVisible(false), []);
 
   const handleBlockPress = useCallback(() => {
@@ -296,7 +297,7 @@ const ProfileScreenContent = ({
 
   const handleConfirmBlock = useCallback(() => {
     setIsBlockConfirmVisible(false);
-    ToastService.show({type: 'success', message: t('profile.toast.blocked')});
+    ToastService.show({ type: 'success', message: t('profile.toast.blocked') });
   }, [t]);
 
   const handleCancelBlock = useCallback(() => setIsBlockConfirmVisible(false), []);
@@ -304,7 +305,7 @@ const ProfileScreenContent = ({
   const handleCopyLinkPress = useCallback(() => {
     const url = `https://weightlossbuddy.app/u/${profile?.name?.toLowerCase()}`;
     if (Clipboard?.setString) { Clipboard.setString(url); }
-    ToastService.show({type: 'success', message: t('profile.toast.copied')});
+    ToastService.show({ type: 'success', message: t('profile.toast.copied') });
     setIsMenuVisible(false);
   }, [profile?.name, t]);
 
@@ -314,7 +315,7 @@ const ProfileScreenContent = ({
       return (
         <TouchableOpacity
           style={styles.menuButton}
-          hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           onPress={handleOpenDrawer}
           accessibilityLabel="Open Menu"
           accessibilityRole="button">
@@ -322,7 +323,7 @@ const ProfileScreenContent = ({
         </TouchableOpacity>
       );
     }
-    
+
     if (isAIBuddy) {
       return null;
     }
@@ -330,12 +331,12 @@ const ProfileScreenContent = ({
     return (
       <TouchableOpacity
         style={styles.menuButton}
-        hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         onPress={handleOpenMenu}
         accessibilityLabel="Menu"
         accessibilityRole="button">
         <Icon name="dots-vertical" size={20} color={colors.textPrimary} />
-        </TouchableOpacity>
+      </TouchableOpacity>
     );
   }, [isOwnProfile, isAIBuddy, styles.menuButton, colors.textPrimary, handleOpenMenu, handleOpenDrawer]);
 
@@ -351,7 +352,7 @@ const ProfileScreenContent = ({
             variant="primary"
             size="md"
             fullWidth
-            style={styles.buttonHalf}
+            style={styles.flex1}
             accessibilityLabel={t('profile.buttons.updateProfile')}
           />
           <Button
@@ -362,7 +363,7 @@ const ProfileScreenContent = ({
             size="md"
             fullWidth
             style={styles.secondaryButton}
-            textStyle={{color: colors.textPrimary}}
+            textStyle={{ color: colors.textPrimary }}
             accessibilityLabel={t('profile.buttons.viewPortrait')}
           />
         </View>
@@ -377,7 +378,6 @@ const ProfileScreenContent = ({
             title={t('aiBuddy.details.chooseButton')}
             onPress={handleChooseBuddy}
             variant="primary"
-            size="md"
             fullWidth
             style={styles.primaryButton}
             accessibilityLabel="Choose as AI Buddy"
@@ -387,10 +387,9 @@ const ProfileScreenContent = ({
             title={t('aiBuddy.details.followButton')}
             onPress={handleFollow}
             variant="gray"
-            size="md"
             fullWidth
             style={styles.secondaryButton}
-            textStyle={{color: colors.textPrimary}}
+            textStyle={{ color: colors.textPrimary }}
             accessibilityLabel="Follow AI Buddy"
           />
         </View>
@@ -417,7 +416,7 @@ const ProfileScreenContent = ({
           size="md"
           fullWidth
           style={styles.secondaryButton}
-          textStyle={{color: colors.textPrimary}}
+          textStyle={{ color: colors.textPrimary }}
           accessibilityLabel={t('profile.buttons.message')}
         />
       </View>
@@ -431,18 +430,22 @@ const ProfileScreenContent = ({
 
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
-      <StatusBar
-        barStyle={colors.statusBar}
-        backgroundColor={colors.primarySurface}
-        translucent={false}
-      />
+      {isShowHeader && (
+        <>
+          <StatusBar
+            barStyle={colors.statusBar}
+            backgroundColor={colors.primarySurface}
+            translucent={false}
+          />
 
-      <Header
-        title={headerTitle || t('profile.header.title')}
-        showBack
-        transparent={true}
-        rightComponent={renderRightComponent}
-      />
+          <Header
+            title={headerTitle || t('profile.header.title')}
+            showBack
+            transparent={true}
+            rightComponent={renderRightComponent}
+          />
+        </>
+      )}
 
       <AppFlatList
         data={listData}
@@ -520,9 +523,9 @@ const ProfileScreenContent = ({
 
           if (item.type === 'tabs') {
             return (
-              <ProfileTabs 
-                activeTab={activeTab} 
-                onTabChange={setActiveTab} 
+              <ProfileTabs
+                activeTab={activeTab}
+                onTabChange={setActiveTab}
               />
             );
           }
@@ -612,7 +615,7 @@ const ProfileScreenContent = ({
                 borderRadius={36}
               />
               <AppText style={styles.confirmTitle}>
-                {t('profile.block.title', {name: profile?.name})}
+                {t('profile.block.title', { name: profile?.name })}
               </AppText>
               <AppText style={styles.confirmDescription}>
                 {t('profile.block.description')}

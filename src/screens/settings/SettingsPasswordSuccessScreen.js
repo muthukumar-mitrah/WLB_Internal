@@ -56,7 +56,7 @@ const SettingsPasswordSuccessScreen = ({ navigation }) => {
             {t('auth.settingsPassword.successTitle')}
           </AppText>
 
-          <AppText variant="body" color={colors.textSecondary} style={styles.successMessage}>
+          <AppText variant="body" color={colors.textSecondary} style={[styles.subheading, styles.successMessage]}>
             {t('auth.settingsPassword.successMessage')}
           </AppText>
 

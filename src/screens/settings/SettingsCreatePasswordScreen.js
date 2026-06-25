@@ -24,7 +24,6 @@ import createStyles from './styles';
 const SettingsCreatePasswordScreen = ({ navigation, route }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
-  const email = route.params?.email || '';
 
   const styles = useMemo(
     () => createStyles({ colors, spacing, borderRadius }),
@@ -85,7 +84,7 @@ const SettingsCreatePasswordScreen = ({ navigation, route }) => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <AppText variant="h2" color={colors.textPrimary} >
+        <AppText variant="h4" color={colors.textPrimary} style={styles.pageTitle} >
           {t('auth.settingsPassword.createPasswordTitle')}
         </AppText>
 

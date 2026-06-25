@@ -71,7 +71,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         <AppText variant="h2" color={colors.textPrimary} style={styles.heading}>
           {t('auth.forgotPassword.heading')}
         </AppText>
-        <AppText variant="subtitle" color={colors.textSecondary} style={styles.subheading}>
+        <AppText variant="subtitle" color={colors.textSecondary} style={[styles.subheading, styles.textAlignCenter]}>
           {t('auth.forgotPassword.subheading')}
         </AppText>
         <View style={styles.emailSection}>

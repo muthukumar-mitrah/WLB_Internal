@@ -62,7 +62,7 @@ const SettingsVerifyCodeScreen = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.emailIconContainer}>
-          <Ionicons name="mail" size={iconSize['2xl']} color={colors.primary} />
+          <Ionicons name="mail" size={iconSize['3xl']} color={colors.primary} />
         </View>
         <AppText variant="h3" color={colors.textPrimary} style={styles.successTitle}>
           {t('auth.settingsPassword.verifyCodeTitle')}
@@ -82,32 +82,17 @@ const SettingsVerifyCodeScreen = ({ navigation, route }) => {
           </AppText>
         </View>
 
-        <View style={styles.otpContainer}>
+        <View style={styles.otpWrapper}>
           <OtpInput
             numberOfDigits={OTP_LENGTH}
             onTextChange={setOtpCode}
             autoFocus
             focusColor={colors.borderFocused}
             theme={{
-              containerStyle: { width: '100%' },
-              pinCodeContainerStyle: {
-                width: 52,
-                height: 56,
-                borderRadius: borderRadius.md,
-                borderWidth: 1,
-                borderColor: colors.inputBorder,
-                backgroundColor: colors.inputBackground,
-                marginHorizontal: spacing[1],
-              },
-              focusedPinCodeContainerStyle: {
-                borderColor: colors.borderFocused,
-                borderWidth: 2,
-              },
-              pinCodeTextStyle: {
-                fontFamily: fonts.fontFamily.semiBold,
-                fontSize: fonts.fontSize.xl,
-                color: colors.textPrimary,
-              },
+              containerStyle: styles.otpContainer,
+              pinCodeContainerStyle: styles.pinCodeContainer,
+              focusedPinCodeContainerStyle: styles.focusedPinCodeContainer,
+              pinCodeTextStyle: styles.pinCodeText,
             }}
           />
         </View>
