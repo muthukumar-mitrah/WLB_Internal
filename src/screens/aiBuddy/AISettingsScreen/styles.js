@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { fontSize, letterSpacing } from '../../../theme/fonts';
+import { fontSize, fontWeight, letterSpacing } from '../../../theme/fonts';
 
 export const createStyles = ({ colors, spacing, borderRadius, isDark }) => StyleSheet.create({
   container: {
@@ -7,7 +7,7 @@ export const createStyles = ({ colors, spacing, borderRadius, isDark }) => Style
     backgroundColor: colors.background,
   },
   contentContainer: {
-    paddingHorizontal: spacing[4],
+    paddingHorizontal: spacing[5],
     paddingVertical: spacing[1],
   },
   title: {
@@ -18,7 +18,7 @@ export const createStyles = ({ colors, spacing, borderRadius, isDark }) => Style
     marginBottom: spacing[3],
   },
   subtitle: {
-    marginBottom: spacing[4],
+    marginBottom: spacing[3],
   },
   // Memory Option Selected
   memoryOptionSelected: {
@@ -41,7 +41,7 @@ export const createStyles = ({ colors, spacing, borderRadius, isDark }) => Style
     marginRight: spacing[3],
   },
   memoryTitleSelected: {
-    fontWeight: '700',
+    fontWeight: fontWeight.bold,
     color: colors.primary,
     marginBottom: 2,
   },
@@ -61,7 +61,7 @@ export const createStyles = ({ colors, spacing, borderRadius, isDark }) => Style
     marginBottom: spacing[1],
   },
   memoryTitleDefault: {
-    fontWeight: '700',
+    fontWeight: fontWeight.bold,
     marginBottom: 2,
   },
   memoryDescDefault: {
@@ -86,12 +86,12 @@ export const createStyles = ({ colors, spacing, borderRadius, isDark }) => Style
   },
   actionItem: {
     flexDirection: 'row',
-    padding: spacing[4],
+    padding: spacing[2.5],
     alignItems: 'center',
   },
   actionIconWrapper: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     borderRadius: borderRadius.md,
     backgroundColor: isDark ? colors.border : colors.primaryLightSoft,
     justifyContent: 'center',
@@ -103,11 +103,14 @@ export const createStyles = ({ colors, spacing, borderRadius, isDark }) => Style
     marginRight: spacing[3],
   },
   actionTitle: {
-    fontWeight: '600',
+    fontWeight: fontWeight.medium,
     marginBottom: 2,
   },
   actionDesc: {
-    lineHeight: 18,
+    lineHeight: 16,
+    letterSpacing: -0.28,
+    fontWeight:fontWeight.medium,
+    fontSize:fontSize.sm,
   },
   divider: {
     height: 1,
@@ -129,7 +132,10 @@ export const createStyles = ({ colors, spacing, borderRadius, isDark }) => Style
     marginTop: spacing[3],
   },
   disclaimerText: {
-    fontWeight: '700',
-    letterSpacing: letterSpacing.tight
+    fontWeight: fontWeight.semiBold,
+    fontSize:fontSize.base,
+    lineHeight: 14,
+    letterSpacing: -0.28,
+    textAlign:"center"
   },
 });

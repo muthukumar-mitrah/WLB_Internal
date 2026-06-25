@@ -309,7 +309,7 @@ const AccountSettingScreen = () => {
         backgroundColor={colors.background}
         translucent={false}
       />
-      <Header title={t('accountSettings.title', 'Account Settings')} showBack titleAlign="left" transparent={true} />
+      <Header title={t('accountSettings.title')} showBack titleAlign="left" transparent={true} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}

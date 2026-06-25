@@ -46,7 +46,7 @@ const AISettingsScreen = () => {
 
         {/* Memory Section */}
         <AppText variant="subtitleMedium" color={colors.textSecondary} style={styles.sectionTitle}>
-          {t('aiBuddy.settings.memory', 'Memory')}
+          {t('aiBuddy.settings.memory')}
         </AppText>
 
         <TouchableOpacity
@@ -67,14 +67,14 @@ const AISettingsScreen = () => {
               style={memoryMode === 'keep' ? styles.memoryTitleSelected : styles.memoryTitleDefault}
               color={memoryMode !== 'keep' ? colors.textPrimary : undefined}
             >
-              {t('aiBuddy.settings.keepHistory', 'Keep chat history for 30 days')}
+              {t('aiBuddy.settings.keepHistory')}
             </AppText>
             <AppText
               variant="caption"
               style={memoryMode === 'keep' ? styles.memoryDescSelected : styles.memoryDescDefault}
               color={memoryMode !== 'keep' ? colors.textSecondary : undefined}
             >
-              {t('aiBuddy.settings.keepHistoryDesc', { name: buddy.name, defaultValue: `${buddy.name} can use recent conversations to provide more personalized support` })}
+              {t('aiBuddy.settings.keepHistoryDesc', { name: buddy.name })}
             </AppText>
           </View>
           <Ionicons
@@ -102,18 +102,18 @@ const AISettingsScreen = () => {
           </View>
           <View style={styles.memoryTextContainer}>
             <AppText
-              variant="bodyMedium"
+              variant="body"
               style={memoryMode === 'erase' ? styles.memoryTitleSelected : styles.memoryTitleDefault}
               color={memoryMode !== 'erase' ? colors.textPrimary : undefined}
             >
-              {t('aiBuddy.settings.eraseHistory', 'Erase all AI history')}
+              {t('aiBuddy.settings.eraseHistory')}
             </AppText>
             <AppText
               variant="caption"
               style={memoryMode === 'erase' ? styles.memoryDescSelected : styles.memoryDescDefault}
               color={memoryMode !== 'erase' ? colors.textSecondary : undefined}
             >
-              {t('aiBuddy.settings.eraseHistoryDesc', 'Remove saved AI conversation history.')}
+              {t('aiBuddy.settings.eraseHistoryDesc')}
             </AppText>
           </View>
           <Ionicons
@@ -130,7 +130,7 @@ const AISettingsScreen = () => {
 
         {/* AI Buddy Action Section */}
         <AppText variant="bodyMedium" color={colors.textSecondary} style={styles.sectionTitle}>
-          {t('aiBuddy.settings.action', 'AI Buddy Action')}
+          {t('aiBuddy.settings.action')}
         </AppText>
 
         <View style={styles.actionCard}>
@@ -139,11 +139,11 @@ const AISettingsScreen = () => {
               <Ionicons name="heart-outline" size={iconSize.md} color={colors.primary} />
             </View>
             <View style={styles.actionTextContainer}>
-              <AppText variant="bodyMedium" color={colors.textPrimary} style={styles.actionTitle}>
-                {t('aiBuddy.settings.suggestLikes', 'Suggest likes')}
+              <AppText variant="h5" color={colors.textPrimary} style={styles.actionTitle}>
+                {t('aiBuddy.settings.suggestLikes')}
               </AppText>
               <AppText variant="caption" color={colors.textSecondary} style={styles.actionDesc}>
-                {t('aiBuddy.settings.suggestLikesDesc', { name: buddy.name, defaultValue: `${buddy.name} can suggest when a post may be worth supporting` })}
+                {t('aiBuddy.settings.suggestLikesDesc', { name: buddy.name })}
               </AppText>
             </View>
             <CommonToggle
@@ -160,10 +160,10 @@ const AISettingsScreen = () => {
             </View>
             <View style={styles.actionTextContainer}>
               <AppText variant="bodyMedium" color={colors.textPrimary} style={styles.actionTitle}>
-                {t('aiBuddy.settings.suggestComments', 'Suggest comments')}
+                {t('aiBuddy.settings.suggestComments')}
               </AppText>
               <AppText variant="caption" color={colors.textSecondary} style={styles.actionDesc}>
-                {t('aiBuddy.settings.suggestCommentsDesc', { name: buddy.name, defaultValue: `${buddy.name} can help draft supportive replies, but you choose what to post.` })}
+                {t('aiBuddy.settings.suggestCommentsDesc', { name: buddy.name })}
               </AppText>
             </View>
             <CommonToggle
@@ -175,22 +175,20 @@ const AISettingsScreen = () => {
 
         <View style={styles.footer}>
           <Button
-            title={t('aiBuddy.settings.saveChanges', 'Save Changes')}
+            title={t('aiBuddy.settings.saveChanges')}
             variant="primary"
-            size="lg"
             onPress={() => { }}
             textStyle={styles.buttonText}
           />
           <View style={styles.buttonSpacer} />
           <Button
-            title={t('aiBuddy.settings.cancel', 'Cancel')}
+            title={t('aiBuddy.settings.cancel')}
             variant="gray"
-            size="lg"
             onPress={handleCancel}
             textStyle={styles.buttonText}
           />
           <Button
-            title={t('aiBuddy.settings.viewDisclaimer', 'View AI Disclaimer')}
+            title={t('aiBuddy.settings.viewDisclaimer')}
             variant="ghost"
             textStyle={styles.disclaimerText}
             style={styles.disclaimerBtn}
