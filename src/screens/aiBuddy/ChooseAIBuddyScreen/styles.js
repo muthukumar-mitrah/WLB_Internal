@@ -1,27 +1,28 @@
 import { StyleSheet } from 'react-native';
 import { fontSize, fontWeight } from '../../../theme/fonts';
+import { borderRadius } from '../../../theme/spacing';
 
 export const createStyles = ({ colors, spacing }) => StyleSheet.create({
   listContainer: {
     padding: spacing[5],
   },
   cardContainer: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
     borderRadius: 16,
     padding: spacing[3],
     marginBottom: spacing[2],
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
-    borderWidth: colors.isDark ? 1 : 0,
+    borderWidth: 1,
     borderColor: colors.border,
-    gap:12
+    gap: 12
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  headerPressable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   avatar: {
     width: 56,
@@ -56,7 +57,7 @@ export const createStyles = ({ colors, spacing }) => StyleSheet.create({
   cardBody: {
     backgroundColor: colors.backgroundSecondary,
     padding: spacing[2],
-    borderRadius: 16,
+    borderRadius: borderRadius.md,
   },
   descriptionText: {
     lineHeight: 17.5,

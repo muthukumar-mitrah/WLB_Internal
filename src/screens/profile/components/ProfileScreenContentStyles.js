@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
+const createStyles = ({ colors, spacing, borderRadius, isDark }) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -45,27 +45,26 @@ const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
       marginTop: spacing[4],
       padding: spacing[4],
       borderRadius: borderRadius['2xl'],
-      backgroundColor: colors.cardBackground,
+      backgroundColor: colors.background,
       borderWidth: 1,
       borderColor: colors.border,
-      ...shadows.card,
     },
     weightTitle: {
       marginBottom: spacing[1],
-      height:24,
-      fontSize:16,
-      fontWeight:'700',
-      fontStyle:'bold',
-      lineHeight:24,
-      letterSpacing:0,
+      height: 24,
+      fontSize: 16,
+      fontWeight: '700',
+      fontStyle: 'bold',
+      lineHeight: 24,
+      letterSpacing: 0,
     },
     weightSubtitle: {
       marginBottom: spacing[4],
-      height:18,
-      fontSize:12,
-      fontWeight:'400',
-      lineHeight:18,
-      letterSpacing:0,
+      height: 18,
+      fontSize: 12,
+      fontWeight: '400',
+      lineHeight: 18,
+      letterSpacing: 0,
     },
     weightRow: {
       flexDirection: 'row',

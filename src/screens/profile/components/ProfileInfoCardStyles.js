@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
+const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
   StyleSheet.create({
     /* ── Main Profile Card ── */
     mainCard: {
-      backgroundColor: colors.cardBackground,
+      backgroundColor: colors.background,
       marginHorizontal: spacing[4],
       marginTop: spacing[2],
       borderRadius: borderRadius['3xl'], // Very rounded
@@ -13,7 +13,6 @@ const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
       paddingHorizontal: spacing[3], // Reduced horizontal padding
       borderWidth: 1,
       borderColor: colors.border,
-      ...shadows.card,
     },
 
     /* ── Avatar Section ── */
@@ -68,7 +67,7 @@ const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
       alignItems: 'center',
       justifyContent: 'space-evenly',
       paddingVertical: spacing[3],
-      backgroundColor: colors.backgroundSecondary,
+      backgroundColor: colors.primarySurface,
       borderRadius: borderRadius.xl,
       marginBottom: spacing[4],
     },
@@ -97,7 +96,7 @@ const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: colors.backgroundSecondary,
+      backgroundColor: colors.primarySurface,
       borderRadius: borderRadius.xl,
       paddingVertical: spacing[3],
       paddingHorizontal: spacing[3],
@@ -117,7 +116,7 @@ const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
       backgroundColor: colors.surface,
       alignItems: 'center',
       justifyContent: 'center',
-      marginRight: spacing[2.5]     
+      marginRight: spacing[2.5]
     },
     infoIconImage: {
       width: 18,

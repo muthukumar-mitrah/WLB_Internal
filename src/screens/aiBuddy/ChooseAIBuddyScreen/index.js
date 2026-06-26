@@ -11,15 +11,21 @@ import { ROUTES } from '../../../constants';
 const BuddyCard = React.memo(({ item, onPress, colors, styles }) => (
   <View style={styles.cardContainer}>
     <View style={styles.cardHeader}>
-      <Image source={{ uri: item.image }} style={styles.avatar} />
-      <View style={styles.headerText}>
-        <AppText variant="subtitleMedium" color={colors.textPrimary} style={styles.nameText}>
-          {item.name}
-        </AppText>
-        <AppText variant="caption" color={colors.textSecondary}>
-          {item.role}
-        </AppText>
-      </View>
+      <TouchableOpacity
+        style={styles.headerPressable}
+        onPress={() => onPress(item.id)}
+        activeOpacity={0.7}
+      >
+        <Image source={{ uri: item.image }} style={styles.avatar} />
+        <View style={styles.headerText}>
+          <AppText variant="subtitleMedium" color={colors.textPrimary} style={styles.nameText}>
+            {item.name}
+          </AppText>
+          <AppText variant="caption" color={colors.textSecondary}>
+            {item.role}
+          </AppText>
+        </View>
+      </TouchableOpacity>
       <Button
         title="Explore"
         variant="primary"
@@ -27,7 +33,7 @@ const BuddyCard = React.memo(({ item, onPress, colors, styles }) => (
         fullWidth={false}
         onPress={() => onPress(item.id)}
         style={styles.exploreBtn}
-         textStyle={styles.exploreBtnText}
+        textStyle={styles.exploreBtnText}
       />
     </View>
     <View style={styles.cardBody}>
@@ -43,7 +49,7 @@ const ChooseAIBuddyScreen = () => {
   const navigation = useNavigation();
   const { colors, spacing } = useTheme();
   const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
-  
+
   const [buddies, setBuddies] = useState([]);
   const [loading, setLoading] = useState(true);
 
