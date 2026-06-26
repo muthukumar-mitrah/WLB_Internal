@@ -2,8 +2,9 @@ import {
   MOCK_PROFILE, 
   MOCK_PROFILES, 
   PROFILE_TABS,
-  REPORT_OPTIONS
-} from '../../constants/profileConstants';
+  REPORT_OPTIONS,
+  BUDDY_PROFILE_TABS
+} from '../../constants';
 
 // Simulate network delay
 const delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
@@ -28,6 +29,11 @@ const getProfileTabs = async () => {
   return { data: PROFILE_TABS };
 };
 
+const getBuddyProfileTabs = async () => {
+  await delay(100);
+  return { data: BUDDY_PROFILE_TABS };
+};
+
 const getReportOptions = async () => {
   await delay(100);
   return { data: REPORT_OPTIONS };
@@ -39,6 +45,7 @@ const profileService = {
   getUsers,
   getProfileTabs,
   getReportOptions,
+  getBuddyProfileTabs
 };
 
 export default profileService;

@@ -4,12 +4,13 @@
  * Layout rule: the back button is always in a fixed-width left slot.
  * Title alignment (left or center) never shifts the back button position.
  */
-import React, {memo} from 'react';
-import {View, TouchableOpacity, StyleSheet, Platform} from 'react-native';
+import React, {memo, useMemo} from 'react';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useTheme} from '../../theme';
 import AppText from './AppText';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from '../../i18n/useTranslation';
 
 const BACK_SLOT_WIDTH = 48; // fixed width — back icon never moves
 
@@ -27,7 +28,8 @@ const Header = ({
 }) => {
   const navigation = useNavigation();
   const {colors, spacing, shadows} = useTheme();
-
+  const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
+ const { t } = useTranslation();
   const handleBack = () => {
     if (onBackPress) {
       onBackPress();
@@ -41,13 +43,7 @@ const Header = ({
       testID={testID}
       style={[
         styles.container,
-        {
-          backgroundColor: transparent ? 'transparent' : colors.background,
-          paddingHorizontal: spacing[4],
-          paddingTop: Platform.OS === 'ios' ? spacing[2] : spacing[2],
-          paddingBottom: spacing[3],
-          zIndex: 10,
-        },
+         styles.headerContainer(transparent),       
         !transparent && shadows.xs,
         style,
       ]}>
@@ -57,8 +53,17 @@ const Header = ({
         {leftComponent ? (
           leftComponent
         ) : showBack ? (
-          <TouchableOpacity onPress={handleBack} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="arrow-back-ios-new" size={22} color={colors.textPrimary} />
+          <TouchableOpacity
+            onPress={handleBack}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel={t('common.back')}
+          >
+            <MaterialIcons
+              name="arrow-back-ios-new"
+              size={22}
+              color={colors.textPrimary}
+            />
           </TouchableOpacity>
         ) : null}
       </View>
@@ -92,12 +97,19 @@ const Header = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = ({ colors, spacing }) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     minHeight: 56,
   },
+  headerContainer: transparent => ({
+    backgroundColor: transparent ? 'transparent' : colors.background,
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[2],
+    paddingBottom: spacing[3],
+    zIndex: 10,
+}),
   // Fixed-width slot so the back icon never shifts
   backSlot: {
     width: BACK_SLOT_WIDTH,

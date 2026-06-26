@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import ProfileScreenContent from '../components/ProfileScreenContent';
 import { useProfile } from '../../../context/ProfileContext';
-import { MOCK_PROFILE } from '../../../constants/profileConstants';
+import { MOCK_PROFILE, PROFILE_TABS } from '../../../constants';
 
 const ViewProfileScreen = ({ navigation }) => {
   const { allUsers } = useProfile();
@@ -28,6 +28,7 @@ const ViewProfileScreen = ({ navigation }) => {
       navigation={navigation}
       isOwnProfile={false}
       profile={profile}
+      tabs={PROFILE_TABS}
     />
   );
 };

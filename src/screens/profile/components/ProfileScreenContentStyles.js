@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
+import { fontSize, fontWeight } from '../../../theme/fonts';
 
-const createStyles = ({ colors, spacing, borderRadius, isDark }) =>
+const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -53,16 +54,15 @@ const createStyles = ({ colors, spacing, borderRadius, isDark }) =>
       marginBottom: spacing[1],
       height: 24,
       fontSize: 16,
-      fontWeight: '700',
-      fontStyle: 'bold',
+      fontWeight: fontWeight.bold,
       lineHeight: 24,
       letterSpacing: 0,
     },
     weightSubtitle: {
       marginBottom: spacing[4],
       height: 18,
-      fontSize: 12,
-      fontWeight: '400',
+      fontSize: fontSize.sm,
+      fontWeight: fontWeight.regular,
       lineHeight: 18,
       letterSpacing: 0,
     },
@@ -116,14 +116,14 @@ const createStyles = ({ colors, spacing, borderRadius, isDark }) =>
       left: 0,
     },
     confirmTitle: {
-      fontSize: 18,
+      fontSize: fontSize.lg,
       fontWeight: 'bold',
       color: colors.textPrimary,
       marginBottom: spacing[2.5],
       textAlign: 'center',
     },
     confirmDescription: {
-      fontSize: 14,
+      fontSize: fontSize.base,
       color: colors.textSecondary,
       textAlign: 'center',
       marginBottom: spacing[6],
@@ -138,6 +138,10 @@ const createStyles = ({ colors, spacing, borderRadius, isDark }) =>
     confirmButton: {
       flex: 1,
     },
+    emptyStateContainer: {
+       flex: 1,
+      paddingVertical: spacing[10],
+    }
   });
 
 export default createStyles;

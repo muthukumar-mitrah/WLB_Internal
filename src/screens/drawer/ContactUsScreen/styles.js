@@ -8,6 +8,8 @@ const ICON_CIRCLE_SIZE = 40;
 const createStyles = ({colors, spacing, borderRadius, shadows}) =>
   StyleSheet.create({
     flex: {flex: 1},
+    marginBottom6: {marginBottom: 6},
+    paddingBottom16: {paddingBottom: spacing[4]},
 
     // ── Header ───────────────────────────────────────────────────────────────
     header: {

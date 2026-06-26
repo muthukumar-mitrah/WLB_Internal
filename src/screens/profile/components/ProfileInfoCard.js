@@ -1,13 +1,13 @@
-import React, {memo, useMemo} from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
+import React, { memo, useMemo } from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {APP_IMAGES} from '../../../constants';
-import {useTheme} from '../../../theme';
-import {AppText, AppImage, Divider} from '../../../components/common';
+import { APP_IMAGES } from '../../../constants';
+import { useTheme } from '../../../theme';
+import { AppText, AppImage, Divider } from '../../../components/common';
 import createStyles from './ProfileInfoCardStyles';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const StatItem = memo(({count, label, colors, styles}) => (
+const StatItem = memo(({ count, label, colors, styles }) => (
   <View style={styles.statItem}>
     <AppText variant="h3" color={colors.textPrimary} style={styles.statCount}>
       {count}
@@ -18,33 +18,51 @@ const StatItem = memo(({count, label, colors, styles}) => (
   </View>
 ));
 
-const InfoCardItem = memo(({imageSource, label, value, colors, styles, positionStyle}) => (
-  <View style={[styles.infoCardSingle, positionStyle]}>
-    <View style={styles.infoIconWrapper}>
-      <Image
-        source={imageSource}
-        style={styles.infoIconImage}
-        resizeMode="contain"
-      />
+const InfoCardItem = memo(
+  ({ imageSource, label, value, colors, styles, positionStyle }) => (
+    <View style={[styles.infoCardSingle, positionStyle]}>
+      <View style={styles.infoIconWrapper}>
+        <Image
+          source={imageSource}
+          style={styles.infoIconImage}
+          resizeMode="contain"
+        />
+      </View>
+      <View style={styles.infoTextBlock}>
+        <AppText
+          variant="caption"
+          color={colors.textSecondary}
+          numberOfLines={1}
+        >
+          {label}
+        </AppText>
+        <AppText
+          variant="bodyMedium"
+          color={colors.textPrimary}
+          numberOfLines={1}
+        >
+          {value}
+        </AppText>
+      </View>
     </View>
-    <View style={styles.infoTextBlock}>
-      <AppText variant="caption" color={colors.textSecondary} numberOfLines={1}>
-        {label}
-      </AppText>
-      <AppText variant="bodyMedium" color={colors.textPrimary} numberOfLines={1}>
-        {value}
-      </AppText>
-    </View>
-  </View>
-));
+  ),
+);
 
-const ProfileInfoCard = ({profile, isOwnProfile, isAIBuddy, avatarSource, onPressCamera, onPressAvatar, children}) => {
-  const {t} = useTranslation();
+const ProfileInfoCard = ({
+  profile,
+  isOwnProfile,
+  isAIBuddy,
+  avatarSource,
+  onPressCamera,
+  onPressAvatar,
+  children,
+}) => {
+  const { t } = useTranslation();
   const theme = useTheme();
-  const {colors, spacing, borderRadius, shadows, isDark} = theme;
+  const { colors, spacing, borderRadius, shadows, isDark } = theme;
 
   const styles = useMemo(
-    () => createStyles({colors, spacing, borderRadius, shadows, isDark}),
+    () => createStyles({ colors, spacing, borderRadius, shadows, isDark }),
     [colors, spacing, borderRadius, shadows, isDark],
   );
 
@@ -76,10 +94,18 @@ const ProfileInfoCard = ({profile, isOwnProfile, isAIBuddy, avatarSource, onPres
         </View>
 
         <View style={styles.avatarTextBlock}>
-          <AppText variant="h3" color={colors.textPrimary} style={styles.userName}>
+          <AppText
+            variant="h3"
+            color={colors.textPrimary}
+            style={styles.userName}
+          >
             {profile?.name}
           </AppText>
-          <AppText variant="caption" color={colors.textSecondary} style={styles.userBio}>
+          <AppText
+            variant="caption"
+            color={colors.textSecondary}
+            style={styles.userBio}
+          >
             {profile?.bio}
           </AppText>
         </View>
@@ -87,17 +113,46 @@ const ProfileInfoCard = ({profile, isOwnProfile, isAIBuddy, avatarSource, onPres
 
       {/* Stats Row */}
       <View style={styles.statsRow}>
-        <StatItem count={profile.postCount} label={t('profile.infoCard.posts')} colors={colors} styles={styles} />
-        <Divider orientation="vertical" color={colors.border} style={styles.statDivider} />
-        <StatItem count={profile.followingCount} label={t('profile.infoCard.following')} colors={colors} styles={styles} />
-        <Divider orientation="vertical" color={colors.border} style={styles.statDivider} />
-        <StatItem count={profile.followersCount} label={t('profile.infoCard.followers')} colors={colors} styles={styles} />
+        <StatItem
+          count={profile.postCount}
+          label={t('profile.infoCard.posts')}
+          colors={colors}
+          styles={styles}
+        />
+        <Divider
+          orientation="vertical"
+          color={colors.border}
+          style={styles.statDivider}
+        />
+        <StatItem
+          count={profile.followingCount}
+          label={t('profile.infoCard.following')}
+          colors={colors}
+          styles={styles}
+        />
+        <Divider
+          orientation="vertical"
+          color={colors.border}
+          style={styles.statDivider}
+        />
+        <StatItem
+          count={profile.followersCount}
+          label={t('profile.infoCard.followers')}
+          colors={colors}
+          styles={styles}
+        />
+        <Divider
+          orientation="vertical"
+          color={colors.border}
+          style={styles.statDivider}
+        />
         {!isAIBuddy && (
-          <>
-            <Divider orientation="vertical" color={colors.border} style={styles.statDivider} />
-            <StatItem count={profile.buddiesCount} label={t('profile.infoCard.buddies')} colors={colors} styles={styles} />
-          </>
-        )}
+        <StatItem
+          count={profile.buddiesCount}
+          label={t('profile.infoCard.buddies')}
+          colors={colors}
+          styles={styles}
+        />)}
       </View>
 
       {/* Info Grid */}

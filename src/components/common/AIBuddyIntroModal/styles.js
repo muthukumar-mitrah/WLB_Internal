@@ -1,14 +1,15 @@
 import { StyleSheet } from 'react-native';
 
-export const createStyles = ({ colors, spacing }) => StyleSheet.create({
+export const createStyles = ({ colors, spacing, isDark }) => StyleSheet.create({
   container: {
     paddingTop: spacing[3],
     paddingBottom: spacing[3],
+
   },
   infoCard: {
-    backgroundColor: colors.backgroundSecondary,
-    borderRadius: 16,
-    padding: spacing[2],
+    backgroundColor: isDark ? colors.background : colors.backgroundSecondary,
+    borderRadius: spacing[4],
+    padding: spacing[3],
     marginBottom: spacing[3],
   },
   featureRow: {

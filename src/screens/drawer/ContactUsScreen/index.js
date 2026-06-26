@@ -37,7 +37,7 @@ const SelectField = memo(
           <AppText
             variant="label"
             color={colors.textSecondary}
-            style={{ marginBottom: 6 }}>
+            style={styles.marginBottom6}>
             {label}
           </AppText>
         )}
@@ -70,7 +70,7 @@ const SelectField = memo(
           title={label}
           position="bottom"
         >
-          <View style={{ paddingBottom: 16 }}>
+          <View style={styles.paddingBottom16}>
             {options.map((option, index) => (
               <TouchableOpacity
                 key={option}

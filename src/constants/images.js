@@ -87,7 +87,8 @@ export const APP_IMAGES = {
   aiBuddyChat: require('../assets/icons/ai_chat_message.png'),
   aiBuddySupport: require('../assets/icons/ai_support.png'),
   aiBuddyDiet: require('../assets/icons/ai_diet_nutrition.png'),
-  aiBuddyResource: require('../assets/icons/ai_resource.png'),
+  ai_diet_apple: require('../assets/icons/ai_dietary_apple.png'),
+  aiBuddyResource: require('../assets/icons/ai_resoureces.png'),
   aiBuddyWorkout: require('../assets/icons/ai_workout.png'),
   aiBuddyActivity: require('../assets/icons/ai_recent_activity.png'), // used as a fallback for time/clock
   aiBuddySettings: require('../assets/icons/ai_settings.png'),

@@ -2,13 +2,10 @@ import React, { memo, useMemo } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../../theme';
 import { AppText } from '../../../components/common';
-import { useProfile } from '../../../context/ProfileContext';
 
-const ProfileTabs = ({ activeTab = 'Posts', onTabChange, tabs, createGroupButton }) => {
+const ProfileTabs = ({ activeTab = 'Posts', onTabChange, tabs =[], createGroupButton }) => {
   const { colors, spacing } = useTheme();
   const styles = useMemo(() => createStyles({ colors, spacing }), [colors, spacing]);
-  const { tabs: contextTabs } = useProfile();
-  const displayTabs = tabs || contextTabs;
 
   return (
     <View style={styles.container}>
@@ -18,7 +15,7 @@ const ProfileTabs = ({ activeTab = 'Posts', onTabChange, tabs, createGroupButton
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          {displayTabs?.map((tab) => {
+          {tabs?.map((tab) => {
             const isActive = tab === activeTab;
           return (
             <TouchableOpacity

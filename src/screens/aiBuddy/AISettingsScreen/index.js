@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { SafeContainer, Header, AppText, Button, CommonToggle } from '../../../components/common';
+import { SafeContainer, Header, AppText, Button, CommonToggle, ToastService } from '../../../components/common';
 import { useTheme } from '../../../theme';
 import { createStyles } from './styles';
 import AiBuddyDisclaimerModal from '../../../components/home/AiBuddyDisclaimerModal';
@@ -30,8 +30,18 @@ const AISettingsScreen = () => {
     navigation.goBack();
   };
 
-  const title = t('aiBuddy.settings.title', { name: buddy.name, defaultValue: `${buddy.name} AI Settings` });
-  const subtitle = t('aiBuddy.settings.subtitle', { name: buddy.name, defaultValue: `Control how ${buddy.name} remembers your activity and supports your interactions.` });
+  const handleSave = () => {
+    // Save the settings
+    ToastService.show({
+      title: t('common.success'),
+      message: t('aiBuddy.settings.savedSuccessfully'),
+      type: 'success',
+    });
+    navigation.goBack();
+  };
+
+  const title = t('aiBuddy.settings.title', { name: buddy.name,});
+  const subtitle = t('aiBuddy.settings.subtitle', { name: buddy.name, });
 
   return (
     <SafeContainer edges={['top', 'bottom']}>
@@ -177,7 +187,7 @@ const AISettingsScreen = () => {
           <Button
             title={t('aiBuddy.settings.saveChanges')}
             variant="primary"
-            onPress={() => { }}
+            onPress={handleSave}
             textStyle={styles.buttonText}
           />
           <View style={styles.buttonSpacer} />

@@ -3,6 +3,7 @@ import { View, ActivityIndicator } from 'react-native';
 import ProfileScreenContent from '../components/ProfileScreenContent';
 import { useProfile } from '../../../context/ProfileContext';
 import { useTheme } from '../../../theme';
+import { PROFILE_TABS } from '../../../constants';
 
 const MyProfileScreen = ({ navigation }) => {
   const [avatar, setAvatar] = useState(null);
@@ -27,6 +28,7 @@ const MyProfileScreen = ({ navigation }) => {
       profile={profile}
       avatar={avatar}
       onAvatarChange={setAvatar}
+      tabs={PROFILE_TABS}
     />
   );
 };

@@ -82,8 +82,13 @@ const ProfileScreenContent = ({
   const progressPercent = calculateWeightProgress(startWeight, currentWeight, goalWeight);
 
   // ── Tabs & Feed State ───────────────────────────────────────────────────────
-  const [activeTab, setActiveTab] = useState('Posts');
+  const [activeTab, setActiveTab] = useState(tabs[0] ?? 'Posts');
   const [localPostUpdates, setLocalPostUpdates] = useState({});
+
+  useEffect(() => {
+    setActiveTab(tabs[0] ?? 'Posts');
+  }, [tabs]);
+  
 
   const feedData = useMemo(() => {
     return profile.posts?.map(post => {
@@ -92,9 +97,22 @@ const ProfileScreenContent = ({
         : (post.authorAvatar ?? APP_IMAGES.userAvatar);
 
       const localUpdate = localPostUpdates[post.id];
-      const liked = localUpdate?.liked !== undefined ? localUpdate.liked : (post.liked ?? false);
-      const likesCount = localUpdate?.likes !== undefined ? localUpdate.likes : (post.likesCount ?? 0);
-      const saved = localUpdate?.saved !== undefined ? localUpdate.saved : (post.saved ?? false);
+      const liked =
+        localUpdate?.liked !== undefined
+          ? localUpdate.liked
+          : post.liked ?? false;
+      const likesCount =
+        localUpdate?.likes !== undefined
+          ? localUpdate.likes
+          : post.likesCount ?? 0;
+      const saved =
+        localUpdate?.saved !== undefined
+          ? localUpdate.saved
+          : post.saved ?? false;
+
+      const mediaType =
+        post.mediaType ??
+        (post.video ? 'video' : post.image ? 'image' : 'text');
 
       return {
         // identity
@@ -113,25 +131,60 @@ const ProfileScreenContent = ({
         shares: post.sharesCount ?? 0,
         saved: saved,
         liked: liked,
+        type: post.type ?? 'post',
+        mediaType,
       };
     }) || [];
-  }, [profile.posts, profile?.id, profile?.name, avatar, isOwnProfile, currentWeight, localPostUpdates]);
+   }, [
+    profile.posts,
+    profile?.id,
+    profile?.name,
+    avatar,
+    isOwnProfile,
+    currentWeight,
+    localPostUpdates,
+  ]);
 
-  const listData = useMemo(() => {
-    const base = [
-      { id: 'profile-header', type: 'header' },
-      { id: 'profile-tabs', type: 'tabs' }
-    ];
-
-    if (activeTab === 'Posts' || activeTab === 'All') {
-      return [
-        ...base,
-        ...feedData.map(post => ({ id: post.id, type: 'post', data: post }))
-      ];
-    } else {
-      return [...base, { id: `empty-${activeTab}`, type: 'blank' }];
+  const filteredFeedData = useMemo(() => {
+    switch (activeTab) {
+      // ── My Profile / View Profile tabs ────────────────────────────────────────
+      case 'Posts':
+        return feedData.filter(p => p.type === 'post');
+      case 'Activities':
+        return feedData.filter(p => p.type === 'activity');
+      case 'All':
+        return feedData;
+      case 'Photos':
+        return feedData.filter(p => p.mediaType === 'image');
+      case 'Videos':
+        return feedData.filter(p => p.mediaType === 'video');
+      // ── AI Buddy tabs ─────────────────────────────────────────────────────────
+      case 'All Posts':
+        return feedData;
+      case 'Text':
+        return feedData.filter(p => p.mediaType === 'text');
+      default:
+        return feedData;
     }
   }, [feedData, activeTab]);
+
+const listData = useMemo(() => {
+    const base = [
+      { id: 'profile-header', type: 'header' },
+      { id: 'profile-tabs', type: 'tabs' },
+    ];
+
+    const postItems = filteredFeedData.map(post => ({
+      id: post.id,
+      type: 'post',
+      data: post,
+    }));
+
+    return postItems.length > 0
+      ? [...base, ...postItems]
+      : [...base, { id: `empty-${activeTab}`, type: 'blank' }];
+  }, [filteredFeedData, activeTab]);
+
 
   // ── Avatar source ───────────────────────────────────────────────────────────
   const avatarSource = useMemo(
@@ -526,13 +579,14 @@ const ProfileScreenContent = ({
               <ProfileTabs
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
+                tabs={tabs}
               />
             );
           }
 
           if (item.type === 'blank') {
             return (
-              <View style={{ flex: 1, paddingVertical: spacing[10] }}>
+              <View style={styles.emptyStateContainer}>
                 <EmptyState
                   title={t('common.noRecordsFound', 'No records found')}
                   icon={null}

@@ -112,7 +112,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
     infoIconWrapper: {
       width: 32,
       height: 32,
-      borderRadius: 16,
+      borderRadius: borderRadius.xl,
       backgroundColor: colors.surface,
       alignItems: 'center',
       justifyContent: 'center',

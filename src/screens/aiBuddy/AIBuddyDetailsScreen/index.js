@@ -90,7 +90,7 @@ const AIBuddyDetailsScreen = () => {
 
   if (loading || !formattedProfile) {
     return renderScreenState(
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
