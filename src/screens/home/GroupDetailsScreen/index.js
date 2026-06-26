@@ -35,7 +35,7 @@ import AssignAdminModal from '../components/AssignAdminModal';
 import groupService from '../../../api/services/groupService';
 import ProfileTabs from '../../profile/components/ProfileTabs';
 import DeleteGroupConfirmModal from '../components/DeleteGroupConfirmModal';
-import { MOCK_PENDING_APPROVAL_REQUESTS } from '../../../utils/mockData';
+import { MOCK_PENDING_APPROVAL_REQUESTS, MOCK_PENDING_APPROVAL_POSTS } from '../../../utils/mockData';
 import UserApprovalCard from './components/UserApprovalCard';
 
 import { StyleSheet } from 'react-native';
@@ -123,6 +123,19 @@ const GroupDetailsScreen = () => {
   const [loading, setLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(false);
   const [pendingRequests, setPendingRequests] = useState(MOCK_PENDING_APPROVAL_REQUESTS);
+  const [pendingPosts, setPendingPosts] = useState(MOCK_PENDING_APPROVAL_POSTS);
+
+  const isAdmin = useMemo(() => {
+    return group?.admin?.name === profile?.name;
+  }, [group, profile]);
+
+  const isMember = useMemo(() => {
+    return group?.status === 'joined';
+  }, [group]);
+
+  const isJoined = useMemo(() => {
+    return group?.status === 'joined';
+  }, [group]);
 
   const membersToShow = useMemo(() => {
     if (!group) return [];
@@ -173,6 +186,7 @@ const GroupDetailsScreen = () => {
   const TABS = useMemo(
     () => ({
       POSTS: t('groupDetails.tabs.posts'),
+      POSTS_APPROVAL: t('groupDetails.tabs.postsApproval'),
       APPROVAL: t('groupDetails.tabs.userApproval'),
       MEMBERS: `${t('groupDetails.tabs.members')}`,
       ABOUT: t('groupDetails.tabs.about'),
@@ -180,10 +194,16 @@ const GroupDetailsScreen = () => {
     [t]
   );
 
-  const tabList = useMemo(
-    () => [TABS.POSTS, TABS.APPROVAL, TABS.MEMBERS, TABS.ABOUT],
-    [TABS]
-  );
+  const tabList = useMemo(() => {
+    const list = [TABS.POSTS];
+    if (isAdmin) {
+      list.push(TABS.POSTS_APPROVAL);
+      list.push(TABS.APPROVAL);
+    }
+    list.push(TABS.MEMBERS);
+    list.push(TABS.ABOUT);
+    return list;
+  }, [TABS, isAdmin]);
 
   const [activeTab, setActiveTab] = useState(TABS.ABOUT);
 
@@ -303,6 +323,22 @@ const GroupDetailsScreen = () => {
     });
   }, []);
 
+  const handleApprovePost = useCallback((post) => {
+    setPendingPosts((prev) => prev.filter((p) => p.id !== post.id));
+    ToastService.show({
+      type: 'success',
+      message: 'Post approved successfully.',
+    });
+  }, []);
+
+  const handleDeclinePost = useCallback((post) => {
+    setPendingPosts((prev) => prev.filter((p) => p.id !== post.id));
+    ToastService.show({
+      type: 'success',
+      message: 'Post declined successfully.',
+    });
+  }, []);
+
   const renderApprovalItem = useCallback(({ item }) => (
     <UserApprovalCard
       item={item}
@@ -312,18 +348,6 @@ const GroupDetailsScreen = () => {
   ), [handleApproveRequest, handleDeclineRequest]);
 
   const approvalKeyExtractor = useCallback((item) => item.id, []);
-
-  const isAdmin = useMemo(() => {
-    return group?.admin?.name === profile?.name;
-  }, [group, profile]);
-
-  const isMember = useMemo(() => {
-    return group?.status === 'joined';
-  }, [group]);
-
-  const isJoined = useMemo(() => {
-    return group?.status === 'joined';
-  }, [group]);
 
   const currentPostInState = useMemo(() => {
     if (!selectedPost) return null;
@@ -599,6 +623,39 @@ const GroupDetailsScreen = () => {
           ListEmptyComponent={
             <View style={styles.emptyStateWrapper}>
               <EmptyState title={t('home.myGroups.emptyPosts')} icon={null} />
+            </View>
+          }
+        />
+      );
+    }
+
+    if (activeTab === TABS.POSTS_APPROVAL) {
+      return (
+        <FlatList
+          data={pendingPosts}
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
+          renderItem={({ item }) => (
+            <PostCard
+              post={{
+                ...item,
+                username: item.username || item.user?.name,
+                avatar: item.avatar || item.profileImage,
+                text: item.text || item.description,
+                image: item.image || (item.images && item.images[0]),
+                timeAgo: item.timeAgo || item.createdAt,
+              }}
+              colors={colors}
+              isApprovalPost
+              showApprovalActions
+              onApprove={handleApprovePost}
+              onDecline={handleDeclinePost}
+            />
+          )}
+          ItemSeparatorComponent={PostSeparator}
+          ListEmptyComponent={
+            <View style={styles.emptyStateWrapper}>
+              <EmptyState title={t('groupDetails.postsApproval.noPendingPosts')} icon={null} />
             </View>
           }
         />

@@ -155,6 +155,21 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
     spacer: {
       flex: 1,
     },
+    approvalButtonsRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+      paddingTop: spacing[2],
+      paddingBottom: spacing[1],
+    },
+    approvalDeclineBtn: {
+      flex: 1,
+      marginRight: spacing[1] + 2,
+    },
+    approvalApproveBtn: {
+      flex: 1,
+      marginLeft: spacing[1] + 2,
+    },
   });
 
 export default createStyles;

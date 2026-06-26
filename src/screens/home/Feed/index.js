@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
 import { useTheme } from '../../../theme';
 import { useTranslation } from '../../../i18n/useTranslation';
-import { AppText, LikeAnimationOverlay } from '../../../components/common';
+import { AppText, LikeAnimationOverlay, Button } from '../../../components/common';
 import { APP_IMAGES } from '../../../constants';
 import createStyles from './styles';
 
@@ -90,6 +90,9 @@ const PostCard = memo(
     onSharePress,
     onLikesCountPress,
     onAvatarPress,
+    showApprovalActions,
+    onApprove,
+    onDecline,
   }) => {
     const { colors, spacing, borderRadius } = useTheme();
     const { t } = useTranslation();
@@ -290,66 +293,87 @@ const PostCard = memo(
             <LikeAnimationOverlay trigger={animationTrigger} />
           )}
         </View>
-        <View style={styles.reactionsRow}>
-          <View style={styles.reactionBtn}>
+        {showApprovalActions ? (
+          <View style={styles.approvalButtonsRow}>
+            <Button
+              title={t('groupDetails.postsApproval.decline')}
+              variant="gray"
+              size="sm"
+              onPress={() => onDecline?.(post)}
+              fullWidth={false}
+              style={styles.approvalDeclineBtn}
+            />
+            <Button
+              title={t('groupDetails.postsApproval.approve')}
+              variant="primary"
+              size="sm"
+              onPress={() => onApprove?.(post)}
+              fullWidth={false}
+              style={styles.approvalApproveBtn}
+            />
+          </View>
+        ) : (
+          <View style={styles.reactionsRow}>
+            <View style={styles.reactionBtn}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => handleLike(false)}>
+                <Image
+                  source={ICON_LIKE}
+                  style={[
+                    styles.reactionIcon,
+                    {
+                      tintColor: liked
+                        ? colors.error
+                        : colors.iconSecondary,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => onLikesCountPress?.(post)}>
+                <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
+                  {post.likes}
+                </AppText>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
+              style={styles.reactionBtn}
               activeOpacity={0.7}
-              onPress={() => handleLike(false)}>
+              onPress={() => onCommentPress?.(post)}>
               <Image
-                source={ICON_LIKE}
-                style={[
-                  styles.reactionIcon,
-                  {
-                    tintColor: liked
-                      ? colors.error
-                      : colors.iconSecondary,
-                  },
-                ]}
+                source={ICON_COMMENT}
+                style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
               />
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => onLikesCountPress?.(post)}>
               <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
-                {post.likes}
+                {post.comments}
               </AppText>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.reactionBtn}
+              activeOpacity={0.7}
+              onPress={() => onSharePress?.(post)}>
+              <Image
+                source={ICON_SHARE}
+                style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
+              />
+              <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
+                {post.shares}
+              </AppText>
+            </TouchableOpacity>
+            <View style={styles.spacer} />
+            <TouchableOpacity
+              style={[styles.reactionBtn, styles.robiContainer]}
+              activeOpacity={0.7}
+              onPress={() => onSavePress?.(post.id)}>
+              <Image
+                source={ICON_ROBI}
+                style={styles.robiImage}
+              />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.reactionBtn}
-            activeOpacity={0.7}
-            onPress={() => onCommentPress?.(post)}>
-            <Image
-              source={ICON_COMMENT}
-              style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
-            />
-            <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
-              {post.comments}
-            </AppText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.reactionBtn}
-            activeOpacity={0.7}
-            onPress={() => onSharePress?.(post)}>
-            <Image
-              source={ICON_SHARE}
-              style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
-            />
-            <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
-              {post.shares}
-            </AppText>
-          </TouchableOpacity>
-          <View style={styles.spacer} />
-          <TouchableOpacity
-            style={[styles.reactionBtn, styles.robiContainer]}
-            activeOpacity={0.7}
-            onPress={() => onSavePress?.(post.id)}>
-            <Image
-              source={ICON_ROBI}
-              style={styles.robiImage}
-            />
-          </TouchableOpacity>
-        </View>
+        )}
       </View>
     );
   },

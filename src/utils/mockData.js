@@ -297,3 +297,25 @@ export const MOCK_PENDING_APPROVAL_REQUESTS = [
   },
 ];
 
+export const MOCK_PENDING_APPROVAL_POSTS = [
+  {
+    id: 'pap1',
+    user: {
+      name: 'MGIGD17',
+    },
+    username: 'MGIGD17',
+    profileImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',
+    isOnline: true,
+    createdAt: '12h ago',
+    timeAgo: '12h ago',
+    description: 'Shed those extra pounds and embrace a healthier, more vibrant you! Discover new ways to stay active, nourish your body, and boost your confidence along the journey to wellness!',
+    text: 'Shed those extra pounds and embrace a healthier, more vibrant you! Discover new ways to stay active, nourish your body, and boost your confidence along the journey to wellness!',
+    images: [require('../assets/images/find_robi.png')],
+    image: require('../assets/images/find_robi.png'),
+    status: 'pending',
+    currentWeight: '67kgs',
+  },
+];
+
+

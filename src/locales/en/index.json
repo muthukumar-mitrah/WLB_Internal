@@ -1121,6 +1121,7 @@
     "close": "Close",
     "tabs": {
       "posts": "Posts",
+      "postsApproval": "Posts Approval",
       "userApproval": "User Approval",
       "members": "Members",
       "about": "About"
@@ -1183,6 +1184,12 @@
       "mutualMembers": "{{count}} mutual members",
       "invitedBy": "Invited by {{name}}",
       "noPendingRequests": "No pending requests found."
+    },
+    "postsApproval": {
+      "title": "Posts Approval",
+      "approve": "Approve",
+      "decline": "Decline",
+      "noPendingPosts": "No posts pending approval."
     },
     "editGroup": {
       "title": "Edit Group",
