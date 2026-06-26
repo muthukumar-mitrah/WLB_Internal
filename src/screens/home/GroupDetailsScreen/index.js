@@ -35,6 +35,8 @@ import AssignAdminModal from '../components/AssignAdminModal';
 import groupService from '../../../api/services/groupService';
 import ProfileTabs from '../../profile/components/ProfileTabs';
 import DeleteGroupConfirmModal from '../components/DeleteGroupConfirmModal';
+import { MOCK_PENDING_APPROVAL_REQUESTS } from '../../../utils/mockData';
+import UserApprovalCard from './components/UserApprovalCard';
 
 import { StyleSheet } from 'react-native';
 import { palette } from '../../../theme/colors';
@@ -120,6 +122,7 @@ const GroupDetailsScreen = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(false);
+  const [pendingRequests, setPendingRequests] = useState(MOCK_PENDING_APPROVAL_REQUESTS);
 
   const membersToShow = useMemo(() => {
     if (!group) return [];
@@ -284,6 +287,32 @@ const GroupDetailsScreen = () => {
     console.log('[GroupDetailsScreen] Create Post clicked');
   }, []);
 
+  const handleApproveRequest = useCallback((requestId) => {
+    setPendingRequests((prev) => prev.filter((req) => req.id !== requestId));
+    ToastService.show({
+      type: 'success',
+      message: 'Request approved successfully.',
+    });
+  }, []);
+
+  const handleDeclineRequest = useCallback((requestId) => {
+    setPendingRequests((prev) => prev.filter((req) => req.id !== requestId));
+    ToastService.show({
+      type: 'success',
+      message: 'Request declined successfully.',
+    });
+  }, []);
+
+  const renderApprovalItem = useCallback(({ item }) => (
+    <UserApprovalCard
+      item={item}
+      onApprove={handleApproveRequest}
+      onDecline={handleDeclineRequest}
+    />
+  ), [handleApproveRequest, handleDeclineRequest]);
+
+  const approvalKeyExtractor = useCallback((item) => item.id, []);
+
   const isAdmin = useMemo(() => {
     return group?.admin?.name === profile?.name;
   }, [group, profile]);
@@ -296,10 +325,68 @@ const GroupDetailsScreen = () => {
     return group?.status === 'joined';
   }, [group]);
 
+  const currentPostInState = useMemo(() => {
+    if (!selectedPost) return null;
+    return posts.find((p) => p.id === selectedPost.id) || selectedPost;
+  }, [selectedPost, posts]);
+
+  const groupPostOptions = useMemo(() => {
+    if (!currentPostInState) return [];
+    const isPostOwner = currentPostInState.username === profile?.name;
+    const isGroupAdmin = isAdmin;
+    const opts = [];
+
+    // 1. Pin/Unpin post (Group Admin only)
+    if (isGroupAdmin) {
+      opts.push({
+        key: 'pin',
+        icon: APP_IMAGES.pinPost,
+        label: currentPostInState.pinned
+          ? t('home.postOptions.unpinPost')
+          : t('home.postOptions.pinPost'),
+      });
+    }
+
+    // 2. View profile (Anyone)
+    opts.push({
+      key: 'profile',
+      icon: APP_IMAGES.accountSetting,
+      label: t('home.postOptions.profile'),
+    });
+
+    // 3. Delete post (Post Owner or Group Admin)
+    if (isPostOwner || isGroupAdmin) {
+      opts.push({
+        key: 'delete',
+        icon: APP_IMAGES.deletePost,
+        label: t('home.postOptions.deletePost'),
+        destructive: true,
+      });
+    }
+
+    // 4. Report post (Anyone)
+    opts.push({
+      key: 'report',
+      icon: APP_IMAGES.reportPost,
+      label: t('home.postOptions.reportPost'),
+    });
+
+    // 5. Remove from group (Group Admin only, and only if the post creator is not the admin themselves)
+    if (isGroupAdmin && currentPostInState.username !== profile?.name) {
+      opts.push({
+        key: 'removeFromGroup',
+        icon: APP_IMAGES.blockUser,
+        label: t('home.postOptions.removeUserFromGroup', { username: currentPostInState.username }),
+      });
+    }
+
+    return opts;
+  }, [currentPostInState, isAdmin, profile?.name, t]);
+
   const handleSelectOption = useCallback((actionKey) => {
     switch (actionKey) {
       case 'editGroup':
-        ToastService.show({ type: 'info', message: t('common.comingSoon', 'Coming Soon') });
+        navigation.navigate(ROUTES.EDIT_GROUP, { groupId: group.id });
         break;
       case 'deleteGroup':
         setDeleteConfirmVisible(true);
@@ -324,7 +411,7 @@ const GroupDetailsScreen = () => {
       default:
         break;
     }
-  }, [isAdmin, navigation, t]);
+  }, [isAdmin, navigation, t, group]);
 
   const handleConfirmDelete = useCallback(() => {
     setDeleteConfirmVisible(false);
@@ -341,6 +428,22 @@ const GroupDetailsScreen = () => {
     });
   }, [TABS.MEMBERS, t]);
 
+  const handlePinPost = useCallback((postId) => {
+    setPosts((prev) =>
+      prev.map((p) => {
+        if (p.id === postId) {
+          const nextPinned = !p.pinned;
+          ToastService.show({
+            type: 'success',
+            message: nextPinned ? 'Post pinned successfully.' : 'Post unpinned successfully.',
+          });
+          return { ...p, pinned: nextPinned };
+        }
+        return p;
+      })
+    );
+  }, []);
+
   const handlePostMenuPress = useCallback((post) => {
     setSelectedPost(post);
   }, []);
@@ -348,6 +451,9 @@ const GroupDetailsScreen = () => {
   const handlePostMenuSelect = useCallback((action) => {
     if (!selectedPost) return;
     switch (action) {
+      case 'pin':
+        handlePinPost(selectedPost.id);
+        break;
       case 'save':
         handleSavePost(selectedPost.id);
         break;
@@ -372,10 +478,24 @@ const GroupDetailsScreen = () => {
           message: `${t('home.postOptions.block', { username: selectedPost.username })}`,
         });
         break;
+      case 'delete':
+        setPosts((prev) => prev.filter((p) => p.id !== selectedPost.id));
+        ToastService.show({
+          type: 'success',
+          message: 'Post deleted successfully.',
+        });
+        break;
+      case 'removeFromGroup':
+        ToastService.show({
+          type: 'success',
+          message: `${selectedPost.username} removed from group successfully.`,
+        });
+        setPosts((prev) => prev.filter((p) => p.username !== selectedPost.username));
+        break;
       default:
         break;
     }
-  }, [selectedPost, handleSavePost, navigation, t]);
+  }, [selectedPost, handleSavePost, handlePinPost, navigation, t]);
 
   const handleMemberMenuPress = useCallback((member, event) => {
     const { pageY } = event.nativeEvent;
@@ -533,6 +653,32 @@ const GroupDetailsScreen = () => {
                   </AppText>
                 </TouchableOpacity>
               ) : null
+            }
+          />
+        </View>
+      );
+    }
+
+    if (activeTab === TABS.APPROVAL) {
+      return (
+        <View style={styles.approvalContainer}>
+          {pendingRequests.length > 0 && (
+            <AppText style={styles.approvalSectionTitle}>
+              {t('groupDetails.userApproval.pendingRequests')} ({pendingRequests.length})
+            </AppText>
+          )}
+          <FlatList
+            data={pendingRequests}
+            keyExtractor={approvalKeyExtractor}
+            scrollEnabled={false}
+            renderItem={renderApprovalItem}
+            ListEmptyComponent={
+              <View style={styles.emptyStateWrapper}>
+                <EmptyState
+                  title={t('groupDetails.userApproval.noPendingRequests')}
+                  icon={null}
+                />
+              </View>
             }
           />
         </View>
@@ -720,6 +866,8 @@ const GroupDetailsScreen = () => {
         username={selectedPost?.username ?? ''}
         onClose={() => setSelectedPost(null)}
         onSelect={handlePostMenuSelect}
+        options={groupPostOptions}
+        renderImage={true}
       />
       <PostPreviewModal
         visible={!!previewImage}

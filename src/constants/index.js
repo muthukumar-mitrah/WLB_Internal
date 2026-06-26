@@ -87,6 +87,7 @@ const ROUTES = {
   LEADER_BOARD: 'leaderBoard',
   CREATE_GROUP: 'CreateGroup',
   GROUP_DETAILS: 'GroupDetails',
+  EDIT_GROUP: 'EditGroup',
 
   // Profile
   PROFILE_NAVIGATOR: 'ProfileNavigator',

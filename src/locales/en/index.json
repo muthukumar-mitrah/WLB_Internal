@@ -429,7 +429,17 @@
       "profile": "View profile",
       "hide": "Hide post",
       "report": "Report post",
-      "block": "Block {{username}}'s profile"
+      "block": "Block {{username}}'s profile",
+      "pinPost": "Pin post",
+      "unpinPost": "Unpin post",
+      "deletePost": "Delete post",
+      "removeUserFromGroup": "Remove {{username}} from group",
+      "editPost": "Edit Post",
+      "savePost": "Save Post",
+      "unsavePost": "Unsave Post",
+      "copyLink": "Copy Link",
+      "sharePost": "Share Post",
+      "reportPost": "Report Post"
     },
     "filterHeader": {
       "skinnyNews": "Skinny News",
@@ -452,7 +462,22 @@
       "nameRequired": "Group name is required",
       "descRequired": "Description is required",
       "privacyRequired": "Privacy option is required",
-      "successMessage": "Group created successfully!"
+      "successMessage": "Group created successfully!",
+      "postingPermission": "Posting Permission",
+      "choosePermission": "Choose Permission",
+      "allMembers": "All Members",
+      "allMembersWithApproval": "All Members with admin approval",
+      "adminsOnly": "Admins Only",
+      "postingPermissionRequired": "Posting permission option is required"
+    },
+    "postingPermissionInfo": {
+      "title": "Post permission",
+      "allMembersTitle": "All Members",
+      "allMembersDesc": "Everyone can share updates and tips",
+      "allMembersWithApprovalTitle": "All Members with admin approval",
+      "allMembersWithApprovalDesc": "Everyone can share updates and tips but need admin approval to public the post.",
+      "adminsOnlyTitle": "Admins Only",
+      "adminsOnlyDesc": "Only staff can post content"
     },
     "privacyInfo": {
       "group": {
@@ -1149,6 +1174,33 @@
       "noPosts": "No posts",
       "member": "Member",
       "members": "Members"
+    },
+    "userApproval": {
+      "pendingRequests": "Pending Requests",
+      "approve": "Approve",
+      "decline": "Decline",
+      "wantsToJoin": "Wants to join",
+      "mutualMembers": "{{count}} mutual members",
+      "invitedBy": "Invited by {{name}}",
+      "noPendingRequests": "No pending requests found."
+    },
+    "editGroup": {
+      "title": "Edit Group",
+      "groupName": "Group Name",
+      "description": "Description",
+      "privacy": "Privacy",
+      "postingPermission": "Posting Permission",
+      "admin": "Admin",
+      "saveChanges": "Save Changes",
+      "cancel": "Cancel",
+      "viewProfile": "View Profile",
+      "message": "Message",
+      "removeFromAdmin": "Remove from Admin",
+      "nameEmpty": "Group name cannot be empty.",
+      "descriptionEmpty": "Description cannot be empty.",
+      "privacyRequired": "Privacy option is required.",
+      "postingPermissionRequired": "Posting permission option is required.",
+      "adminOnly": "Admin Only"
     }
   }
 }

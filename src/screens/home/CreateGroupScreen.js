@@ -22,16 +22,17 @@ const CreateGroupScreen = ({ navigation }) => {
     groupName,
     description,
     privacy,
+    postingPermission,
     requireApproval,
     coverImage,
     avatarImage,
     errors,
     loading,
     isMediaModalVisible,
-    activePickerType,
     handleNameChange,
     handleDescriptionChange,
     handlePrivacyChange,
+    handlePostingPermissionChange,
     toggleRequireApproval,
     openMediaPicker,
     closeMediaPicker,
@@ -70,6 +71,7 @@ const CreateGroupScreen = ({ navigation }) => {
           groupName={groupName}
           description={description}
           privacy={privacy}
+          postingPermission={postingPermission}
           requireApproval={requireApproval}
           coverImage={coverImage}
           avatarImage={avatarImage}
@@ -78,6 +80,7 @@ const CreateGroupScreen = ({ navigation }) => {
           onNameChange={handleNameChange}
           onDescriptionChange={handleDescriptionChange}
           onPrivacyChange={handlePrivacyChange}
+          onPostingPermissionChange={handlePostingPermissionChange}
           onToggleApproval={toggleRequireApproval}
           onOpenPicker={openMediaPicker}
           handleSubmit={handleSubmit}

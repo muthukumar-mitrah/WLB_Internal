@@ -361,6 +361,17 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
       fontSize: 14,
       color: colors.primary,
     },
+    approvalContainer: {
+      paddingHorizontal: spacing[4],
+      paddingTop: spacing[4],
+    },
+    approvalSectionTitle: {
+      fontFamily: fontFamily.bold,
+      fontSize: 16,
+      fontWeight: '700',
+      color: colors.textPrimary,
+      marginBottom: spacing[4],
+    },
   });
 
 export default createStyles;

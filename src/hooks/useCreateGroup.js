@@ -18,6 +18,7 @@ export const useCreateGroup = () => {
   const [loading, setLoading] = useState(false);
   const [isMediaModalVisible, setIsMediaModalVisible] = useState(false);
   const [activePickerType, setActivePickerType] = useState(null);
+  const [postingPermission, setPostingPermission] = useState('allMembers');
 
   const handleNameChange = useCallback((text) => {
     setGroupName(text);
@@ -39,6 +40,13 @@ export const useCreateGroup = () => {
       setErrors((prev) => ({ ...prev, privacy: null }));
     }
   }, [errors.privacy]);
+
+  const handlePostingPermissionChange = useCallback((value) => {
+    setPostingPermission(value);
+    if (errors.postingPermission) {
+      setErrors((prev) => ({ ...prev, postingPermission: null }));
+    }
+  }, [errors.postingPermission]);
 
   const toggleRequireApproval = useCallback(() => {
     setRequireApproval((prev) => !prev);
@@ -76,10 +84,13 @@ export const useCreateGroup = () => {
     if (!privacy) {
       newErrors.privacy = t('home.createGroupForm.privacyRequired');
     }
+    if (!postingPermission) {
+      newErrors.postingPermission = t('home.createGroupForm.postingPermissionRequired');
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [groupName, description, privacy, t]);
+  }, [groupName, description, privacy, postingPermission, t]);
 
   const handleSubmit = useCallback(async () => {
     if (!validateForm()) {
@@ -92,6 +103,7 @@ export const useCreateGroup = () => {
         name: groupName.trim(),
         description: description.trim(),
         privacy,
+        postingPermission,
         requireApproval,
         coverImage,
         avatarImage,
@@ -118,12 +130,13 @@ export const useCreateGroup = () => {
     } finally {
       setLoading(false);
     }
-  }, [groupName, description, privacy, requireApproval, coverImage, avatarImage, validateForm, navigation, t]);
+  }, [groupName, description, privacy, postingPermission, requireApproval, coverImage, avatarImage, validateForm, navigation, t]);
 
   return {
     groupName,
     description,
     privacy,
+    postingPermission,
     requireApproval,
     coverImage,
     avatarImage,
@@ -134,6 +147,7 @@ export const useCreateGroup = () => {
     handleNameChange,
     handleDescriptionChange,
     handlePrivacyChange,
+    handlePostingPermissionChange,
     toggleRequireApproval,
     openMediaPicker,
     closeMediaPicker,

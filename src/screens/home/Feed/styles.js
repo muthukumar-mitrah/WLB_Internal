@@ -76,6 +76,12 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       height: 20,
       resizeMode: 'contain',
     },
+    pinIcon: {
+      width: 20,
+      height: 20,
+      resizeMode: 'contain',
+      tintColor: colors.iconSecondary,
+    },
 
     // ── Post content ───────────────────────────────────────────────────────────
     postContentContainer: {

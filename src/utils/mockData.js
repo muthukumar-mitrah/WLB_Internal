@@ -270,3 +270,30 @@ export const MOCK_GROUP_POSTS = [
   },
 ];
 
+export const MOCK_PENDING_APPROVAL_REQUESTS = [
+  {
+    id: 'req1',
+    name: 'Michael Chen',
+    profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+    mutualMembers: 4,
+    invitedBy: null,
+    isOnline: true,
+  },
+  {
+    id: 'req2',
+    name: 'Sarah Jenkins',
+    profileImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+    mutualMembers: 2,
+    invitedBy: null,
+    isOnline: false,
+  },
+  {
+    id: 'req3',
+    name: 'David Miller',
+    profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',
+    mutualMembers: 0,
+    invitedBy: 'Olivia K.',
+    isOnline: false,
+  },
+];
+

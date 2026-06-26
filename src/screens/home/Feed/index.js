@@ -8,6 +8,7 @@ import Video from 'react-native-video';
 import { useTheme } from '../../../theme';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { AppText, LikeAnimationOverlay } from '../../../components/common';
+import { APP_IMAGES } from '../../../constants';
 import createStyles from './styles';
 
 const ICON_LIKE = require('../../../assets/icons/heart-outline.png');
@@ -224,6 +225,12 @@ const PostCard = memo(
                   {t('home.feed.chat')}
                 </AppText>
               </TouchableOpacity>
+            )}
+            {post.pinned && (
+              <Image
+                source={APP_IMAGES.pinFilled}
+                style={styles.pinIcon}
+              />
             )}
             <TouchableOpacity
               style={styles.menuBtn}

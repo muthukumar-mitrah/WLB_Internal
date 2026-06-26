@@ -16,7 +16,7 @@ const CreateGroupForm = ({
   groupName,
   description,
   privacy,
-  requireApproval,
+  postingPermission,
   coverImage,
   avatarImage,
   errors,
@@ -24,17 +24,23 @@ const CreateGroupForm = ({
   onNameChange,
   onDescriptionChange,
   onPrivacyChange,
-  onToggleApproval,
+  onPostingPermissionChange,
   onOpenPicker,
   handleSubmit,
 }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isPostingPermissionModalOpen, setIsPostingPermissionModalOpen] = useState(false);
 
   const handleSelectPrivacy = (val) => {
     onPrivacyChange(val);
     setIsPrivacyModalOpen(false);
+  };
+
+  const handleSelectPostingPermission = (val) => {
+    onPostingPermissionChange(val);
+    setIsPostingPermissionModalOpen(false);
   };
 
   const privacyOptions = React.useMemo(() => [
@@ -49,6 +55,24 @@ const CreateGroupForm = ({
       icon: 'lock-closed-outline',
       title: t('home.privacyInfo.group.privateTitle'),
       description: t('home.privacyInfo.group.privateDesc'),
+    },
+  ], [t]);
+
+  const postingPermissionOptions = React.useMemo(() => [
+    {
+      key: 'allMembers',
+      title: t('home.postingPermissionInfo.allMembersTitle'),
+      description: t('home.postingPermissionInfo.allMembersDesc'),
+    },
+    {
+      key: 'allMembersWithApproval',
+      title: t('home.postingPermissionInfo.allMembersWithApprovalTitle'),
+      description: t('home.postingPermissionInfo.allMembersWithApprovalDesc'),
+    },
+    {
+      key: 'adminsOnly',
+      title: t('home.postingPermissionInfo.adminsOnlyTitle'),
+      description: t('home.postingPermissionInfo.adminsOnlyDesc'),
     },
   ], [t]);
 
@@ -187,21 +211,39 @@ const CreateGroupForm = ({
         )}
       </View>
 
-      {/* Require Approval Checkbox */}
-      <TouchableOpacity
-        style={styles.checkboxRow}
-        activeOpacity={0.8}
-        onPress={onToggleApproval}
-      >
-        <Ionicons
-          name={requireApproval ? 'checkbox' : 'square-outline'}
-          size={24}
-          color={requireApproval ? colors.primary : colors.textSecondary}
-        />
-        <AppText style={[styles.checkboxText, { color: colors.textPrimary }]}>
-          {t('home.createGroupForm.requireApproval')}
+      {/* Posting Permission */}
+      <View style={styles.fieldContainer}>
+        <AppText style={[styles.fieldLabel, { color: colors.textSecondary, marginBottom: spacing[2] }]}>
+          {t('home.createGroupForm.postingPermission')}
         </AppText>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.dropdownContainer,
+            {
+              borderColor: errors.postingPermission ? colors.error : colors.border,
+              backgroundColor: colors.inputBackground,
+              borderRadius: borderRadius.lg,
+            },
+          ]}
+          activeOpacity={0.7}
+          onPress={() => setIsPostingPermissionModalOpen(true)}
+        >
+          <AppText
+            style={[
+              styles.dropdownValue,
+              { color: postingPermission ? colors.textPrimary : colors.textSecondary },
+            ]}
+          >
+            {t('home.createGroupForm.choosePermission')}
+          </AppText>
+          <Ionicons name="chevron-down" size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
+        {errors.postingPermission && (
+          <AppText style={[styles.errorText, { color: colors.error }]}>
+            {errors.postingPermission}
+          </AppText>
+        )}
+      </View> 
 
       {/* Privacy Option Selection Modal */}
       <AppModal
@@ -215,6 +257,22 @@ const CreateGroupForm = ({
           options={privacyOptions}
           selectedValue={privacy}
           onSelect={handleSelectPrivacy}
+          variant="card"
+        />
+      </AppModal>
+
+      {/* Posting Permission Selection Modal */}
+      <AppModal
+        visible={isPostingPermissionModalOpen}
+        onClose={() => setIsPostingPermissionModalOpen(false)}
+        showHandle={true}
+        showCloseButton={false}
+      >
+        <PrivacyInfo
+          title={t('home.postingPermissionInfo.title')}
+          options={postingPermissionOptions}
+          selectedValue={postingPermission}
+          onSelect={handleSelectPostingPermission}
           variant="card"
         />
       </AppModal>

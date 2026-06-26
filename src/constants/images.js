@@ -65,6 +65,12 @@ export const APP_IMAGES = {
   commentIcon: require('../assets/icons/chat-outline.png'),
   shareIcon: require('../assets/icons/send-outline.png'),
   optionsIcon: require('../assets/icons/dots-horizontal.png'),
+  accountSetting: require('../assets/icons/account_settings.png'),
+  pinPost: require('../assets/icons/pin_post.png'),
+  pinFilled: require('../assets/icons/pin_filled.png'),
+  deletePost: require('../assets/icons/delete_post.png'),
+  blockUser: require('../assets/icons/block_user.png'),
+  reportPost: require('../assets/icons/report_post.png'),
 
   // Profile-specific aliases requested by user
   gender: require('../assets/icons/account_outline.png'),

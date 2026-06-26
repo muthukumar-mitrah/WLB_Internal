@@ -67,6 +67,10 @@ const groupService = {
   createGroup: (groupData) => {
     return Promise.resolve({ success: true, data: { id: 'g_new', ...groupData, totalMembers: 1 } });
   },
+
+  updateGroup: (groupId, groupData) => {
+    return Promise.resolve({ success: true, data: { id: groupId, ...groupData } });
+  },
 };
 
 export default groupService;

@@ -39,6 +39,7 @@ import ProfileVisibilityScreen from '../screens/AccountSetting/ProfileVisibility
 import WeightVisibilityScreen from '../screens/AccountSetting/WeightVisibilityScreen';
 import TrackProgressScreen from '../screens/TrackProgress/TrackProgressScreen';
 import GroupDetailsScreen from '../screens/home/GroupDetailsScreen';
+import EditGroupScreen from '../screens/home/EditGroupScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -87,6 +88,7 @@ const MainNavigator = () => (
     {/* Group flow */}
     <Stack.Screen name={ROUTES.CREATE_GROUP} component={CreateGroupScreen} />
     <Stack.Screen name={ROUTES.GROUP_DETAILS} component={GroupDetailsScreen} />
+    <Stack.Screen name={ROUTES.EDIT_GROUP} component={EditGroupScreen} />
   </Stack.Navigator>
 );
 
