@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../theme';
 import { useFeed } from '../../context/FeedContext';
+import { APP_IMAGES, ROUTES } from '../../constants';
 
 const HomeHeader = () => {
   const navigation = useNavigation();
@@ -28,7 +29,7 @@ const HomeHeader = () => {
       </TouchableOpacity>
       <View style={styles.logoWrapper}>
         <Image
-          source={require('../../assets/images/header_wlb_logo.png')}
+          source={APP_IMAGES.headerWlbLogo}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -38,7 +39,7 @@ const HomeHeader = () => {
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           style={styles.iconBtn}>
           <Image
-            source={require('../../assets/icons/message.png')}
+            source={APP_IMAGES.message}
             style={[styles.messageIcon, { tintColor: colors.iconPrimary }]}
             resizeMode="contain"
           />

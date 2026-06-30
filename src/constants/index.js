@@ -77,6 +77,7 @@ const ROUTES = {
   BUDDY_SEARCH_RESULT: 'BuddySearchResult',
   CREATE_POST: 'CreatePost',
   NOTIFICATIONS: 'Notifications',
+  NOTIFICATION_SCREEN: 'NotificationScreen',
   ROBI: 'Robi',
   CONTACT_US: 'ContactUs',
   TERMS_OF_USE: 'TermsOfUse',
@@ -272,6 +273,12 @@ const BUDDY_PROFILE_TABS = [
   'Videos',
 ];
 
+const NOTIFICATION_TABS = [
+  'All',
+  'Unread',
+  'Buddies',
+];
+
 // ── Report Options ────────────────────────────────────────────────────────────
 const REPORT_OPTIONS = [
   "It's spam",
@@ -311,5 +318,6 @@ export {
   MOCK_PROFILES,
   PROFILE_TABS,
   BUDDY_PROFILE_TABS,
-  REPORT_OPTIONS
+  REPORT_OPTIONS,
+  NOTIFICATION_TABS
 };

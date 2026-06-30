@@ -145,4 +145,5 @@ export const APP_IMAGES = {
   notificationIcon: require('../assets/icons/notification.png'),
   copyLinkIcon: require('../assets/icons/copy_link.png'),
   shareGroup: require('../assets/icons/share.png'),
+  optionsIconHorizontal: require('../assets/icons/dots-horizontal.png'),
 };

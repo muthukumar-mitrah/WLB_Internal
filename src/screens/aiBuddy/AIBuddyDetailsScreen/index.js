@@ -7,6 +7,7 @@ import { useTheme } from '../../../theme';
 import aiBuddyService from '../../../api/services/aiBuddyService';
 import ProfileScreenContent from '../../profile/components/ProfileScreenContent';
 import { createStyles } from './styles';
+import { BUDDY_PROFILE_TABS } from '../../../constants';
 
 const AIBuddyDetailsScreen = () => {
   const { t } = useTranslation();
@@ -104,6 +105,7 @@ const AIBuddyDetailsScreen = () => {
       profile={formattedProfile}
       avatar={buddy.image}
       headerTitle={t('aiBuddy.details.title')}
+      tabs={BUDDY_PROFILE_TABS}
     />
   );
 };

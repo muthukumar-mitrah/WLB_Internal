@@ -98,8 +98,8 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
       alignItems: 'center',
       backgroundColor: colors.primarySurface,
       borderRadius: borderRadius.xl,
-      paddingVertical: spacing[3],
-      paddingHorizontal: spacing[3],
+      paddingVertical: spacing[2],
+      paddingHorizontal: spacing[2],
       borderWidth: isDark ? 1 : 0,
       borderColor: isDark ? colors.border : 'transparent',
     },
@@ -116,7 +116,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows, isDark }) =>
       backgroundColor: colors.surface,
       alignItems: 'center',
       justifyContent: 'center',
-      marginRight: spacing[2.5]
+      marginRight: spacing[1]
     },
     infoIconImage: {
       width: 18,

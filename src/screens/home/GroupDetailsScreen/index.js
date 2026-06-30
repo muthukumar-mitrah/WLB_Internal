@@ -28,12 +28,12 @@ import {
   AppModal,
   PostOptionsSheet,
   PostPreviewModal,
+  Tabs
 } from '../../../components/common';
 import { useProfile } from '../../../context/ProfileContext';
 import GroupOptionsMenu from '../components/GroupOptionsMenu';
 import AssignAdminModal from '../components/AssignAdminModal';
 import groupService from '../../../api/services/groupService';
-import ProfileTabs from '../../profile/components/ProfileTabs';
 import DeleteGroupConfirmModal from '../components/DeleteGroupConfirmModal';
 import { MOCK_PENDING_APPROVAL_REQUESTS, MOCK_PENDING_APPROVAL_POSTS } from '../../../utils/mockData';
 import UserApprovalCard from './components/UserApprovalCard';
@@ -892,10 +892,10 @@ const GroupDetailsScreen = () => {
           />
         </View>
 
-        <ProfileTabs
+        <Tabs
           tabs={tabList}
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onTabPress={setActiveTab}
         />
 
         {renderContent()}

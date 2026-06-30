@@ -34,3 +34,4 @@ export { default as PrivacyInfo } from './PrivacyInfo';
 export { default as CommonToggle } from './CommonToggle';
 export { default as CountrySelector } from './CountrySelector';
 export { default as Chart } from './Chart';
+export { default as Tabs } from './Tabs';

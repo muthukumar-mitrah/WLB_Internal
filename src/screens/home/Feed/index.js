@@ -164,6 +164,11 @@ const PostCard = memo(
       [liked, post.id, onLikePress, triggerLikeAnimation],
     );
 
+    const handleAvatarPress = useCallback((userId) => {
+      console.log("[PostCard] handleAvatarPress", userId)
+      // onAvatarPress?.(userId)
+    }, []);
+
     const handleMediaPress = useCallback(() => {
       const now = Date.now();
       if(now - lastTap.current < DOUBLE_TAP_DELAY) {
@@ -186,7 +191,7 @@ const PostCard = memo(
           <TouchableOpacity
             style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}
             activeOpacity={0.7}
-            onPress={() => onAvatarPress?.(post)}>
+            onPress={() => handleAvatarPress?.(post.userId)}>
             <View style={styles.avatarContainer}>
               {post.avatar ? (
                 <Image
@@ -213,7 +218,7 @@ const PostCard = memo(
             </View>
             <View style={styles.cardHeaderInfo}>
               <AppText style={[styles.cardUsername, { color: colors.textPrimary }]}>
-                {post.username}
+                {post.username} 
               </AppText>
               <AppText style={[styles.cardMeta, { color: colors.textSecondary }]}>
                 {post.currentWeight ? `${t('home.feed.cw')}${post.currentWeight} · ` : ''}

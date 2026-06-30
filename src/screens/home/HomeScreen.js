@@ -27,13 +27,12 @@ import { useFeed } from '../../context/FeedContext';
 import { ROUTES, STORAGE_KEYS } from '../../constants';
 import { storage } from '../../utils/storage';
 import PostCard from './Feed';
-import ProfileTabs from '../profile/components/ProfileTabs';
 import MyGroupsTabContent from './MyGroupsTabContent';
 import GroupPostsTabContent from './GroupPostsTabContent';
 import AllGroupsTabContent from './AllGroupsTabContent';
 import SortGroupsBottomSheet from './components/SortGroupsBottomSheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AppText } from '../../components/common';
+import { AppText , Tabs} from '../../components/common';
 import FilterHeader from './FilterHeader';
 import RobiQuickAnswerDisclaimerModal from './RobiQuickAnswerDisclaimerModal/index.js'
 
@@ -222,11 +221,11 @@ const handleRobiFilterPress = useCallback(async () => {
       );
 
       return (
-        <ProfileTabs
+        <Tabs
           tabs={groupTabs}
           activeTab={activeGroupTab}
-          onTabChange={setActiveGroupTab}
-          createGroupButton={createGroupButton}
+          onTabPress={setActiveGroupTab}
+          rightSlot={createGroupButton}
         />
       );
     }

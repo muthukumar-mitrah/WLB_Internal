@@ -1,4 +1,4 @@
-﻿import { APP_IMAGES } from '../images';
+import { APP_IMAGES } from '../images';
 
 // ─── Blocked Users ───────────────────────────────────────────────────────────
 
@@ -88,3 +88,98 @@ export const yourRankData = {
   month:   { rank: 8,  points: 25000 },
   allTime: { rank: 24, points: 542 },
 };
+
+export const notificationMockData = [
+  {
+    id: 'n1',
+    type: 'buddyRequest',
+    title: 'New Buddy Request',
+    message: 'Sarah M. wants to connect with you as a buddy.',
+    time: '2m ago',
+    section: 'Today',
+    isRead: false,
+    user: {
+      name: 'Sarah M.',
+      avatar: APP_IMAGES.userAvatar,
+    },
+  },
+  {
+    id: 'n2',
+    type: 'like',
+    title: 'Someone liked your post',
+    message: 'Alexandra liked your progress update.',
+    time: 'Yesterday · 8:42 PM',
+    section: 'Today',
+    isRead: true,
+    user: {
+      name: 'Alexandra',
+      avatar: APP_IMAGES.userAvatar,
+    },
+  },
+  {
+    id: 'n3',
+    type: 'groupJoinRequest',
+    title: 'Group Join Request',
+    message: 'Emma requested to join your GLP-1 Support Group.',
+    time: 'Yesterday · 8:42 PM',
+    section: 'Earlier',
+    isRead: false,
+    user: {
+      name: 'Emma',
+      avatar: APP_IMAGES.userAvatar,
+    },
+  },
+  {
+    id: 'n4',
+    type: 'comment',
+    title: 'New Comment',
+    message: 'David commented on your post: "This is so inspiring! Keep it up!"',
+    time: 'Yesterday · 8:42 PM',
+    section: 'Earlier',
+    isRead: false,
+    user: {
+      name: 'David',
+      avatar: APP_IMAGES.userAvatar,
+    },
+  },
+  {
+    id: 'n5',
+    type: 'buddyRequest',
+    title: 'New Buddy Request',
+    message: 'Sarah M. wants to connect with you as a buddy.',
+    time: 'Yesterday · 8:42 PM',
+    section: 'Earlier',
+    isRead: true,
+    user: {
+      name: 'Sarah M.',
+      avatar: APP_IMAGES.userAvatar,
+    },
+  },
+  {
+    id: 'n6',
+    type: 'like',
+    title: 'Someone liked your post',
+    message: 'Alexandra liked your progress update.',
+    time: 'Yesterday · 8:42 PM',
+    section: 'Earlier',
+    isRead: true,
+    user: {
+      name: 'Alexandra',
+      avatar: APP_IMAGES.userAvatar,
+    },
+  },
+  {
+    id: 'n7',
+    type: 'groupPost',
+    title: 'New Group Post',
+    message: 'Mona shared a new post in GLP-1 Support Group.',
+    time: 'Yesterday · 8:42 PM',
+    section: 'Earlier',
+    isRead: true,
+    user: {
+      name: 'Mona',
+      avatar: APP_IMAGES.userAvatar,
+    },
+  },
+];
+

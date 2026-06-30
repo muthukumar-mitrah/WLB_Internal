@@ -10,6 +10,7 @@ import { AuthProvider } from './src/context/AuthContext';
 import { SurveyProvider } from './src/context/SurveyContext';
 import { ProfileProvider } from './src/context/ProfileContext';
 import { FeedProvider } from './src/context/FeedContext';
+import { NotificationProvider } from './src/context/NotificationContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import Toast from './src/components/common/Toast';
 import SplashScreen from 'react-native-splash-screen'
@@ -47,9 +48,11 @@ const App = () => (
           <ProfileProvider>
           <SurveyProvider>
             <FeedProvider>
-              <BottomSheetModalProvider>
-                <AppCore />
-              </BottomSheetModalProvider>
+              <NotificationProvider>
+                <BottomSheetModalProvider>
+                  <AppCore />
+                </BottomSheetModalProvider>
+              </NotificationProvider>
             </FeedProvider>
           </SurveyProvider>
           </ProfileProvider>

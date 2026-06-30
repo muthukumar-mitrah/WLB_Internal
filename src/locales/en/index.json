@@ -85,7 +85,7 @@
       "about": "About Me",
       "expertise": "Expertise",
       "howToHelp": "How I Can Help",
-      "chooseButton": "Choose as AI Buddy",
+      "chooseButton": "Choose AI Buddy",
       "followButton": "Follow",
       "posts": "Posts",
       "following": "Following",
@@ -375,6 +375,30 @@
     }
   },
   "home": {
+    "notifications": {
+      "title": "Notifications",
+      "tabs": {
+        "all": "All",
+        "unread": "Unread",
+        "buddies": "Buddies"
+      },
+      "sections": {
+        "today": "Today",
+        "earlier": "Earlier"
+      },
+      "buttons": {
+        "accept": "Accept",
+        "delete": "Delete",
+        "join": "Join",
+        "view": "View"
+      },
+      "toasts": {
+        "buddyAccept": "Buddy request accepted successfully.",
+        "buddyDelete": "Buddy request deleted successfully.",
+        "joinSuccess": "Joined successfully.",
+        "comingSoon": "Coming Soon"
+      }
+    },
     "tabs": {
       "home": "Home",
       "buddies": "Buddies",
@@ -765,7 +789,7 @@
       "updateProfile": "Update Profile",
       "viewPortrait": "View Portrait",
       "viewPortfolio": "View Portfolio",
-      "requestBuddy": "Request Buddy",
+      "addBuddy": "Add Buddy",
       "message": "Message"
     },
     "weightProgress": {

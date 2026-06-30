@@ -6,7 +6,7 @@
  *                 camera badge on avatar, MediaPicker modal
  *  - Other profile: Request Buddy + Message buttons, 3-dot menu, Block/Report modals
  */
-import React, { memo, useCallback, useMemo, useState, useRef } from 'react';
+import React, { memo, useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { View, StatusBar, TouchableOpacity, Clipboard } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Share from 'react-native-share';
@@ -27,17 +27,17 @@ import {
   EmptyState,
   PostOptionsSheet,
   PostPreviewModal,
+  Tabs
 } from '../../../components/common';
 import PostCard from '../../home/Feed';
 import MediaPicker from '../../../components/common/MediaPicker';
-import { ROUTES } from '../../../constants';
+import { PROFILE_TABS, ROUTES } from '../../../constants';
 import { APP_IMAGES } from '../../../constants';
 import { useTranslation } from 'react-i18next';
 import { useFeed } from '../../../context/FeedContext';
 
 import { calculateWeightProgress } from '../../../utils/weightUtils';
 import ProfileInfoCard from './ProfileInfoCard';
-import ProfileTabs from './ProfileTabs';
 import WeightColumn from './WeightColumn';
 import createStyles from './ProfileScreenContentStyles';
 
@@ -49,7 +49,8 @@ const ProfileScreenContent = ({
   avatar,          // uri string (own profile only)
   onAvatarChange,  // (uri) => void  (own profile only)
   headerTitle,     // optional custom title
-  isShowHeader = true
+  isShowHeader = true,
+  tabs = PROFILE_TABS,
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -453,13 +454,13 @@ const listData = useMemo(() => {
       <View style={styles.buttonsRow}>
         <Button
           testID="profile-request-buddy-btn"
-          title={t('profile.buttons.requestBuddy')}
+          title={t('profile.buttons.addBuddy')}
           onPress={handleRequestBuddy}
           variant="primary"
           size="md"
           fullWidth
           style={styles.buttonHalf}
-          accessibilityLabel={t('profile.buttons.requestBuddy')}
+          accessibilityLabel={t('profile.buttons.addBuddy')}
         />
         <Button
           testID="profile-message-btn"
@@ -576,9 +577,9 @@ const listData = useMemo(() => {
 
           if (item.type === 'tabs') {
             return (
-              <ProfileTabs
+              <Tabs
                 activeTab={activeTab}
-                onTabChange={setActiveTab}
+                onTabPress={setActiveTab}
                 tabs={tabs}
               />
             );
