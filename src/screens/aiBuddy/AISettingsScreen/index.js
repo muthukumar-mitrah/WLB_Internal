@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { SafeContainer, Header, AppText, Button, CommonToggle, ToastService } from '../../../components/common';
+import { SafeContainer, Header, AppText, Button, AppSwitch, ToastService } from '../../../components/common';
 import { useTheme } from '../../../theme';
 import { createStyles } from './styles';
 import AiBuddyDisclaimerModal from '../../../components/home/AiBuddyDisclaimerModal';
@@ -156,9 +156,10 @@ const AISettingsScreen = () => {
                 {t('aiBuddy.settings.suggestLikesDesc', { name: buddy.name })}
               </AppText>
             </View>
-            <CommonToggle
+            <AppSwitch
               value={suggestLikes}
               onValueChange={setSuggestLikes}
+              size="sm"
             />
           </View>
 
@@ -176,9 +177,10 @@ const AISettingsScreen = () => {
                 {t('aiBuddy.settings.suggestCommentsDesc', { name: buddy.name })}
               </AppText>
             </View>
-            <CommonToggle
+            <AppSwitch
               value={suggestComments}
               onValueChange={setSuggestComments}
+              size="sm"
             />
           </View>
         </View>

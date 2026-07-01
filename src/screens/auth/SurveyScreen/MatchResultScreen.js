@@ -13,7 +13,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
 import { AppText, Button, SafeContainer } from '../../../components/common';
-import { ROUTES } from '../../../constants';
+import { APP_IMAGES, ROUTES } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { createSurveyStyles } from './styles';
 
@@ -23,35 +23,35 @@ const STATIC_MATCHES = [
     name: 'David J.',
     tag: 'Gentle Accountability',
     matchPercent: 96,
-    image: require('../../../assets/images/user.png'),
+    image: APP_IMAGES.userAvatar,
   },
   {
     id: '2',
     name: 'Daniel Brooks',
     tag: 'Goal-Focused',
     matchPercent: 92,
-    image: require('../../../assets/images/user.png'),
+    image: APP_IMAGES.userAvatar,
   },
   {
     id: '3',
     name: 'Maya Lewis',
     tag: 'Encouraging Lifestyle',
     matchPercent: 89,
-    image: require('../../../assets/images/user.png'),
+    image: APP_IMAGES.userAvatar,
   },
   {
     id: '4',
     name: 'Philip',
     tag: 'Wellness Support',
     matchPercent: 89,
-    image: require('../../../assets/images/user.png'),
+    image: APP_IMAGES.userAvatar,
   },
   {
     id: '5',
     name: 'Mitchell',
     tag: 'Smart Accountability',
     matchPercent: 89,
-    image: require('../../../assets/images/user.png'),
+    image: APP_IMAGES.userAvatar,
   },
 ];
 

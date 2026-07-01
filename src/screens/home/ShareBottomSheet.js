@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, FlatList, Image, Clipboard } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
+import { copyWithToast } from '../../utils/helpers/clipboardHelper';
 import { BottomSheetFooter } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Share from 'react-native-share';
@@ -50,10 +51,7 @@ const ShareBottomSheet = forwardRef(({}, ref) => {
   const handleCopyLink = useCallback(() => {
     if (!post) return;
     const shareUrl = `https://wlb.app/post/${post?.id || post}`;
-    if (Clipboard?.setString) {
-      Clipboard.setString(shareUrl);
-      ToastService.show('Link copied to clipboard!', 'success');
-    }
+    copyWithToast(shareUrl, 'Link copied to clipboard!');
     bottomSheetRef.current?.close();
   }, [post]);
 

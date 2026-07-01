@@ -13,6 +13,7 @@ import {
 import MediaPicker from '../../../components/common/MediaPicker';
 import {ROUTES} from '../../../constants';
 import {APP_IMAGES} from '../../../constants';
+import {COUNTRIES} from '../../../constants/countries';
 import createStyles from './styles';
 import {useTranslation} from 'react-i18next';
 import { useProfile } from '../../../context/ProfileContext';
@@ -162,23 +163,31 @@ const UpdateProfileScreen = ({navigation, route}) => {
 
         {/* Name */}
         <InputBox
+          variant="underline"
           label={t('profile.updateProfile.labels.name')}
           value={profile.name}
           onChangeText={text => setProfile(prev => ({...prev, name: text}))}
           autoCapitalize="words"
           autoCorrect={false}
-          containerStyle={styles.fieldContainer}
+          containerStyle={styles.nameContainer}
+          labelStyle={styles.fieldLabel}
+          wrapperStyle={styles.underlineBorder}
+          inputStyle={[styles.fieldValue, styles.underlineInput]}
         />
 
         {/* Bio */}
         <InputBox
+          variant="underline"
           label={t('profile.updateProfile.labels.bio')}
           value={profile.bio}
           onChangeText={text => setProfile(prev => ({...prev, bio: text}))}
           multiline
           numberOfLines={3}
           autoCorrect={false}
-          containerStyle={styles.fieldContainer}
+          containerStyle={styles.bioContainer}
+          labelStyle={styles.fieldLabel}
+          wrapperStyle={styles.underlineBorder}
+          inputStyle={[styles.fieldValue, styles.bioInput]}
         />
 
         {/* Edit Detail Cards — each navigates to its own screen */}
@@ -194,7 +203,7 @@ const UpdateProfileScreen = ({navigation, route}) => {
           <EditCard
             imageSource={APP_IMAGES.country}
             label={t('profile.updateProfile.labels.country')}
-            value={profile.country}
+            value={COUNTRIES.find(c => c.value === profile.country || c.label === profile.country)?.label || profile.country}
             onPress={handleCountryPress}
             colors={colors}
             styles={styles}

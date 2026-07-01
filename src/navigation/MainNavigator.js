@@ -12,6 +12,7 @@ import ProfileNavigator from './ProfileNavigator';
 import ViewProfileScreen from '../screens/profile/ViewProfileScreen';
 import UpdateProfileScreen from '../screens/profile/UpdateProfileScreen';
 import PortraitViewScreen from '../screens/profile/PortraitViewScreen';
+import EditViewPortraitScreen from '../screens/profile/EditViewPortraitScreen';
 import WeightUpdateScreen from '../screens/profile/WeightUpdateScreen';
 import PrivacySelectionScreen from '../screens/profile/PrivacySelectionScreen';
 import GenderSelectionScreen from '../screens/profile/GenderSelectionScreen';
@@ -62,6 +63,7 @@ const MainNavigator = () => (
     <Stack.Screen name={ROUTES.VIEW_PROFILE} component={ViewProfileScreen} />
     <Stack.Screen name={ROUTES.UPDATE_PROFILE} component={UpdateProfileScreen} />
     <Stack.Screen name={ROUTES.PORTRAIT_VIEW} component={PortraitViewScreen} />
+    <Stack.Screen name={ROUTES.EDIT_VIEW_PORTRAIT} component={EditViewPortraitScreen} />
     <Stack.Screen name={ROUTES.WEIGHT_UPDATE} component={WeightUpdateScreen} />
     <Stack.Screen name={ROUTES.PRIVACY_SELECTION} component={PrivacySelectionScreen} />
     <Stack.Screen name={ROUTES.GENDER_SELECTION} component={GenderSelectionScreen} />

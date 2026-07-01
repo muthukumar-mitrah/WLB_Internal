@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { AppText, Button, SafeContainer, AppModal } from '../../../components/common';
 import MediaPicker from '../../../components/common/MediaPicker';
 import { useTranslation } from '../../../i18n/useTranslation';
-import { ROUTES } from '../../../constants';
+import { APP_IMAGES, ROUTES } from '../../../constants';
 import { useTheme } from '../../../theme';
 import createStyles from './styles';
 
@@ -157,7 +157,7 @@ const UploadImageScreen = ({ navigation }) => {
               />
             ) : (
               <Image
-                source={require('../../../assets/images/user.png')}
+                source={APP_IMAGES.userAvatar}
                 style={{ width: 56, height: 56, tintColor: '#B0B8C4' }}
                 resizeMode="contain"
               />

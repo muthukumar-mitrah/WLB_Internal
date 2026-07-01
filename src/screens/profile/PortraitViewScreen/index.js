@@ -61,7 +61,7 @@ const PortraitViewScreen = () => {
   );
 
   const handleEditPortrait = useCallback(() => {
-    navigation.navigate(ROUTES.UPDATE_PROFILE);
+    navigation.navigate(ROUTES.EDIT_VIEW_PORTRAIT);
   }, [navigation]);
 
   const getGoalLabel = useCallback((val) => {
@@ -220,7 +220,7 @@ const PortraitViewScreen = () => {
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar barStyle={colors.statusBar} backgroundColor={colors.background} translucent={false} />
-      <Header title="Portrait View" showBack />
+      <Header title={t("profile.header.viewPortrait")} showBack />
 
       <ScrollView
         showsVerticalScrollIndicator={false}

@@ -48,8 +48,31 @@ const createStyles = ({colors, spacing, borderRadius, shadows}) =>
     },
 
     /* ── InputBox fields (Name, Bio) ── */
-    fieldContainer: {
-      marginBottom: spacing[1.5],
+    nameContainer: {
+      marginBottom: spacing[4],
+    },
+    bioContainer: {
+      marginBottom: spacing[4],
+    },
+    fieldLabel: {
+      marginBottom: spacing[1],
+    },
+    fieldValue: {
+      // Applied directly via inputStyle or natively
+    },
+    underlineInput: {
+      fontWeight: '500',
+      paddingLeft: 0,
+      paddingHorizontal: 0,
+    },
+    underlineBorder: {
+      // InputBox variant handles the bottom border, but we can add style here if needed
+    },
+    bioInput: {
+      fontWeight: '500',
+      minHeight: 60,
+      paddingLeft: 0,
+      paddingHorizontal: 0,
     },
 
     /* ── Edit Detail Cards (Gender, Country, Weight, DOB) ── */

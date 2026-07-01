@@ -1,5 +1,6 @@
-import React, {memo, useMemo, useState, useCallback} from 'react';
-import {View, StatusBar, Image} from 'react-native';
+import React, {memo, useMemo, useState, useCallback, useEffect} from 'react';
+import {View, StatusBar, Image, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../../../theme';
 import {
   Header,
@@ -7,6 +8,7 @@ import {
   Button,
   DateWheelPicker,
   InputBox,
+  AppText,
 } from '../../../components/common';
 import {ROUTES} from '../../../constants';
 import {APP_IMAGES} from '../../../constants';
@@ -50,6 +52,15 @@ const DateOfBirthScreen = ({navigation, route}) => {
   const [currentDate, setCurrentDate] = useState(() =>
     parseDate(route.params?.currentDob),
   );
+  
+  const [privacy, setPrivacy] = useState(route.params?.currentPrivacy || 'Public');
+
+  useEffect(() => {
+    if (route.params?.updatedPrivacy) {
+      setPrivacy(route.params.updatedPrivacy);
+    }
+  }, [route.params?.updatedPrivacy]);
+
   const handleDateChange = useCallback(date => setCurrentDate(date), []);
 
   const handleDone = useCallback(() => {
@@ -57,6 +68,13 @@ const DateOfBirthScreen = ({navigation, route}) => {
       updatedDob: formatDate(currentDate),
     });
   }, [navigation, currentDate]);
+
+  const handlePrivacyPress = useCallback(() => {
+    navigation.navigate(ROUTES.PRIVACY_SELECTION, {
+      currentPrivacy: privacy,
+      returnRoute: ROUTES.DATE_OF_BIRTH,
+    });
+  }, [navigation, privacy]);
 
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
@@ -81,6 +99,14 @@ const DateOfBirthScreen = ({navigation, route}) => {
             }
           />
         </View>
+
+        <TouchableOpacity style={styles.privacyRow} onPress={handlePrivacyPress} activeOpacity={0.7}>
+          <View style={styles.privacyTextContainer}>
+            <AppText style={styles.privacyLabel}>{t('profile.privacySelectionTitle')}</AppText>
+            <AppText style={styles.privacyValue}>{privacy}</AppText>
+          </View>
+          <Icon name="chevron-right" size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
 
         <View style={styles.spacer} />
 

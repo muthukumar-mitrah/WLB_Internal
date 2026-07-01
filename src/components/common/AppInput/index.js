@@ -1,14 +1,16 @@
-/**
- * InputBox — themed, accessible text input
- * Supports: label, placeholder, error, left/right icons, secure entry, multiline
- */
-import React, { memo, useMemo, useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Animated } from 'react-native';
+import React, { memo, useState, useRef, forwardRef, useImperativeHandle, useMemo } from 'react';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useTheme } from '../../../theme';
 import AppText from '../AppText';
 import createStyles from './styles';
 
-const InputBox = ({
+const AppInput = forwardRef(({
   label,
   value,
   onChangeText,
@@ -29,25 +31,48 @@ const InputBox = ({
   editable = true,
   containerStyle,
   inputStyle,
+  wrapperStyle,
+  labelStyle,
   testID,
+  required = false,
+  variant = 'outlined', // 'outlined' or 'underline'
   ...rest
-}) => {
+}, ref) => {
   const { colors, borderRadius, spacing, fonts, shadows } = useTheme();
-  const styles = useMemo(() => createStyles(), []);
+  
+  const styles = useMemo(
+    () => createStyles({ colors, spacing, borderRadius, fonts, shadows }),
+    [colors, spacing, borderRadius, fonts, shadows]
+  );
 
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const borderAnim = useRef(new Animated.Value(0)).current;
+  const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+    blur: () => inputRef.current?.blur(),
+    clear: () => inputRef.current?.clear(),
+  }));
 
   const handleFocus = e => {
     setIsFocused(true);
-    Animated.timing(borderAnim, { toValue: 1, duration: 150, useNativeDriver: false }).start();
+    Animated.timing(borderAnim, {
+      toValue: 1,
+      duration: 150,
+      useNativeDriver: false,
+    }).start();
     onFocus?.(e);
   };
 
   const handleBlur = e => {
     setIsFocused(false);
-    Animated.timing(borderAnim, { toValue: 0, duration: 150, useNativeDriver: false }).start();
+    Animated.timing(borderAnim, {
+      toValue: 0,
+      duration: 150,
+      useNativeDriver: false,
+    }).start();
     onBlur?.(e);
   };
 
@@ -61,28 +86,36 @@ const InputBox = ({
 
   const isSecure = secureTextEntry && !isPasswordVisible;
 
+  const isUnderline = variant === 'underline';
+
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
-        <AppText variant="label" color={colors.textSecondary} style={styles.label}>
-          {label}
-        </AppText>
+        <View style={styles.labelWrapper}>
+          <AppText variant="label" color={colors.textSecondary} style={[styles.label, labelStyle]}>
+            {label}
+          </AppText>
+          {required &&
+            <AppText style={styles.requiredLabel}>*</AppText>
+          }
+        </View>
       )}
 
       <Animated.View
         style={[
           styles.inputWrapper,
-          {
-            borderRadius: borderRadius.md,
-            borderColor,
-            backgroundColor: editable ? colors.inputBackground : colors.backgroundSecondary,
-            paddingHorizontal: spacing[3],
-          },
-          isFocused && shadows.xs,
+          !editable && styles.inputWrapperDisabled,
+          isUnderline && styles.inputWrapperUnderline,
+          isFocused && !isUnderline && styles.inputWrapperFocused,
+          !isUnderline && { borderColor },
+          wrapperStyle,
         ]}>
-        {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
+        {leftIcon && (
+          <View style={styles.leftIcon}>{leftIcon}</View>
+        )}
 
         <TextInput
+          ref={inputRef}
           testID={testID}
           value={value}
           onChangeText={onChangeText}
@@ -100,14 +133,8 @@ const InputBox = ({
           editable={editable}
           style={[
             styles.input,
-            {
-              color: colors.textPrimary,
-              fontFamily: fonts.fontFamily.regular,
-              fontSize: fonts.fontSize.base,
-              height: multiline ? undefined : 48,
-              textAlignVertical: multiline ? 'top' : 'center',
-              paddingVertical: multiline ? spacing[3] : 0,
-            },
+            multiline && styles.inputMultiline,
+            isUnderline && !multiline && styles.inputUnderline,
             inputStyle,
           ]}
           {...rest}
@@ -118,9 +145,7 @@ const InputBox = ({
             onPress={() => setIsPasswordVisible(p => !p)}
             style={styles.rightIcon}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <AppText variant="caption" color={colors.textTertiary}>
-              {isPasswordVisible ? 'Hide' : 'Show'}
-            </AppText>
+            <Ionicons name={isPasswordVisible ? 'eye' : 'eye-off'} color={colors.textTertiary} size={20} />
           </TouchableOpacity>
         ) : rightIcon ? (
           <View style={styles.rightIcon}>{rightIcon}</View>
@@ -128,16 +153,16 @@ const InputBox = ({
       </Animated.View>
 
       {error ? (
-        <AppText variant="caption" color={colors.error} style={styles.message}>
+        <AppText variant="caption" style={styles.messageError}>
           {error}
         </AppText>
       ) : hint ? (
-        <AppText variant="caption" color={colors.textTertiary} style={styles.message}>
+        <AppText variant="caption" style={styles.messageHint}>
           {hint}
         </AppText>
       ) : null}
     </View>
   );
-};
+});
 
-export default memo(InputBox);
+export default memo(AppInput);

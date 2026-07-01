@@ -1,9 +1,8 @@
-import React, {memo, useMemo, useState, useCallback} from 'react';
+import React, {memo, useMemo, useState, useCallback, useEffect} from 'react';
 import {
   View,
   StatusBar,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../../../theme';
@@ -12,8 +11,7 @@ import {
   Header,
   SafeContainer,
   Button,
-  InputBox,
-  CountryListItem,
+  CountrySelector,
 } from '../../../components/common';
 import {ROUTES} from '../../../constants';
 import {COUNTRIES} from '../../../constants/countries';
@@ -29,25 +27,24 @@ const CountrySelectionScreen = ({navigation, route}) => {
     [colors, spacing, borderRadius, shadows],
   );
 
-  const [selected, setSelected] = useState(
-    route.params?.currentCountry || 'United States',
-  );
-  const [query, setQuery] = useState('');
+  const initialCountry = route.params?.currentCountry;
+  const resolvedCountryCode = useMemo(() => {
+    if (!initialCountry) return 'US';
+    const found = COUNTRIES.find(c => c.value === initialCountry || c.label === initialCountry);
+    return found ? found.value : 'US';
+  }, [initialCountry]);
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const list = q
-      ? COUNTRIES.filter(c => c.label.toLowerCase().includes(q))
-      : COUNTRIES;
+  const [selected, setSelected] = useState(resolvedCountryCode);
+  
+  const [privacy, setPrivacy] = useState(route.params?.currentPrivacy || 'Public');
 
-    if (!selected || q) return list;
+  useEffect(() => {
+    if (route.params?.updatedPrivacy) {
+      setPrivacy(route.params.updatedPrivacy);
+    }
+  }, [route.params?.updatedPrivacy]);
 
-    const selectedObj = list.find(c => c.label === selected);
-    const rest = list.filter(c => c.label !== selected);
-    return selectedObj ? [selectedObj, ...rest] : list;
-  }, [selected, query]);
-
-  const handleSelect = useCallback(item => setSelected(item.label), []);
+  const handleSelect = useCallback(val => setSelected(val), []);
 
   const handleDone = useCallback(() => {
     navigation.navigate(ROUTES.UPDATE_PROFILE, {
@@ -55,35 +52,12 @@ const CountrySelectionScreen = ({navigation, route}) => {
     });
   }, [navigation, selected]);
 
-  const clearIcon = useMemo(
-    () =>
-      query ? (
-        <TouchableOpacity
-          onPress={() => setQuery('')}
-          hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
-          <Icon name="close-circle" size={18} color={colors.textSecondary} />
-        </TouchableOpacity>
-      ) : (
-        <Icon name="magnify" size={18} color={colors.textSecondary} />
-      ),
-    [query, colors.textSecondary],
-  );
-
-  const renderItem = useCallback(
-    ({item}) => {
-      const isSelected = item.label === selected;
-      return (
-        <CountryListItem
-          item={item}
-          isSelected={isSelected}
-          onPress={handleSelect}
-        />
-      );
-    },
-    [selected, handleSelect],
-  );
-
-  const keyExtractor = useCallback(item => item.value, []);
+  const handlePrivacyPress = useCallback(() => {
+    navigation.navigate(ROUTES.PRIVACY_SELECTION, {
+      currentPrivacy: privacy,
+      returnRoute: ROUTES.COUNTRY_SELECTION,
+    });
+  }, [navigation, privacy]);
 
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
@@ -94,30 +68,21 @@ const CountrySelectionScreen = ({navigation, route}) => {
       />
       <Header title={t('profile.country.title')} showBack />
 
-      {/* Search bar — uses common InputBox */}
-      <View style={styles.searchWrapper}>
-        <InputBox
-          placeholder={t('profile.country.searchPlaceholder')}
-          value={query}
-          onChangeText={setQuery}
-          leftIcon={<Icon name="magnify" size={20} color={colors.textSecondary} />}
-          rightIcon={clearIcon}
-          autoCorrect={false}
-          containerStyle={styles.searchInputContainer}
+      <View style={styles.content}>
+        <CountrySelector
+          value={selected}
+          onSelect={handleSelect}
+          placeholder={t('basicInfo.countryPlaceholder')}
         />
-      </View>
 
-      <FlatList
-        data={filtered}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        ListEmptyComponent={
-          <AppText style={styles.emptyText}>{t('profile.country.emptyText')}</AppText>
-        }
-      />
+        <TouchableOpacity style={styles.privacyRow} onPress={handlePrivacyPress} activeOpacity={0.7}>
+          <View style={styles.privacyTextContainer}>
+            <AppText style={styles.privacyLabel}> {t('profile.privacySelectionTitle')}</AppText>
+            <AppText style={styles.privacyValue}>{privacy}</AppText>
+          </View>
+          <Icon name="chevron-right" size={20} color={colors.textSecondary} />
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.buttonContainer}>
         <Button title={t('common.buttons.done')} onPress={handleDone} variant="primary" size="lg" fullWidth />

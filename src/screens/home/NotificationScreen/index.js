@@ -51,13 +51,13 @@ const NotificationsScreen = () => {
     const list = [];
     if (today.length > 0) {
       list.push({
-        title: t('home.notifications.sections.today', 'Today'),
+        title: t('home.notifications.sections.today'),
         data: today,
       });
     }
     if (earlier.length > 0) {
       list.push({
-        title: t('home.notifications.sections.earlier', 'Earlier'),
+        title: t('home.notifications.sections.earlier'),
         data: earlier,
       });
     }
@@ -76,14 +76,14 @@ const NotificationsScreen = () => {
       } catch (e) {
         ToastService.show({
           type: 'info',
-          message: t('home.notifications.toasts.comingSoon', 'Coming Soon'),
+          message: t('home.notifications.toasts.comingSoon'),
         });
       }
     } else {
       // Like / Comment / Common -> Show Coming Soon toast for post details
       ToastService.show({
         type: 'info',
-        message: t('home.notifications.toasts.comingSoon', 'Coming Soon'),
+        message: t('home.notifications.toasts.comingSoon'),
       });
     }
   }, [markAsRead, navigation, t]);
@@ -95,7 +95,7 @@ const NotificationsScreen = () => {
     } catch (e) {
       ToastService.show({
         type: 'info',
-        message: t('home.notifications.toasts.comingSoon', 'Coming Soon'),
+        message: t('home.notifications.toasts.comingSoon'),
       });
     }
   }, [markAsRead, navigation, t]);
@@ -138,7 +138,7 @@ const NotificationsScreen = () => {
     <SafeContainer edges={['top', 'bottom']} style={styles.safeArea}>
       {/* Header */}
       <Header
-        title={t('home.notifications.title', 'Notifications')}
+        title={t('home.notifications.title')}
         titleAlign="left"
         showBack={true}
         rightComponent={renderHeaderRight()}
@@ -167,11 +167,8 @@ const NotificationsScreen = () => {
                 color={colors.textTertiary}
               />
             }
-            title={t('home.notifications.emptyTitle', 'No notifications yet')}
-            description={t(
-              'home.notifications.emptyDescription',
-              'You will see updates, buddy requests, and activity alerts here.'
-            )}
+            title={t('home.notifications.emptyTitle')}
+            description={t('home.notifications.emptyDescription')}
             style={styles.emptyState}
           />
         }
@@ -206,7 +203,7 @@ const NotificationsScreen = () => {
             style={styles.menuIcon}
           />
           <AppText variant="bodyMedium" style={styles.menuText}>
-            Mark all as read
+            {t('home.notifications.markAllAsRead')}
           </AppText>
         </TouchableOpacity>
       </AppModal>

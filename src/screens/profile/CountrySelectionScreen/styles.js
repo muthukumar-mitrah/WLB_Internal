@@ -4,20 +4,32 @@ const createStyles = ({colors, spacing, borderRadius}) =>
   StyleSheet.create({
     container: {flex: 1, backgroundColor: colors.background},
 
-    /* ── Search bar wrapper (provides margin around InputBox) ── */
-    searchWrapper: {
+    /* ── Content ── */
+    content: {
+      flex: 1,
       paddingHorizontal: spacing[5],
       paddingTop: spacing[4],
     },
-    searchInputContainer: {
-      marginBottom: 0,
-    },
 
-    /* ── Country list ── */
-    listContent: {
-      paddingHorizontal: spacing[5],
-      paddingTop: spacing[3],
-      paddingBottom: spacing[4],
+    /* ── Privacy Row ── */
+    privacyRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: spacing[3],
+    },
+    privacyTextContainer: {
+      flex: 1,
+    },
+    privacyLabel: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: colors.textPrimary,
+      marginBottom: 2,
+    },
+    privacyValue: {
+      fontSize: 12,
+      color: colors.textSecondary,
     },
 
     row: {

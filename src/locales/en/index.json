@@ -30,7 +30,8 @@
     "matchPercent": "{{percent}}% Match",
     "likes": "Likes",
     "message": "Message",
-    "follow": "Follow"
+    "follow": "Follow",
+    "comingSoon": "Coming Soon"
   },
   "matchLoading": {
     "stage1": "Give me a second…",
@@ -85,7 +86,7 @@
       "about": "About Me",
       "expertise": "Expertise",
       "howToHelp": "How I Can Help",
-      "chooseButton": "Choose AI Buddy",
+      "chooseButton": "Choose Buddy",
       "followButton": "Follow",
       "posts": "Posts",
       "following": "Following",
@@ -397,7 +398,8 @@
         "buddyDelete": "Buddy request deleted successfully.",
         "joinSuccess": "Joined successfully.",
         "comingSoon": "Coming Soon"
-      }
+      },
+      "markAllAsRead": "Mark all as read"
     },
     "tabs": {
       "home": "Home",
@@ -782,13 +784,15 @@
         "buddyStatus": "Buddy Status"
       }
     },
+    "privacySelectionTitle": "Who can see this?",
     "header": {
-      "title": "Profile"
+      "title": "Profile",
+      "editPortrait": "Edit Portrait",
+      "viewPortrait": "View Portrait"
     },
     "buttons": {
       "updateProfile": "Update Profile",
       "viewPortrait": "View Portrait",
-      "viewPortfolio": "View Portfolio",
       "addBuddy": "Add Buddy",
       "message": "Message"
     },
@@ -1136,6 +1140,7 @@
       "errorToast": "Failed to update weight."
     }
   },
+
   "groupDetails": {
     "title": "Group Details",
     "privateGroup": "Private Group",
@@ -1233,5 +1238,16 @@
       "postingPermissionRequired": "Posting permission option is required.",
       "adminOnly": "Admin Only"
     }
+  },
+  "bottomSheet": {
+    "copyLink": "Copy Link",
+    "sharePost": "Share this Post",
+    "share": "Share",
+    "sharePostFooter": "Share post",
+    "linkCopied": "Link copied to clipboard!",
+    "shareSuccess": "Post shared successfully!",
+    "fallbackShareMessage": "Check out this post on WLB!",
+    "sharePostTemplate": "Check out this post by @{{username}} on Weight Loss Buddy:\n\n\"{{message}}\"",
+    "nativeShareTitle": "Share Post"
   }
 }

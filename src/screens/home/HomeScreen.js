@@ -150,6 +150,7 @@ const handleRobiFilterPress = useCallback(async () => {
         onCommentPress={handleCommentPress}
         onSharePress={handleSharePress}
         onLikesCountPress={handleLikesCountPress}
+        onAvatarPress={handleAvatarPress}
       />
     ),
     [

@@ -4,7 +4,8 @@
  */
 export { default as AppText } from './AppText';
 export { default as Button } from './Button';
-export { default as InputBox } from './InputBox';
+export { default as AppInput } from './AppInput';
+export { default as InputBox } from './AppInput';
 export { default as Header } from './Header';
 export { default as Loader } from './Loader';
 export { default as EmptyState } from './EmptyState';
@@ -31,7 +32,7 @@ export { default as RatingCard } from './RatingCard';
 export { default as AIBuddyIntroModal } from './AIBuddyIntroModal';
 export * from './BuddyFilters';
 export { default as PrivacyInfo } from './PrivacyInfo';
-export { default as CommonToggle } from './CommonToggle';
+export { default as AppSwitch } from './AppSwitch';
 export { default as CountrySelector } from './CountrySelector';
 export { default as Chart } from './Chart';
 export { default as Tabs } from './Tabs';

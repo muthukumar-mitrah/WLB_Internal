@@ -11,7 +11,7 @@ import {
   Header,
   AppText,
   Divider,
-  CommonToggle,
+  AppSwitch,
   ToastService,
   AppImage,
   AppModal,
@@ -23,6 +23,7 @@ import {
   APP_SETTINGS,
   ACCOUNT_ACTIONS,
 } from '../../constants/accountSetting';
+import { APP_IMAGES } from '../../constants';
 
 const AccountSettingScreen = () => {
   const navigation = useNavigation();
@@ -79,7 +80,7 @@ const AccountSettingScreen = () => {
     if (profile?.avatar) {
       return typeof profile.avatar === 'number' ? profile.avatar : { uri: profile.avatar };
     }
-    return require('../../assets/images/user.png');
+    return APP_IMAGES.userAvatar;
   }, [profile?.avatar]);
 
   // Section 1: Preferences
@@ -176,9 +177,10 @@ const AccountSettingScreen = () => {
 
         {/* Right interaction based on type */}
         {item.type === 'switch' && (
-          <CommonToggle
+          <AppSwitch
             value={item.value}
             onValueChange={item.onChange}
+            size="sm"
           />
         )}
 

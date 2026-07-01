@@ -258,7 +258,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
     viewProfileButton: {
       flex: 1,
       backgroundColor: '#F3F4F6',
-      height: 32,
+      height: 38,
       borderRadius: borderRadius.md,
       justifyContent: 'center',
       alignItems: 'center',
@@ -271,7 +271,7 @@ const createStyles = ({ colors, spacing, borderRadius, shadows }) =>
     requestBuddyButton: {
       flex: 1,
       backgroundColor: colors.primary,
-      height: 32,
+      height: 38,
       borderRadius: borderRadius.md,
       justifyContent: 'center',
       alignItems: 'center',

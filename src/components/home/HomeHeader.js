@@ -46,7 +46,7 @@ const HomeHeader = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.avatarBtn}>
           <Image
-            source={require('../../assets/images/user.png')}
+            source={APP_IMAGES.userAvatar}
             style={styles.avatar}
             resizeMode="cover"
           />

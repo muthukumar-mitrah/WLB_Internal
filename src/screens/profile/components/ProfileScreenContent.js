@@ -7,7 +7,8 @@
  *  - Other profile: Request Buddy + Message buttons, 3-dot menu, Block/Report modals
  */
 import React, { memo, useCallback, useMemo, useState, useRef, useEffect } from 'react';
-import { View, StatusBar, TouchableOpacity, Clipboard } from 'react-native';
+import { View, StatusBar, TouchableOpacity } from 'react-native';
+import { copyWithToast } from '../../../utils/helpers/clipboardHelper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Share from 'react-native-share';
 import { DrawerActions } from '@react-navigation/native';
@@ -358,8 +359,7 @@ const listData = useMemo(() => {
 
   const handleCopyLinkPress = useCallback(() => {
     const url = `https://weightlossbuddy.app/u/${profile?.name?.toLowerCase()}`;
-    if (Clipboard?.setString) { Clipboard.setString(url); }
-    ToastService.show({ type: 'success', message: t('profile.toast.copied') });
+    copyWithToast(url, t('profile.toast.copied'));
     setIsMenuVisible(false);
   }, [profile?.name, t]);
 

@@ -37,8 +37,6 @@ const createStyles = ({colors, spacing, borderRadius, shadows}) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingVertical: spacing[3],
-      marginBottom: spacing[6],
     },
     privacyTexts: {
       flex: 1,

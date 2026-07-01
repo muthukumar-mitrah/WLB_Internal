@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from 'react';
-import { View, TouchableOpacity, Switch, StyleSheet } from 'react-native';
-import { AppText } from '.';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { AppText, AppSwitch } from '.';
 import RulerPicker from './RulerPicker';
 
 export const generateScaleValues = (min, max, count = 6) => {
@@ -30,19 +30,18 @@ export const SwitchRow = memo(({ label, subLabel, value, onValueChange, colors, 
           <AppText style={styles?.switchSubLabel}>{subLabel}</AppText>
         ) : null}
       </View>
-      <Switch
+      <AppSwitch
         value={value}
         onValueChange={onValueChange}
-        trackColor={{ false: colors.border, true: colors.primary }}
-        thumbColor={colors.background}
+        size="sm"
       />
     </View>
   );
 });
 
-export const GenderButtons = memo(({ gender, onGenderChange, t, styles }) => (
+export const GenderButtons = memo(({ gender, onGenderChange, t, styles, options = GENDER_OPTIONS }) => (
   <View style={styles?.genderRow}>
-    {GENDER_OPTIONS.map(g => {
+    {options.map(g => {
       const isActive = gender === g.value;
       return (
         <TouchableOpacity

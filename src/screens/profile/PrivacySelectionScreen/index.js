@@ -21,7 +21,7 @@ const PrivacySelectionScreen = ({navigation, route}) => {
     [colors, spacing, borderRadius, shadows],
   );
 
-  const initialPrivacy = 'Public';
+  const initialPrivacy = route.params?.currentPrivacy || 'Public';
   const [selected, setSelected] = useState(initialPrivacy);
 
   const handleSelect = useCallback(key => {
@@ -29,11 +29,19 @@ const PrivacySelectionScreen = ({navigation, route}) => {
   }, []);
 
   const handleDone = useCallback(() => {
-    navigation.navigate({
-      name: ROUTES.WEIGHT_UPDATE,
-      params: {updatedPrivacy: selected},
-      merge: true,
-    });
+    const state = navigation.getState();
+    const routes = state?.routes || [];
+    const prevRoute = routes.length > 1 ? routes[routes.length - 2] : null;
+
+    if (prevRoute) {
+      navigation.navigate({
+        name: prevRoute.name,
+        params: {updatedPrivacy: selected},
+        merge: true,
+      });
+    } else {
+      navigation.goBack();
+    }
   }, [navigation, selected]);
 
   const privacyOptions = useMemo(() => [

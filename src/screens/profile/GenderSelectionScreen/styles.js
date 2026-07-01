@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
+import { fontSize, fontWeight } from '../../../theme/fonts';
 
-const createStyles = ({colors, spacing}) =>
+const createStyles = ({colors, spacing, borderRadius}) =>
   StyleSheet.create({
     container: {flex: 1, backgroundColor: colors.background},
 
@@ -19,6 +20,33 @@ const createStyles = ({colors, spacing}) =>
 
     listContainer: {
       backgroundColor: 'transparent',
+    },
+
+    // ── Gender buttons ────────────────────────────────────────────────────────
+    genderRow: {
+      flexDirection: 'row',
+      gap: 6,
+    },
+    genderBtn: {
+      paddingHorizontal: 14,
+      paddingVertical: 9,
+      borderRadius: borderRadius.md || 8,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.card || colors.backgroundSecondary,
+    },
+    genderBtnActive: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    genderBtnText: {
+      fontSize: fontSize.base,
+      fontWeight: fontWeight.medium,
+      color: colors.textPrimary,
+    },
+    genderBtnTextActive: {
+      color: '#FFFFFF',
+      fontWeight: fontWeight.bold,
     },
 
     row: {

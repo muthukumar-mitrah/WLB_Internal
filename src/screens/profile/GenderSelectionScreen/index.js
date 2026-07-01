@@ -12,12 +12,12 @@ import {
 import {ROUTES} from '../../../constants';
 import createStyles from './styles';
 import {useTranslation} from 'react-i18next';
-import RadioOption from '../components/RadioOption';
+import {GenderButtons} from '../../../components/common/BuddyFilters';
 
 const GENDER_OPTIONS = [
-  {key: 'Male',               icon: 'human-male'},
-  {key: 'Female',             icon: 'human-female'},
-  {key: 'Other',              icon: 'gender-non-binary'}
+  {value: 'Male', labelKey: 'profile.gender.options.male'},
+  {value: 'Female', labelKey: 'profile.gender.options.female'},
+  {value: 'Other', labelKey: 'profile.gender.options.other'}
 ];
 
 const GenderSelectionScreen = ({navigation, route}) => {
@@ -65,25 +65,13 @@ const GenderSelectionScreen = ({navigation, route}) => {
         <AppText style={styles.sectionLabel}>{t('profile.gender.subtitle')}</AppText>
 
         <View style={styles.listContainer}>
-          {GENDER_OPTIONS.map((option, index) => {
-            const isSelected = option.key === selected;
-            const isLast = index === GENDER_OPTIONS.length - 1;
-            return (
-              <View key={option.key}>
-                <TouchableOpacity
-                  style={styles.row}
-                  onPress={() => handleSelect(option.key)}
-                  activeOpacity={0.7}>
-                  <View style={styles.iconWrapper}>
-                    <Icon name={option.icon} size={22} color={colors.textPrimary} />
-                  </View>
-                  <AppText style={styles.optionLabel}>{getGenderLabel(option.key)}</AppText>
-                  <RadioOption selected={isSelected} />
-                </TouchableOpacity>
-                {!isLast && <Divider style={styles.divider} thickness={1} />}
-              </View>
-            );
-          })}
+          <GenderButtons
+            options={GENDER_OPTIONS}
+            gender={selected}
+            onGenderChange={handleSelect}
+            t={t}
+            styles={styles}
+          />
         </View>
       </ScrollView>
 

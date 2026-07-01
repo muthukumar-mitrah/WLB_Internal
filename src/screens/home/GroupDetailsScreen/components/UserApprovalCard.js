@@ -5,6 +5,7 @@ import { useTranslation } from '../../../../i18n/useTranslation';
 import { fontFamily } from '../../../../theme/fonts';
 import AppText from '../../../../components/common/AppText';
 import Card from '../../../../components/common/Card';
+import { APP_IMAGES } from '../../../../constants';
 
 export const ApprovalActionButtons = memo(({ onApprove, onDecline, id }) => {
   const { colors, borderRadius } = useTheme();
@@ -58,7 +59,7 @@ const UserApprovalCard = ({
       <View style={styles.userInfoRow}>
         <View style={styles.avatarWrapper}>
           <Image
-            source={item.profileImage ? { uri: item.profileImage } : require('../../../../assets/images/user.png')}
+            source={item.profileImage ? { uri: item.profileImage } : APP_IMAGES.userAvatar}
             style={styles.avatar}
             resizeMode="cover"
           />

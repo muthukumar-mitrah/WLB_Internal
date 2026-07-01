@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
 import { AppText, Button, SafeContainer } from '../../../components/common';
-import { ROUTES } from '../../../constants';
+import { APP_IMAGES, ROUTES } from '../../../constants';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { createSurveyStyles } from './styles';
 
@@ -63,7 +63,7 @@ const AiBuddyScreen = ({ navigation }) => {
           </AppText>
           <View style={styles.profileRow}>
             <Image
-              source={require('../../../assets/images/user.png')}
+              source={APP_IMAGES.userAvatar}
               style={styles.avatar}
               resizeMode="cover"
             />

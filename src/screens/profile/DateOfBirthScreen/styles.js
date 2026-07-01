@@ -10,6 +10,26 @@ const createStyles = ({colors, spacing, borderRadius, shadows, isDark}) =>
       paddingTop: spacing[5],
     },
 
+    /* ── Privacy Row ── */
+    privacyRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    privacyTextContainer: {
+      flex: 1,
+    },
+    privacyLabel: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: colors.textPrimary,
+      marginBottom: 2,
+    },
+    privacyValue: {
+      fontSize: 12,
+      color: colors.textSecondary,
+    },
+
     pickerWrapper: {
       backgroundColor: colors.backgroundSecondary,
       borderRadius: borderRadius.xl,

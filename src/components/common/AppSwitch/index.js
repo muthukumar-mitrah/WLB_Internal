@@ -1,15 +1,19 @@
-import React, { useRef, useEffect } from 'react';
-import { Pressable, Animated, StyleSheet } from 'react-native';
-import { useTheme } from '../../theme';
+import React, { useRef, useEffect, useMemo } from 'react';
+import { Pressable, Animated } from 'react-native';
+import { useTheme } from '../../../theme';
+import createStyles, { getSwitchMetrics } from './styles';
 
-const CommonToggle = ({
+const AppSwitch = ({
   value = false,
   onValueChange,
+  size = 'md',
   disabled = false,
   activeColor,
   inactiveColor,
   thumbColor,
   style,
+  testID,
+  accessibilityLabel,
 }) => {
   const { colors, isDark } = useTheme();
 
@@ -39,19 +43,21 @@ const CommonToggle = ({
     }
   };
 
+  const styles = useMemo(() => createStyles(size), [size]);
+  const metrics = getSwitchMetrics(size);
+
   // Interpolate track background color
   const backgroundColor = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [defaultInactiveColor, activeTrackColor],
   });
 
-  // Interpolate thumb position (from left padding 2px to right padding 2px)
-  // Track width 51, thumb width 27, padding 2 => max translateX = 51 - 27 - 2 = 22.
-  // With paddingHorizontal: 2 on track, default start is at offset 2.
-  // To stay within padding bounds, translateX should animate from 0 to 20.
+  // Calculate translation: trackWidth - thumbSize - (padding * 2)
+  const maxTranslate = metrics.trackWidth - metrics.thumbSize - (metrics.padding * 2);
+
   const translateX = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 20],
+    outputRange: [0, maxTranslate],
   });
 
   // Interpolate thumb color
@@ -68,6 +74,10 @@ const CommonToggle = ({
         disabled && styles.disabled,
         style,
       ]}
+      testID={testID}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: value, disabled }}
     >
       <Animated.View
         style={[
@@ -89,27 +99,4 @@ const CommonToggle = ({
   );
 };
 
-const styles = StyleSheet.create({
-  track: {
-    width: 51,
-    height: 31,
-    borderRadius: 16,
-    justifyContent: 'center',
-    paddingHorizontal: 2,
-  },
-  thumb: {
-    width: 27,
-    height: 27,
-    borderRadius: 13.5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.5,
-    elevation: 2,
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-});
-
-export default CommonToggle;
+export default React.memo(AppSwitch);

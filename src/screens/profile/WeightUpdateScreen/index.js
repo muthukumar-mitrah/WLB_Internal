@@ -121,7 +121,7 @@ const initialUnit = route.params?.unit || 'lbs';
         >
           <View style={styles.privacyTexts}>
             <AppText style={styles.privacyTitle}>
-              {t('profile.weightUpdate.privacyTitle')}
+              {t('profile.privacySelectionTitle')}
             </AppText>
             <AppText style={styles.privacyValue}>
               {getPrivacyLabel(privacy)}
