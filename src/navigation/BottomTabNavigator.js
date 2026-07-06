@@ -61,8 +61,21 @@ const NoRippleTabButton = (props) => (
   <TouchableOpacity {...props} activeOpacity={1} />
 );
 
-const TabIcon = memo(({ routeName, focused, colors, step }) => {
+const TabIcon = memo(({ routeName, focused }) => {
   const { t } = useTranslation();
+  const { colors } = useTheme();
+  const { steps } = useAppTour();
+
+  const step = useMemo(() => {
+    if (!steps) return null;
+    return steps.find((s) => s.target === (
+      routeName === ROUTES.HOME ? 'home' :
+      routeName === ROUTES.BUDDIES ? 'findBuddy' :
+      routeName === ROUTES.NOTIFICATIONS ? 'notifications' :
+      routeName === ROUTES.ROBI ? 'aiBuddy' : null
+    ));
+  }, [steps, routeName]);
+
   const icons = TAB_ICONS[routeName];
   if (!icons) return null;
 
@@ -115,8 +128,15 @@ const tabIconStyles = StyleSheet.create({
   },
 });
 
-const CreateTabButton = memo(({ onPress, colors, shadows, step }) => {
+const CreateTabButton = memo(({ onPress, ...props }) => {
   const { t } = useTranslation();
+  const { colors, shadows } = useTheme();
+  const { steps } = useAppTour();
+
+  const step = useMemo(() => {
+    return steps?.find((s) => s.target === 'createPost');
+  }, [steps]);
+
   const image = (
     <Image
       source={TAB_ICONS[ROUTES.CREATE_POST].active}
@@ -128,6 +148,7 @@ const CreateTabButton = memo(({ onPress, colors, shadows, step }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
+      {...props}
       activeOpacity={0.85}
       style={createBtnStyles.container}
       accessibilityRole="button"
@@ -180,8 +201,30 @@ const createBtnStyles = StyleSheet.create({
   },
 });
 
+const renderNull = () => null;
+
+const renderCreateButton = (props) => (
+  <CreateTabButton {...props} />
+);
+
+const renderHomeIcon = ({ focused }) => (
+  <TabIcon routeName={ROUTES.HOME} focused={focused} />
+);
+
+const renderBuddiesIcon = ({ focused }) => (
+  <TabIcon routeName={ROUTES.BUDDIES} focused={focused} />
+);
+
+const renderNotificationsIcon = ({ focused }) => (
+  <TabIcon routeName={ROUTES.NOTIFICATIONS} focused={focused} />
+);
+
+const renderRobiIcon = ({ focused }) => (
+  <TabIcon routeName={ROUTES.ROBI} focused={focused} />
+);
+
 const BottomTabNavigator = () => {
-  const { colors, spacing, shadows } = useTheme();
+  const { colors, spacing } = useTheme();
   const { t } = useTranslation();
 
   const insets = useSafeAreaInsets();
@@ -189,18 +232,6 @@ const BottomTabNavigator = () => {
 
   const [disclaimerVisible, setDisclaimerVisible] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState(null);
-
-  const { steps } = useAppTour();
-
-  const stepMap = useMemo(() => {
-    const map = {};
-    if (steps) {
-      steps.forEach((s) => {
-        map[s.target] = s;
-      });
-    }
-    return map;
-  }, [steps]);
 
   const handleRobiTabPress = useCallback(
     async (e, navigation) => {
@@ -283,81 +314,46 @@ const BottomTabNavigator = () => {
   const homeTabOptions = useMemo(
     () => ({
       tabBarLabel: t('home.tabs.home'),
-      tabBarIcon: ({ focused }) => (
-        <TabIcon
-          routeName={ROUTES.HOME}
-          focused={focused}
-          colors={colors}
-          step={stepMap.home}
-        />
-      ),
+      tabBarIcon: renderHomeIcon,
     }),
-    [colors, stepMap.home, t],
+    [t],
   );
 
   const buddiesTabOptions = useMemo(
     () => ({
       tabBarLabel: t('home.tabs.buddies'),
-      tabBarIcon: ({ focused }) => (
-        <TabIcon
-          routeName={ROUTES.BUDDIES}
-          focused={focused}
-          colors={colors}
-          step={stepMap.findBuddy}
-        />
-      ),
+      tabBarIcon: renderBuddiesIcon,
     }),
-    [colors, stepMap.findBuddy, t],
+    [t],
   );
 
   const createPostTabOptions = useMemo(
     () => ({
-      tabBarLabel: () => null,
-      tabBarIcon: () => null,
-      tabBarButton: (props) => (
-        <CreateTabButton
-          {...props}
-          colors={colors}
-          shadows={shadows}
-          step={stepMap.createPost}
-        />
-      ),
+      tabBarLabel: renderNull,
+      tabBarIcon: renderNull,
+      tabBarButton: renderCreateButton,
     }),
-    [colors, shadows, stepMap.createPost],
+    [],
   );
 
   const notificationsTabOptions = useMemo(
     () => ({
       tabBarLabel: t('home.tabs.notifications'),
-      tabBarIcon: ({ focused }) => (
-        <TabIcon
-          routeName={ROUTES.NOTIFICATIONS}
-          focused={focused}
-          colors={colors}
-          step={stepMap.notifications}
-        />
-      ),
+      tabBarIcon: renderNotificationsIcon,
     }),
-    [colors, stepMap.notifications, t],
+    [t],
   );
 
   const robiTabOptions = useMemo(
     () => ({
       tabBarLabel: t('home.tabs.robi'),
-      tabBarIcon: ({ focused }) => (
-        <TabIcon
-          routeName={ROUTES.ROBI}
-          focused={focused}
-          colors={colors}
-          step={stepMap.aiBuddy}
-        />
-      ),
+      tabBarIcon: renderRobiIcon,
     }),
-    [colors, stepMap.aiBuddy, t],
+    [t],
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <Tab.Navigator screenOptions={screenOptions}>
         <Tab.Screen
           name={ROUTES.HOME}
@@ -398,5 +394,11 @@ const BottomTabNavigator = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default memo(BottomTabNavigator);

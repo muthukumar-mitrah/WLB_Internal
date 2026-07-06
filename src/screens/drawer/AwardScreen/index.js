@@ -1,7 +1,6 @@
 import React, { memo, useMemo, useCallback } from 'react';
-import { ScrollView, TouchableOpacity, View, Image, StatusBar } from 'react-native';
+import { ScrollView, View, Image, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { AppText, SafeContainer, Divider, Header } from '../../../components/common';

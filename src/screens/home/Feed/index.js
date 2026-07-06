@@ -201,7 +201,7 @@ const PostCard = memo(
       <View style={styles.card}>
         <View style={styles.cardHeader}>
           <TouchableOpacity
-            style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}
+            style={styles.headerUserInfo}
             activeOpacity={0.7}
             onPress={() => onAvatarPress?.(post.id)}>
             <View style={styles.avatarContainer}>
@@ -221,7 +221,7 @@ const PostCard = memo(
                   username={post.username}
                   size={38}
                   colors={colors}
-                  style={{ marginRight: 0 }}
+                  style={styles.avatarPlaceholder}
                 />
               )}
               {post.isOnline && (
@@ -342,7 +342,7 @@ const PostCard = memo(
                   tooltipBottomOffset={FEED_TOUR_TOOLTIP_OFFSET}
                   text={JSON.stringify({ title: t(stepMap.likePost.titleKey), body: t(stepMap.likePost.descKey) })}
                 >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1] }}>
+                  <View style={styles.reactionInnerRow}>
                     <TouchableOpacity
                       activeOpacity={0.7}
                       onPress={() => handleLike(false)}>
@@ -408,7 +408,7 @@ const PostCard = memo(
                   tooltipBottomOffset={FEED_TOUR_TOOLTIP_OFFSET}
                   text={JSON.stringify({ title: t(stepMap.comment.titleKey), body: t(stepMap.comment.descKey) })}
                 >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1] }}>
+                  <View style={styles.reactionInnerRow}>
                     <Image
                       source={ICON_COMMENT}
                       style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
@@ -447,7 +447,7 @@ const PostCard = memo(
                   tooltipBottomOffset={FEED_TOUR_TOOLTIP_OFFSET}
                   text={JSON.stringify({ title: t(stepMap.sharePost.titleKey), body: t(stepMap.sharePost.descKey) })}
                 >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1] }}>
+                  <View style={styles.reactionInnerRow}>
                     <Image
                       source={ICON_SHARE}
                       style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}

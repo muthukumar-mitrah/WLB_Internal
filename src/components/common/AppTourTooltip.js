@@ -65,7 +65,7 @@ const AppTourTooltip = ({
           onPress={handlePrev}
           disabled={isFirstStep}
           activeOpacity={0.7}
-          style={[styles.navBtn, isFirstStep && { opacity: 0.5 }]}
+          style={[styles.navBtn, isFirstStep && styles.disabledBtn]}
         >
           <AppText
             variant="bodyMedium"
@@ -76,7 +76,7 @@ const AppTourTooltip = ({
           </AppText>
         </TouchableOpacity>
 
-        <View style={{ width: spacing[8] }} />
+        <View style={styles.spacer} />
 
         <TouchableOpacity
           onPress={isLastStep ? handleStop : handleNext}
@@ -143,6 +143,12 @@ const createStyles = ({ colors, spacing, borderRadius, fonts }) =>
     navBtn: {
       paddingVertical: spacing[1.5],
       paddingHorizontal: spacing[3],
+    },
+    disabledBtn: {
+      opacity: 0.5,
+    },
+    spacer: {
+      width: spacing[8],
     },
     navText: {
       fontFamily: fonts.fontFamily.medium,

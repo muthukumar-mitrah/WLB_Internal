@@ -6,8 +6,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../theme';
-import { useFeed } from '../../context/FeedContext';
-import { APP_IMAGES, ROUTES } from '../../constants';
+import { APP_IMAGES } from '../../constants';
 import { useTranslation } from '../../i18n/useTranslation';
 import { TourGuideZone } from 'rn-tourguide';
 import { useAppTour } from '../../hooks/useAppTour';
@@ -16,7 +15,6 @@ import { useAppTour } from '../../hooks/useAppTour';
 const HomeHeader = () => {
   const navigation = useNavigation();
   const { colors, spacing, borderRadius } = useTheme();
-  const { activeTab } = useFeed();
   const { t } = useTranslation();
   const { steps } = useAppTour();
 

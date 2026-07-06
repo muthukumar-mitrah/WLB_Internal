@@ -16,6 +16,11 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       alignItems: 'center',
       marginBottom: spacing[2] + 2,
     },
+    headerUserInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
     avatarContainer: {
       position: 'relative',
       marginRight: spacing[2] + 2,
@@ -34,6 +39,9 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       borderRadius: 6,
       borderWidth: 2,
       borderColor: colors.background,
+    },
+    avatarPlaceholder: {
+      marginRight: 0,
     },
     avatarText: {
       color: colors.white,
@@ -132,6 +140,11 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginRight: spacing[4],
+      gap: spacing[1],
+    },
+    reactionInnerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: spacing[1],
     },
     reactionIcon: {
