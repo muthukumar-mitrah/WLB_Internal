@@ -195,8 +195,6 @@ const TrackProgressScreen = () => {
     }
   }, [updateProfile, t]);
 
-  // koi kisikiliyae kuch nahi karta
-
   return (
     <SafeContainer edges={['top', 'bottom']} style={styles.container}>
       <StatusBar
