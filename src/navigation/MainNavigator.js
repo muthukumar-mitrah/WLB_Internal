@@ -42,10 +42,13 @@ import TrackProgressScreen from '../screens/TrackProgress/TrackProgressScreen';
 import GroupDetailsScreen from '../screens/home/GroupDetailsScreen';
 import EditGroupScreen from '../screens/home/EditGroupScreen';
 import NotificationsScreen from '../screens/home/NotificationScreen';
+import SavedPostsScreen from '../screens/SavedPosts';
+import { VideoPlaybackProvider } from '../context/VideoPlaybackContext';
 
 const Stack = createNativeStackNavigator();
 
 const MainNavigator = () => (
+  <VideoPlaybackProvider>
   <Stack.Navigator
     screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
     <Stack.Screen name={ROUTES.DRAWER} component={DrawerNavigator} />
@@ -95,7 +98,11 @@ const MainNavigator = () => (
 
     {/* Notification Screen — accessible from Home header icon */}
     <Stack.Screen name={ROUTES.NOTIFICATION_SCREEN} component={NotificationsScreen} />
+
+    {/* Saved Posts Screen */}
+    <Stack.Screen name={ROUTES.SAVED_POSTS} component={SavedPostsScreen} />
   </Stack.Navigator>
+  </VideoPlaybackProvider>
 );
 
 export default memo(MainNavigator);

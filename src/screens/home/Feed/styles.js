@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { fontFamily } from '../../../theme/fonts';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const createStyles = ({ colors, spacing, borderRadius }) =>
   StyleSheet.create({
@@ -54,6 +56,10 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       fontFamily: fontFamily.semiBold,
       fontSize: 14,
       lineHeight: 18,
+    },
+    cardFeelingText: {
+      fontFamily: fontFamily.regular,
+      fontSize: 13,
     },
     cardMeta: {
       fontFamily: fontFamily.regular,
@@ -122,12 +128,23 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
       overflow: 'hidden',
       marginBottom: spacing[2] + 2,
     },
+    // Full-bleed container for video thumbnails — escapes the card's horizontal padding
+    videoImageContainer: {
+      width: SCREEN_WIDTH,
+      marginLeft: -spacing[4],
+      borderRadius: 0,
+    },
     imagePressable: {
       width: '100%',
     },
     postImage: {
       width: '100%',
       borderRadius: borderRadius.lg,
+    },
+    // Image style override when video thumbnail — no rounding, cover fill
+    videoPostImage: {
+      width: '100%',
+      borderRadius: 0,
     },
 
     // ── Reactions row ──────────────────────────────────────────────────────────
@@ -182,6 +199,42 @@ const createStyles = ({ colors, spacing, borderRadius }) =>
     approvalApproveBtn: {
       flex: 1,
       marginLeft: spacing[1] + 2,
+    },
+    // ── Video thumbnail overlays ────────────────────────────────────────────
+    videoPlayOverlay: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: [{ translateX: -32 }, { translateY: -32 }],
+      zIndex: 1,
+    },
+    playIconCircle: {
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      backgroundColor: 'rgba(255,255,255,0.95)',
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.25,
+      shadowRadius: 6,
+      elevation: 6,
+    },
+    videoDurationBadge: {
+      position: 'absolute',
+      bottom: spacing[2],
+      right: spacing[2],
+      backgroundColor: 'rgba(0,0,0,0.65)',
+      borderRadius: borderRadius.sm || 4,
+      paddingHorizontal: spacing[2],
+      paddingVertical: 2,
+      zIndex: 2,
+    },
+    videoDurationText: {
+      color: colors.white,
+      fontSize: 12,
+      fontFamily: fontFamily.medium,
     },
   });
 

@@ -79,6 +79,7 @@ const ROUTE_MAP = {
   changePassword: ROUTES.SETTINGS_CHANGE_PASSWORD,
   accountSettings: ROUTES.ACCOUNT_SETTINGS,
   trackProgress: ROUTES.TRACK_PROGRESS,
+  savedPosts: ROUTES.SAVED_POSTS
 };
 
 const getGreetingKey = () => {

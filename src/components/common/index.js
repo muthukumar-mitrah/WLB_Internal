@@ -37,3 +37,4 @@ export { default as CountrySelector } from './CountrySelector';
 export { default as Chart } from './Chart';
 export { default as Tabs } from './Tabs';
 export { default as AppTourTooltip } from './AppTourTooltip';
+export { default as VideoPlayer } from './VideoPlayer';

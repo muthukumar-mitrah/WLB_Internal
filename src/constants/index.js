@@ -122,6 +122,9 @@ const ROUTES = {
   PROFILE_VISIBILITY: 'ProfileVisibility',
   WEIGHT_VISIBILITY: 'WeightVisibility',
   TRACK_PROGRESS: 'TrackProgress',
+
+  // Saved Posts
+  SAVED_POSTS: 'SavedPosts',
 };
 
 // Remove once the real login API is integrated.
@@ -280,6 +283,14 @@ const NOTIFICATION_TABS = [
   'Buddies',
 ];
 
+const SAVED_POST_TABS = [
+  'All',
+  'Text',
+  'Photos',
+  'Videos',
+  'Groups',
+];
+
 // ── Report Options ────────────────────────────────────────────────────────────
 const REPORT_OPTIONS = [
   "It's spam",
@@ -320,5 +331,6 @@ export {
   PROFILE_TABS,
   BUDDY_PROFILE_TABS,
   REPORT_OPTIONS,
-  NOTIFICATION_TABS
+  NOTIFICATION_TABS,
+  SAVED_POST_TABS,
 };

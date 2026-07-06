@@ -3,11 +3,13 @@
  */
 import React, { memo, useCallback, useState, useRef, useEffect, useMemo } from 'react';
 import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Video from 'react-native-video';
 import { useTheme } from '../../../theme';
+import { useVideoPlayback } from '../../../context/VideoPlaybackContext';
 import { useTranslation } from '../../../i18n/useTranslation';
-import { AppText, LikeAnimationOverlay, Button } from '../../../components/common';
+import { AppText, LikeAnimationOverlay, Button, VideoPlayer } from '../../../components/common';
 import { APP_IMAGES } from '../../../constants';
 import createStyles from './styles';
 import { useAppTour } from '../../../hooks/useAppTour';
@@ -121,6 +123,18 @@ const PostCard = memo(
 
     const liked = post.liked ?? false;
     const [animationTrigger, setAnimationTrigger] = useState(0);
+    const { playingVideoId, playVideo, pauseVideo } = useVideoPlayback();
+    const isPlaying = playingVideoId === post.id;
+
+    useFocusEffect(
+      useCallback(() => {
+        return () => {
+          if (isPlaying) {
+            pauseVideo();
+          }
+        };
+      }, [isPlaying, pauseVideo])
+    );
 
     const [aspectRatio, setAspectRatio] = useState(() => {
       if (post.image && typeof post.image === 'number') {
@@ -182,6 +196,8 @@ const PostCard = memo(
     );
 
     const handleMediaPress = useCallback(() => {
+      if (post.videoUrl) return; // VideoPlayer handles its own press
+
       const now = Date.now();
       if (now - lastTap.current < DOUBLE_TAP_DELAY) {
         clearTimeout(tapTimeout.current);
@@ -195,7 +211,7 @@ const PostCard = memo(
           tapTimeout.current = null;
         }, DOUBLE_TAP_DELAY);
       }
-    }, [handleLike, onImagePreview, post.image]);
+    }, [handleLike, onImagePreview, post.image, post.videoUrl]);
 
     return (
       <View style={styles.card}>
@@ -229,9 +245,14 @@ const PostCard = memo(
               )}
             </View>
             <View style={styles.cardHeaderInfo}>
-              <AppText style={[styles.cardUsername, { color: colors.textPrimary }]}>
+              <Text style={[styles.cardUsername, { color: colors.textPrimary }]}>
                 {post.username}
-              </AppText>
+                {post.feeling ? (
+                  <Text style={[styles.cardFeelingText, { color: colors.textSecondary }]}>
+                    {` is feeling ${post.feeling}`}
+                  </Text>
+                ) : null}
+              </Text>
               <AppText style={[styles.cardMeta, { color: colors.textSecondary }]}>
                 {post.currentWeight ? `${t('home.feed.cw')}${post.currentWeight} · ` : ''}
                 {post.timeAgo}
@@ -279,35 +300,37 @@ const PostCard = memo(
               style={styles.cardText}
             />
           </Pressable>
-          {post.image && (
-            <View style={styles.imageContainer}>
+          {!post.videoUrl && post.image && (
+            <View style={[styles.imageContainer, post.videoDuration && styles.videoImageContainer]}>
               <Pressable onPress={handleMediaPress} style={styles.imagePressable}>
                 <Image
                   source={post.image}
-                  style={[styles.postImage, { aspectRatio, height: undefined }]}
-                  resizeMode="contain"
+                  style={[
+                    post.videoDuration ? styles.videoPostImage : styles.postImage,
+                    { aspectRatio: post.videoDuration ? 4 / 3 : aspectRatio, height: undefined },
+                  ]}
+                  resizeMode={post.videoDuration ? 'cover' : 'contain'}
                 />
               </Pressable>
               <LikeAnimationOverlay trigger={animationTrigger} />
             </View>
           )}
-          {post.video && (
-            <View style={styles.imageContainer}>
-              <Pressable onPress={handleMediaPress} style={styles.imagePressable}>
-                <Video
-                  source={post.video}
-                  style={styles.postImage}
-                  resizeMode="cover"
-                  paused
-                  muted
-                  repeat
-                />
-              </Pressable>
+          {post.videoUrl && (
+            <View style={[styles.imageContainer, post.videoDuration && styles.videoImageContainer]}>
+              <VideoPlayer
+                videoUri={{ uri: post.videoUrl }}
+                thumbnail={post.thumbnail || post.image}
+                aspectRatio={post.videoDuration ? 4 / 3 : aspectRatio}
+                paused={!isPlaying}
+                onTogglePlay={() => {
+                  if (isPlaying) pauseVideo();
+                  else playVideo(post.id);
+                }}
+                onDoubleTap={() => handleLike(true)}
+                durationBadge={post.videoDuration}
+              />
               <LikeAnimationOverlay trigger={animationTrigger} />
             </View>
-          )}
-          {!post.image && !post.video && (
-            <LikeAnimationOverlay trigger={animationTrigger} />
           )}
         </View>
         {showApprovalActions ? (
