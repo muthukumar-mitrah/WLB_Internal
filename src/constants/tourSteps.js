@@ -1,0 +1,20 @@
+export const TOUR_STEPS = [
+  { order: 1, target: 'home', titleKey: 'tour.home.title', descKey: 'tour.home.description', shape: 'circle' },
+  { order: 2, target: 'findBuddy', titleKey: 'tour.findBuddy.title', descKey: 'tour.findBuddy.description', shape: 'circle' },
+  { order: 3, target: 'createPost', titleKey: 'tour.createPost.title', descKey: 'tour.createPost.description', shape: 'circle' },
+  { order: 4, target: 'notifications', titleKey: 'tour.notifications.title', descKey: 'tour.notifications.description', shape: 'circle' },
+  { order: 5, target: 'aiBuddy', titleKey: 'tour.aiBuddy.title', descKey: 'tour.aiBuddy.description', shape: 'circle' },
+  { order: 6, target: 'liveChat', titleKey: 'tour.liveChat.title', descKey: 'tour.liveChat.description', shape: 'circle' },
+  { order: 7, target: 'profile', titleKey: 'tour.profile.title', descKey: 'tour.profile.description', shape: 'circle' },
+  { order: 8, target: 'trending', titleKey: 'tour.trending.title', descKey: 'tour.trending.description', shape: 'rectangle' },
+  { order: 9, target: 'wlb', titleKey: 'tour.wlb.title', descKey: 'tour.wlb.description', shape: 'rectangle' },
+  { order: 10, target: 'buddies', titleKey: 'tour.following.title', descKey: 'tour.following.description', shape: 'rectangle' },
+  { order: 11, target: 'groups', titleKey: 'tour.groups.title', descKey: 'tour.groups.description', shape: 'rectangle' },
+  { order: 12, target: 'skillnews', titleKey: 'tour.skillnews.title', descKey: 'tour.skillnews.description', shape: 'circle' },
+  { order: 13, target: 'filter', titleKey: 'tour.filter.title', descKey: 'tour.filter.description', shape: 'circle' },
+  { order: 14, target: 'askAnything', titleKey: 'tour.askAnything.title', descKey: 'tour.askAnything.description', shape: 'rectangle' },
+  { order: 15, target: 'likePost', titleKey: 'tour.likePost.title', descKey: 'tour.likePost.description', shape: 'circle' },
+  { order: 16, target: 'comment', titleKey: 'tour.comment.title', descKey: 'tour.comment.description', shape: 'circle' },
+  { order: 17, target: 'sharePost', titleKey: 'tour.sharePost.title', descKey: 'tour.sharePost.description', shape: 'circle' },
+  { order: 18, target: 'postBuddy', titleKey: 'tour.postBuddy.title', descKey: 'tour.postBuddy.description', shape: 'circle' }
+];

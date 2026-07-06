@@ -16,7 +16,7 @@ const palette = {
   brandPrimary: '#0B2EF3',
   blue400: "#3C58F5",
   iconBg: '#E7EAFE',
-  
+
   // Secondary
   secondary: '#7C3AED',
   secondaryDark: '#6D28D9',
@@ -67,6 +67,7 @@ const palette = {
   transparent: 'transparent',
   overlay: 'rgba(0,0,0,0.5)',
   overlayLight: 'rgba(0,0,0,0.3)',
+  overlayDark: 'rgba(0,0,0,0.85)',
 
   // BMI Section Icon Backgrounds
   bmiIconBgLight: '#FEE2E2',

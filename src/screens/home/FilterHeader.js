@@ -18,6 +18,8 @@ import { AppText } from '../../components/common';
 import { useTheme } from '../../theme';
 import { useTranslation } from '../../i18n/useTranslation';
 import { fontFamily } from '../../theme/fonts';
+import { TourGuideZone } from 'rn-tourguide';
+import { useAppTour } from '../../hooks/useAppTour';
 
 const SKINNY_NEWS_URL = 'https://skinnynews.com/';
 
@@ -30,6 +32,11 @@ const ASSETS = {
 const FilterHeader = ({ onRobiPress, onFilterPress }) => {
   const { colors, spacing, borderRadius } = useTheme();
   const { t } = useTranslation();
+  const { steps } = useAppTour();
+
+  const skillnewsStep = useMemo(() => steps.find((s) => s.target === 'skillnews'), [steps]);
+  const filterStep = useMemo(() => steps.find((s) => s.target === 'filter'), [steps]);
+  const askStep = useMemo(() => steps.find((s) => s.target === 'askAnything'), [steps]);
 
   const styles = useMemo(
     () => createStyles({ colors, spacing, borderRadius }),
@@ -57,6 +64,19 @@ const FilterHeader = ({ onRobiPress, onFilterPress }) => {
           activeOpacity={0.7}
           style={styles.skinnyNewsBtn}
         >
+          {skillnewsStep && (
+            <TourGuideZone
+              zone={skillnewsStep.order}
+              shape="circle"
+              borderRadius={borderRadius.md}
+              text={JSON.stringify({
+                title: t(skillnewsStep.titleKey),
+                body: t(skillnewsStep.descKey),
+              })}
+              style={StyleSheet.absoluteFill}
+              pointerEvents="none"
+            />
+          )}
           <Image
             source={ASSETS.skinnyNews}
             style={styles.skinnyNewsImage}
@@ -70,6 +90,18 @@ const FilterHeader = ({ onRobiPress, onFilterPress }) => {
           style={styles.filterBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
+          {filterStep && (
+            <TourGuideZone
+              zone={filterStep.order}
+              borderRadius={borderRadius.lg}
+              text={JSON.stringify({
+                title: t(filterStep.titleKey),
+                body: t(filterStep.descKey),
+              })}
+              style={StyleSheet.absoluteFill}
+              pointerEvents="none"
+            />
+          )}
           <Image
             source={ASSETS.filter}
             style={[styles.filterIcon, { tintColor: colors.iconPrimary }]}
@@ -84,6 +116,18 @@ const FilterHeader = ({ onRobiPress, onFilterPress }) => {
         activeOpacity={0.7}
         style={styles.robiBtn}
       >
+        {askStep && (
+          <TourGuideZone
+            zone={askStep.order}
+            borderRadius={borderRadius.lg}
+            text={JSON.stringify({
+              title: t(askStep.titleKey),
+              body: t(askStep.descKey),
+            })}
+            style={StyleSheet.absoluteFill}
+            pointerEvents="none"
+          />
+        )}
         <AppText
           variant="bodyMedium"
           color={colors.textSecondary}
@@ -130,7 +174,7 @@ const createStyles = ({ colors, spacing }) =>
       width: 30,
       height: 30,
       borderRadius: 15,
-    }, 
+    },
     filterBtn: {
       width: 36,
       height: 36,

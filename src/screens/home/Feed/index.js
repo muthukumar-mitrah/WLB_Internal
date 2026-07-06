@@ -10,6 +10,8 @@ import { useTranslation } from '../../../i18n/useTranslation';
 import { AppText, LikeAnimationOverlay, Button } from '../../../components/common';
 import { APP_IMAGES } from '../../../constants';
 import createStyles from './styles';
+import { useAppTour } from '../../../hooks/useAppTour';
+import { TourGuideZone } from 'rn-tourguide';
 
 const ICON_LIKE = require('../../../assets/icons/heart-outline.png');
 const ICON_COMMENT = require('../../../assets/icons/chat-outline.png');
@@ -18,10 +20,13 @@ const ICON_ROBI = require('../../../assets/icons/robi.png');
 
 const DOUBLE_TAP_DELAY = 300;
 
+const FEED_TOUR_MASK_OFFSET = 8;
+const FEED_TOUR_TOOLTIP_OFFSET = 75;
+
 const HASHTAG_REGEX = /(#[a-zA-Z0-9_]+)/g;
 
 const PostContent = memo(({ text, hashtagColor, textColor, style }) => {
-  if(!text) return null;
+  if (!text) return null;
 
   const parts = text.split(HASHTAG_REGEX);
 
@@ -81,6 +86,7 @@ const AvatarPlaceholder = memo(({ username, size, colors, style }) => {
 const PostCard = memo(
   ({
     post,
+    isFirstPost = false,
     showChat,
     onLikePress,
     onSavePress,
@@ -96,6 +102,17 @@ const PostCard = memo(
   }) => {
     const { colors, spacing, borderRadius } = useTheme();
     const { t } = useTranslation();
+    const { steps } = useAppTour();
+
+    const stepMap = useMemo(() => {
+      const map = {};
+      if (steps) {
+        steps.forEach((s) => {
+          map[s.target] = s;
+        });
+      }
+      return map;
+    }, [steps]);
 
     const styles = useMemo(
       () => createStyles({ colors, spacing, borderRadius }),
@@ -106,10 +123,10 @@ const PostCard = memo(
     const [animationTrigger, setAnimationTrigger] = useState(0);
 
     const [aspectRatio, setAspectRatio] = useState(() => {
-      if(post.image && typeof post.image === 'number') {
+      if (post.image && typeof post.image === 'number') {
         try {
           const src = Image.resolveAssetSource(post.image);
-          if(src?.width && src?.height) return src.width / src.height;
+          if (src?.width && src?.height) return src.width / src.height;
         } catch {
           // ignore
         }
@@ -118,19 +135,19 @@ const PostCard = memo(
     });
 
     useEffect(() => {
-      if(!post.image) return;
-      if(typeof post.image === 'string') {
+      if (!post.image) return;
+      if (typeof post.image === 'string') {
         Image.getSize(post.image, (w, h) => {
-          if(w && h) setAspectRatio(w / h);
+          if (w && h) setAspectRatio(w / h);
         });
-      } else if(typeof post.image === 'object' && post.image.uri) {
+      } else if (typeof post.image === 'object' && post.image.uri) {
         Image.getSize(post.image.uri, (w, h) => {
-          if(w && h) setAspectRatio(w / h);
+          if (w && h) setAspectRatio(w / h);
         });
-      } else if(typeof post.image === 'number') {
+      } else if (typeof post.image === 'number') {
         try {
           const src = Image.resolveAssetSource(post.image);
-          if(src?.width && src?.height) setAspectRatio(src.width / src.height);
+          if (src?.width && src?.height) setAspectRatio(src.width / src.height);
         } catch {
           // ignore
         }
@@ -142,7 +159,7 @@ const PostCard = memo(
 
     useEffect(
       () => () => {
-        if(tapTimeout.current) clearTimeout(tapTimeout.current);
+        if (tapTimeout.current) clearTimeout(tapTimeout.current);
       },
       [],
     );
@@ -153,12 +170,12 @@ const PostCard = memo(
 
     const handleLike = useCallback(
       isDoubleTap => {
-        if(isDoubleTap) {
-          if(!liked) onLikePress?.(post.id);
+        if (isDoubleTap) {
+          if (!liked) onLikePress?.(post.id);
           triggerLikeAnimation();
         } else {
           onLikePress?.(post.id);
-          if(!liked) triggerLikeAnimation();
+          if (!liked) triggerLikeAnimation();
         }
       },
       [liked, post.id, onLikePress, triggerLikeAnimation],
@@ -166,15 +183,15 @@ const PostCard = memo(
 
     const handleMediaPress = useCallback(() => {
       const now = Date.now();
-      if(now - lastTap.current < DOUBLE_TAP_DELAY) {
+      if (now - lastTap.current < DOUBLE_TAP_DELAY) {
         clearTimeout(tapTimeout.current);
         tapTimeout.current = null;
         handleLike(true);
       } else {
         lastTap.current = now;
-        if(tapTimeout.current) clearTimeout(tapTimeout.current);
+        if (tapTimeout.current) clearTimeout(tapTimeout.current);
         tapTimeout.current = setTimeout(() => {
-          if(onImagePreview && post.image) onImagePreview(post.image);
+          if (onImagePreview && post.image) onImagePreview(post.image);
           tapTimeout.current = null;
         }, DOUBLE_TAP_DELAY);
       }
@@ -194,8 +211,8 @@ const PostCard = memo(
                     typeof post.avatar === 'number' || (typeof post.avatar === 'object' && post.avatar.test)
                       ? post.avatar
                       : typeof post.avatar === 'string'
-                      ? { uri: post.avatar }
-                      : post.avatar
+                        ? { uri: post.avatar }
+                        : post.avatar
                   }
                   style={styles.avatar}
                 />
@@ -213,7 +230,7 @@ const PostCard = memo(
             </View>
             <View style={styles.cardHeaderInfo}>
               <AppText style={[styles.cardUsername, { color: colors.textPrimary }]}>
-                {post.username} 
+                {post.username}
               </AppText>
               <AppText style={[styles.cardMeta, { color: colors.textSecondary }]}>
                 {post.currentWeight ? `${t('home.feed.cw')}${post.currentWeight} · ` : ''}
@@ -315,62 +332,172 @@ const PostCard = memo(
         ) : (
           <View style={styles.reactionsRow}>
             <View style={styles.reactionBtn}>
+              {isFirstPost && stepMap.likePost ? (
+                <TourGuideZone
+                  zone={stepMap.likePost.order}
+                  shape="rectangle"
+                  borderRadius={borderRadius.xl}
+                  maskOffset={FEED_TOUR_MASK_OFFSET}
+                  keepTooltipPosition={false}
+                  tooltipBottomOffset={FEED_TOUR_TOOLTIP_OFFSET}
+                  text={JSON.stringify({ title: t(stepMap.likePost.titleKey), body: t(stepMap.likePost.descKey) })}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1] }}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => handleLike(false)}>
+                      <Image
+                        source={ICON_LIKE}
+                        style={[
+                          styles.reactionIcon,
+                          {
+                            tintColor: liked
+                              ? colors.error
+                              : colors.iconSecondary,
+                          },
+                        ]}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => onLikesCountPress?.(post)}>
+                      <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
+                        {post.likes}
+                      </AppText>
+                    </TouchableOpacity>
+                  </View>
+                </TourGuideZone>
+              ) : (
+                <>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => handleLike(false)}>
+                    <Image
+                      source={ICON_LIKE}
+                      style={[
+                        styles.reactionIcon,
+                        {
+                          tintColor: liked
+                            ? colors.error
+                            : colors.iconSecondary,
+                        },
+                      ]}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => onLikesCountPress?.(post)}>
+                    <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
+                      {post.likes}
+                    </AppText>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+            {isFirstPost && stepMap.comment ? (
               <TouchableOpacity
+                style={styles.reactionBtn}
                 activeOpacity={0.7}
-                onPress={() => handleLike(false)}>
-                <Image
-                  source={ICON_LIKE}
-                  style={[
-                    styles.reactionIcon,
-                    {
-                      tintColor: liked
-                        ? colors.error
-                        : colors.iconSecondary,
-                    },
-                  ]}
-                />
+                onPress={() => onCommentPress?.(post)}>
+                <TourGuideZone
+                  zone={stepMap.comment.order}
+                  shape="rectangle"
+                  borderRadius={borderRadius.xl}
+                  maskOffset={FEED_TOUR_MASK_OFFSET}
+                  keepTooltipPosition={true}
+                  tooltipBottomOffset={FEED_TOUR_TOOLTIP_OFFSET}
+                  text={JSON.stringify({ title: t(stepMap.comment.titleKey), body: t(stepMap.comment.descKey) })}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1] }}>
+                    <Image
+                      source={ICON_COMMENT}
+                      style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
+                    />
+                    <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
+                      {post.comments}
+                    </AppText>
+                  </View>
+                </TourGuideZone>
               </TouchableOpacity>
+            ) : (
               <TouchableOpacity
+                style={styles.reactionBtn}
                 activeOpacity={0.7}
-                onPress={() => onLikesCountPress?.(post)}>
+                onPress={() => onCommentPress?.(post)}>
+                <Image
+                  source={ICON_COMMENT}
+                  style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
+                />
                 <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
-                  {post.likes}
+                  {post.comments}
                 </AppText>
               </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              style={styles.reactionBtn}
-              activeOpacity={0.7}
-              onPress={() => onCommentPress?.(post)}>
-              <Image
-                source={ICON_COMMENT}
-                style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
-              />
-              <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
-                {post.comments}
-              </AppText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.reactionBtn}
-              activeOpacity={0.7}
-              onPress={() => onSharePress?.(post)}>
-              <Image
-                source={ICON_SHARE}
-                style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
-              />
-              <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
-                {post.shares}
-              </AppText>
-            </TouchableOpacity>
+            )}
+            {isFirstPost && stepMap.sharePost ? (
+              <TouchableOpacity
+                style={styles.reactionBtn}
+                activeOpacity={0.7}
+                onPress={() => onSharePress?.(post)}>
+                <TourGuideZone
+                  zone={stepMap.sharePost.order}
+                  shape="rectangle"
+                  borderRadius={borderRadius.xl}
+                  maskOffset={FEED_TOUR_MASK_OFFSET}
+                  keepTooltipPosition={true}
+                  tooltipBottomOffset={FEED_TOUR_TOOLTIP_OFFSET}
+                  text={JSON.stringify({ title: t(stepMap.sharePost.titleKey), body: t(stepMap.sharePost.descKey) })}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1] }}>
+                    <Image
+                      source={ICON_SHARE}
+                      style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
+                    />
+                    <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
+                      {post.shares}
+                    </AppText>
+                  </View>
+                </TourGuideZone>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.reactionBtn}
+                activeOpacity={0.7}
+                onPress={() => onSharePress?.(post)}>
+                <Image
+                  source={ICON_SHARE}
+                  style={[styles.reactionIcon, { tintColor: colors.iconSecondary }]}
+                />
+                <AppText style={[styles.reactionCount, { color: colors.textSecondary }]}>
+                  {post.shares}
+                </AppText>
+              </TouchableOpacity>
+            )}
             <View style={styles.spacer} />
             <TouchableOpacity
               style={[styles.reactionBtn, styles.robiContainer]}
               activeOpacity={0.7}
               onPress={() => onSavePress?.(post.id)}>
-              <Image
-                source={ICON_ROBI}
-                style={styles.robiImage}
-              />
+              {isFirstPost && stepMap.postBuddy ? (
+                <TourGuideZone
+                  zone={stepMap.postBuddy.order}
+                  shape="rectangle"
+                  borderRadius={borderRadius.xl}
+                  maskOffset={FEED_TOUR_MASK_OFFSET}
+                  keepTooltipPosition={true}
+                  tooltipBottomOffset={FEED_TOUR_TOOLTIP_OFFSET}
+                  text={JSON.stringify({ title: t(stepMap.postBuddy.titleKey), body: t(stepMap.postBuddy.descKey) })}
+                >
+                  <Image
+                    source={ICON_ROBI}
+                    style={styles.robiImage}
+                  />
+                </TourGuideZone>
+              ) : (
+                <Image
+                  source={ICON_ROBI}
+                  style={styles.robiImage}
+                />
+              )}
             </TouchableOpacity>
           </View>
         )}

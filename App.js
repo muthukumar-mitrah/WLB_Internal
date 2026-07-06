@@ -18,14 +18,17 @@ import { GOOGLE_SIGN_IN_CONFIG } from './src/constants/index';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { TourGuideProvider } from 'rn-tourguide';
+import { AppTourProvider } from './src/context/AppTourProvider';
+import { AppTourTooltip } from './src/components/common';
 
 const AppCore = () => {
   const { colors } = useTheme();
 
-  useEffect(()=>{
+  useEffect(() => {
     SplashScreen.hide()
     GoogleSignin.configure(GOOGLE_SIGN_IN_CONFIG, [])
-  },[])
+  }, [])
 
   return (
     <View style={[styles.root, { backgroundColor: colors.background }]}>
@@ -46,15 +49,23 @@ const App = () => (
       <ThemeProvider>
         <AuthProvider>
           <ProfileProvider>
-          <SurveyProvider>
-            <FeedProvider>
-              <NotificationProvider>
-                <BottomSheetModalProvider>
-                  <AppCore />
-                </BottomSheetModalProvider>
-              </NotificationProvider>
-            </FeedProvider>
-          </SurveyProvider>
+            <SurveyProvider>
+              <FeedProvider>
+                <NotificationProvider>
+                  <BottomSheetModalProvider>
+                    <TourGuideProvider
+                      tooltipComponent={AppTourTooltip}
+                      androidStatusBarVisible={true}
+                      preventOutsideInteraction={true}
+                    >
+                      <AppTourProvider>
+                        <AppCore />
+                      </AppTourProvider>
+                    </TourGuideProvider>
+                  </BottomSheetModalProvider>
+                </NotificationProvider>
+              </FeedProvider>
+            </SurveyProvider>
           </ProfileProvider>
         </AuthProvider>
       </ThemeProvider>

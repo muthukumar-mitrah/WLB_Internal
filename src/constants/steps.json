@@ -1,0 +1,164 @@
+[
+  {
+    "id": "home",
+    "target": "home",
+    "title": "tour.home.title",
+    "description": "tour.home.description",
+    "titleKey": "tour.home.title",
+    "descKey": "tour.home.description",
+    "order": 1
+  },
+  {
+    "id": "findBuddy",
+    "target": "findBuddy",
+    "title": "tour.findBuddy.title",
+    "description": "tour.findBuddy.description",
+    "titleKey": "tour.findBuddy.title",
+    "descKey": "tour.findBuddy.description",
+    "order": 2
+  },
+  {
+    "id": "createPost",
+    "target": "createPost",
+    "title": "tour.createPost.title",
+    "description": "tour.createPost.description",
+    "titleKey": "tour.createPost.title",
+    "descKey": "tour.createPost.description",
+    "order": 3
+  },
+  {
+    "id": "notifications",
+    "target": "notifications",
+    "title": "tour.notifications.title",
+    "description": "tour.notifications.description",
+    "titleKey": "tour.notifications.title",
+    "descKey": "tour.notifications.description",
+    "order": 4
+  },
+  {
+    "id": "aiBuddy",
+    "target": "aiBuddy",
+    "title": "tour.aiBuddy.title",
+    "description": "tour.aiBuddy.description",
+    "titleKey": "tour.aiBuddy.title",
+    "descKey": "tour.aiBuddy.description",
+    "order": 5
+  },
+  {
+    "id": "liveChat",
+    "target": "liveChat",
+    "title": "tour.liveChat.title",
+    "description": "tour.liveChat.description",
+    "titleKey": "tour.liveChat.title",
+    "descKey": "tour.liveChat.description",
+    "order": 6
+  },
+  {
+    "id": "profile",
+    "target": "profile",
+    "title": "tour.profile.title",
+    "description": "tour.profile.description",
+    "titleKey": "tour.profile.title",
+    "descKey": "tour.profile.description",
+    "order": 7
+  },
+  {
+    "id": "trending",
+    "target": "trending",
+    "title": "tour.trending.title",
+    "description": "tour.trending.description",
+    "titleKey": "tour.trending.title",
+    "descKey": "tour.trending.description",
+    "order": 8
+  },
+  {
+    "id": "wlb",
+    "target": "wlb",
+    "title": "tour.wlb.title",
+    "description": "tour.wlb.description",
+    "titleKey": "tour.wlb.title",
+    "descKey": "tour.wlb.description",
+    "order": 9
+  },
+  {
+    "id": "buddies",
+    "target": "buddies",
+    "title": "tour.following.title",
+    "description": "tour.following.description",
+    "titleKey": "tour.following.title",
+    "descKey": "tour.following.description",
+    "order": 10
+  },
+  {
+    "id": "groups",
+    "target": "groups",
+    "title": "tour.groups.title",
+    "description": "tour.groups.description",
+    "titleKey": "tour.groups.title",
+    "descKey": "tour.groups.description",
+    "order": 11
+  },
+  {
+    "id": "skillnews",
+    "target": "skillnews",
+    "title": "tour.skillnews.title",
+    "description": "tour.skillnews.description",
+    "titleKey": "tour.skillnews.title",
+    "descKey": "tour.skillnews.description",
+    "order": 12
+  },
+  {
+    "id": "filter",
+    "target": "filter",
+    "title": "tour.filter.title",
+    "description": "tour.filter.description",
+    "titleKey": "tour.filter.title",
+    "descKey": "tour.filter.description",
+    "order": 13
+  },
+  {
+    "id": "askAnything",
+    "target": "askAnything",
+    "title": "tour.askAnything.title",
+    "description": "tour.askAnything.description",
+    "titleKey": "tour.askAnything.title",
+    "descKey": "tour.askAnything.description",
+    "order": 14
+  },
+  {
+    "id": "likePost",
+    "target": "likePost",
+    "title": "tour.likePost.title",
+    "description": "tour.likePost.description",
+    "titleKey": "tour.likePost.title",
+    "descKey": "tour.likePost.description",
+    "order": 15
+  },
+  {
+    "id": "comment",
+    "target": "comment",
+    "title": "tour.comment.title",
+    "description": "tour.comment.description",
+    "titleKey": "tour.comment.title",
+    "descKey": "tour.comment.description",
+    "order": 16
+  },
+  {
+    "id": "sharePost",
+    "target": "sharePost",
+    "title": "tour.sharePost.title",
+    "description": "tour.sharePost.description",
+    "titleKey": "tour.sharePost.title",
+    "descKey": "tour.sharePost.description",
+    "order": 17
+  },
+  {
+    "id": "postBuddy",
+    "target": "postBuddy",
+    "title": "tour.postBuddy.title",
+    "description": "tour.postBuddy.description",
+    "titleKey": "tour.postBuddy.title",
+    "descKey": "tour.postBuddy.description",
+    "order": 18
+  }
+]

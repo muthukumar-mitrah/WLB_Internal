@@ -735,6 +735,90 @@
       }
     }
   },
+  "tour": {
+    "home": {
+      "title": "Home Feed",
+      "description": "Access the home feed to view recent posts, trending topics, and updates from your weight loss buddies."
+    },
+    "findBuddy": {
+      "title": "Find Buddy",
+      "description": "Search for other members, find weight loss buddies, and connect with people who share similar goals."
+    },
+    "createPost": {
+      "title": "Create Post",
+      "description": "Share your progress, post updates, ask questions, or write about your fitness and diet journey."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Keep track of likes, comments, group invites, buddy requests, and system alerts."
+    },
+    "aiBuddy": {
+      "title": "AI Buddy",
+      "description": "Chat with Robi, your personal AI health assistant, for advice on diet, wellness, and fitness goals."
+    },
+    "liveChat": {
+      "title": "Live Chat",
+      "description": "Launch immediate conversations with online buddies and active community groups."
+    },
+    "profile": {
+      "title": "User Profile",
+      "description": "View and edit your personal details, achievements, tracker statistics, and settings."
+    },
+    "trending": {
+      "title": "Trending Feed",
+      "description": "Explore the most liked and active posts across the Weight Loss Buddy network.",
+      "desc": "See the most popular posts and discussions from the community."
+    },
+    "wlb": {
+      "title": "WLB Feed",
+      "description": "Chronological stream of general fitness, nutrition, and wellness updates.",
+      "desc": "View all Weight Loss Buddy posts in chronological order, with the newest posts first."
+    },
+    "following": {
+      "title": "Following Feed",
+      "description": "Stream of updates showing posts exclusively from members you follow.",
+      "desc": "See posts from buddies and members you follow."
+    },
+    "groups": {
+      "title": "Groups Feed",
+      "description": "Check group updates, join discussion rooms, and view community post sections.",
+      "desc": "Explore group posts, join communities, and connect with people who share similar goals."
+    },
+    "skillnews": {
+      "title": "Skinny News",
+      "description": "Get the latest health reports, recipes, diet tips, and weight loss articles.",
+      "desc": "Stay updated with the latest weight loss articles and news from Skinny News."
+    },
+    "filter": {
+      "title": "Post Filter",
+      "description": "Refine feed contents by custom keywords, specific hashtags, or time period.",
+      "desc": "Filter posts by topics, tags, or search parameters to find exactly what you need."
+    },
+    "askAnything": {
+      "title": "Ask Robi Shortcut",
+      "description": "Quickly ask Robi any wellness question right from the feed header.",
+      "desc": "Ask Robi anything about your health journey and get instant personalized answers."
+    },
+    "likePost": {
+      "title": "Like Post",
+      "description": "Tap the heart icon to like a post or double tap the post image to react."
+    },
+    "comment": {
+      "title": "Comments",
+      "description": "Leave a supportive comment, ask questions, or read existing member replies."
+    },
+    "sharePost": {
+      "title": "Share Post",
+      "description": "Share post links externally or invite buddies to read this update."
+    },
+    "postBuddy": {
+      "title": "Save to Buddy",
+      "description": "Bookmark this post to your saved list or share it directly into your buddy chat."
+    },
+    "previous": "Previous",
+    "next": "Next",
+    "done": "Done"
+  },
   "sidebar": {
     "greeting": {
       "morning": "Good morning, {{name}}!",
@@ -750,7 +834,8 @@
       "chooseAiBuddy": "Choose an AI Buddy",
       "savedPosts": "Saved Posts",
       "awards": "Awards",
-      "leaderBoard": "Leader Board"
+      "leaderBoard": "Leader Board",
+      "help": "Help"
     },
     "sections": {
       "settings": "Setting",
@@ -1140,7 +1225,6 @@
       "errorToast": "Failed to update weight."
     }
   },
-
   "groupDetails": {
     "title": "Group Details",
     "privateGroup": "Private Group",

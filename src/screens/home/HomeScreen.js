@@ -7,6 +7,7 @@ import React, {
   useState,
   useRef,
   useMemo,
+  useEffect,
 } from 'react';
 import {
   FlatList,
@@ -32,13 +33,34 @@ import GroupPostsTabContent from './GroupPostsTabContent';
 import AllGroupsTabContent from './AllGroupsTabContent';
 import SortGroupsBottomSheet from './components/SortGroupsBottomSheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AppText , Tabs} from '../../components/common';
+import { AppText, Tabs } from '../../components/common';
 import FilterHeader from './FilterHeader';
-import RobiQuickAnswerDisclaimerModal from './RobiQuickAnswerDisclaimerModal/index.js'
+import RobiQuickAnswerDisclaimerModal from './RobiQuickAnswerDisclaimerModal/index.js';
+import { useAppTour } from '../../hooks/useAppTour';
 
 const HomeScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const { pendingTourStart, setPendingTourStart, startTour } = useAppTour();
+
+  useEffect(() => {
+    // If the screen is already focused when help is clicked, launch immediately
+    if (pendingTourStart && navigation.isFocused()) {
+      setPendingTourStart(false);
+      startTour();
+    }
+  }, [pendingTourStart, navigation, setPendingTourStart, startTour]);
+
+  useEffect(() => {
+    // If navigating to the screen, launch on focus
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (pendingTourStart) {
+        setPendingTourStart(false);
+        startTour();
+      }
+    });
+    return unsubscribe;
+  }, [navigation, pendingTourStart, setPendingTourStart, startTour]);
   const {
     posts,
     activeTab,
@@ -85,12 +107,12 @@ const HomeScreen = ({ navigation }) => {
     navigation.navigate(ROUTES.POST_FILTER);
   };
 
-const handleRobiFilterPress = useCallback(async () => {
+  const handleRobiFilterPress = useCallback(async () => {
     const accepted = await storage.getItem(
       STORAGE_KEYS.ROBI_QUICK_ANSWER_DISCLAIMER_ACCEPTED,
       false,
     );
-    if(accepted === true) {
+    if (accepted === true) {
       robiSheetRef.current?.open();
     } else {
       setDisclaimerVisible(true);
@@ -98,7 +120,7 @@ const handleRobiFilterPress = useCallback(async () => {
   }, []);
 
   const handleDisclaimerContinue = useCallback(async (dontShowAgain) => {
-    if(dontShowAgain) {
+    if (dontShowAgain) {
       await storage.setItem(
         STORAGE_KEYS.ROBI_QUICK_ANSWER_DISCLAIMER_ACCEPTED,
         true,
@@ -139,9 +161,10 @@ const handleRobiFilterPress = useCallback(async () => {
   }, [navigation]);
 
   const renderPost = useCallback(
-    ({ item }) => (
+    ({ item, index }) => (
       <PostCard
         post={item}
+        isFirstPost={index === 0}
         showChat={activeTab === 'buddies'}
         onLikePress={likePost}
         onSavePress={savePost}
@@ -162,6 +185,7 @@ const handleRobiFilterPress = useCallback(async () => {
       handleCommentPress,
       handleSharePress,
       handleLikesCountPress,
+      handleAvatarPress,
     ],
   );
 
@@ -332,7 +356,7 @@ const handleRobiFilterPress = useCallback(async () => {
 };
 
 const styles = StyleSheet.create({
-  screen: { 
+  screen: {
     flex: 1,
   },
   topBar: {

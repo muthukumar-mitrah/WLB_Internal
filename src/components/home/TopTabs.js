@@ -2,6 +2,9 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { AppText } from "../common";
 import { fontFamily } from "../../theme/fonts";
 import { t } from "i18next";
+import { TourGuideZone } from "rn-tourguide";
+import steps from "../../constants/steps.json";
+import { borderRadius } from "../../theme/spacing";
 
 const TopTabs = ({ activeTab, setActiveTab, colors }) => {
 
@@ -19,6 +22,8 @@ const TopTabs = ({ activeTab, setActiveTab, colors }) => {
             >
                 {TABS.map(tab => {
                     const isActive = activeTab === tab.key;
+                    const step = steps.find(s => s.target === tab.key);
+
                     return (
                         <TouchableOpacity
                             key={tab.key}
@@ -39,6 +44,18 @@ const TopTabs = ({ activeTab, setActiveTab, colors }) => {
                             activeOpacity={0.7}
                             onPress={() => setActiveTab(tab.key)}
                         >
+                            {step && (
+                                <TourGuideZone
+                                    zone={step.order}
+                                    borderRadius={borderRadius.lg}
+                                    text={JSON.stringify({
+                                        title: t(step.titleKey || step.title),
+                                        body: t(step.descKey || step.description),
+                                    })}
+                                    style={StyleSheet.absoluteFill}
+                                    pointerEvents="none"
+                                />
+                            )}
                             <AppText
                                 style={[
                                     styles.tabLabel,

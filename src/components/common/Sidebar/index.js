@@ -8,6 +8,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../../theme';
 import { useTranslation } from '../../../i18n/useTranslation';
 import { useAuth } from '../../../context/AuthContext';
+import { useFeed } from '../../../context/FeedContext';
+import { useAppTour } from '../../../hooks/useAppTour';
+import { openTour } from '../../../utils/navigationHelpers';
 import { ROUTES } from '../../../constants';
 import { ToastService } from '../Toast';
 import AppText from '../AppText';
@@ -48,6 +51,7 @@ const MENU_GROUPS = [
     { key: 'savedPosts', asset: 'savedPosts' },
     { key: 'awards', asset: 'awards' },
     { key: 'leaderBoard', asset: 'leaderBoard' },
+    { key: 'help', asset: 'help' },
   ],
 ];
 
@@ -167,11 +171,18 @@ const Sidebar = (props) => {
   const [introVisible, setIntroVisible] = useState(false);
 
   const user = { name: 'User', email: 'user@email.com', avatar: null };
+  const { setActiveTab } = useFeed();
+  const { setPendingTourStart } = useAppTour();
 
   const close = useCallback(() => navigation.closeDrawer(), [navigation]);
 
   const handleItemPress = useCallback(
     (key) => {
+      if (key === 'help') {
+        openTour(navigation, setActiveTab, setPendingTourStart);
+        return;
+      }
+
       navigation.closeDrawer();
       if (key === 'chooseAiBuddy') {
         setIntroVisible(true);
@@ -188,7 +199,7 @@ const Sidebar = (props) => {
         });
       }
     },
-    [navigation, t],
+    [navigation, t, setActiveTab, setPendingTourStart],
   );
 
   const handleLogout = useCallback(() => {

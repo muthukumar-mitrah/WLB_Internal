@@ -36,3 +36,4 @@ export { default as AppSwitch } from './AppSwitch';
 export { default as CountrySelector } from './CountrySelector';
 export { default as Chart } from './Chart';
 export { default as Tabs } from './Tabs';
+export { default as AppTourTooltip } from './AppTourTooltip';
