@@ -69,6 +69,7 @@ const FilterHeader = ({ onRobiPress, onFilterPress }) => {
               zone={skillnewsStep.order}
               shape="circle"
               borderRadius={borderRadius.md}
+              maskOffset={10}
               text={JSON.stringify({
                 title: t(skillnewsStep.titleKey),
                 body: t(skillnewsStep.descKey),

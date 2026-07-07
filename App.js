@@ -43,6 +43,21 @@ const AppCore = () => {
   );
 };
 
+const ThemedTourGuideProvider = ({ children }) => {
+  const { colors } = useTheme();
+
+  return (
+    <TourGuideProvider
+      tooltipComponent={AppTourTooltip}
+      androidStatusBarVisible={true}
+      preventOutsideInteraction={true}
+      backdropColor={colors.tourOverlay}
+    >
+      {children}
+    </TourGuideProvider>
+  );
+};
+
 const App = () => (
   <GestureHandlerRootView style={{ flex: 1 }}>
     <SafeAreaProvider>
@@ -53,15 +68,11 @@ const App = () => (
               <FeedProvider>
                 <NotificationProvider>
                   <BottomSheetModalProvider>
-                    <TourGuideProvider
-                      tooltipComponent={AppTourTooltip}
-                      androidStatusBarVisible={true}
-                      preventOutsideInteraction={true}
-                    >
+                    <ThemedTourGuideProvider>
                       <AppTourProvider>
                         <AppCore />
                       </AppTourProvider>
-                    </TourGuideProvider>
+                    </ThemedTourGuideProvider>
                   </BottomSheetModalProvider>
                 </NotificationProvider>
               </FeedProvider>

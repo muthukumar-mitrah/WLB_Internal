@@ -67,7 +67,7 @@ const palette = {
   transparent: 'transparent',
   overlay: 'rgba(0,0,0,0.5)',
   overlayLight: 'rgba(0,0,0,0.3)',
-  overlayDark: 'rgba(0,0,0,0.85)',
+  overlayDark: 'rgba(255,255,255,0.18)',
 
   // BMI Section Icon Backgrounds
   bmiIconBgLight: '#FEE2E2',
@@ -118,6 +118,9 @@ const lightColors = {
   tabBarBorder: palette.gray200,
   tabBarActive: palette.primary,
   tabBarInactive: palette.gray400,
+
+  // App Tour configuration
+  tourOverlay: 'rgba(0, 0, 0, 0.4)',
 
   // Status bar
   statusBar: 'dark-content',
@@ -178,6 +181,9 @@ const darkColors = {
   tabBarBorder: palette.gray800,
   tabBarActive: palette.primaryLight,
   tabBarInactive: palette.gray500,
+
+  // App Tour configuration
+  tourOverlay: palette.overlayDark,
 
   // Status bar
   statusBar: 'light-content',
