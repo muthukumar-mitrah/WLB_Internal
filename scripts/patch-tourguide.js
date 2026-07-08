@@ -4,6 +4,8 @@ const path = require('path');
 const rootDir = path.resolve(__dirname, '..');
 const svgMaskPath = path.join(rootDir, 'node_modules', 'rn-tourguide', 'lib', 'components', 'SvgMask.js');
 const connectedStepPath = path.join(rootDir, 'node_modules', 'rn-tourguide', 'lib', 'components', 'ConnectedStep.js');
+const tourGuideProviderPath = path.join(rootDir, 'node_modules', 'rn-tourguide', 'lib', 'components', 'TourGuideProvider.js');
+const modalPath = path.join(rootDir, 'node_modules', 'rn-tourguide', 'lib', 'components', 'Modal.js');
 
 function patchSvgMask() {
   if (!fs.existsSync(svgMaskPath)) {
@@ -78,7 +80,107 @@ function patchConnectedStep() {
   console.log('[Patch Success] ConnectedStep.js patched successfully.');
 }
 
+function patchTourGuideProvider() {
+  if (!fs.existsSync(tourGuideProviderPath)) {
+    console.warn(`[Patch Warning] TourGuideProvider.js not found at: ${tourGuideProviderPath}`);
+    return;
+  }
+
+  let content = fs.readFileSync(tourGuideProviderPath, 'utf8');
+
+  let updated = false;
+
+  // Check if registerStep is already patched
+  if (!content.includes('updateCurrentStep((currentStep) => {')) {
+    const targetRegister = `    const registerStep = (key, step) => {
+        setSteps((previousSteps) => {
+            const newSteps = { ...previousSteps };
+            newSteps[key] = {
+                ...previousSteps[key],
+                [step.name]: step,
+            };
+            return newSteps;
+        });
+        if (!eventEmitter[key]) {
+            eventEmitter[key] = new mitt();
+        }
+    };`;
+
+    const replacementRegister = `    const registerStep = (key, step) => {
+        setSteps((previousSteps) => {
+            const newSteps = { ...previousSteps };
+            newSteps[key] = {
+                ...previousSteps[key],
+                [step.name]: step,
+            };
+            return newSteps;
+        });
+        updateCurrentStep((currentStep) => {
+            if (currentStep[key] && currentStep[key].name === step.name) {
+                const newStepObj = { ...currentStep };
+                newStepObj[key] = step;
+                return newStepObj;
+            }
+            return currentStep;
+        });
+        if (!eventEmitter[key]) {
+            eventEmitter[key] = new mitt();
+        }
+    };`;
+
+    if (content.includes(targetRegister)) {
+      content = content.replace(targetRegister, replacementRegister);
+      updated = true;
+      console.log('[Patch Success] TourGuideProvider.js registerStep patched.');
+    } else {
+      console.error('[Patch Error] Could not find registerStep in TourGuideProvider.js');
+    }
+  }
+
+  if (updated) {
+    fs.writeFileSync(tourGuideProviderPath, content, 'utf8');
+    console.log('[Patch Success] TourGuideProvider.js file updated.');
+  } else {
+    console.log('[Patch Info] TourGuideProvider.js is already fully patched.');
+  }
+}
+
+function patchModal() {
+  if (!fs.existsSync(modalPath)) {
+    console.warn(`[Patch Warning] Modal.js not found at: ${modalPath}`);
+    return;
+  }
+
+  let content = fs.readFileSync(modalPath, 'utf8');
+
+  // Check if already patched
+  if (content.includes('this.state.tooltipTranslateY.setValue(toValue)')) {
+    console.log('[Patch Info] Modal.js is already patched.');
+    return;
+  }
+
+  const searchStr = `        else {
+            opacityAnim.start();
+        }`;
+
+  const replaceStr = `        else {
+            this.state.tooltipTranslateY.setValue(toValue);
+            opacityAnim.start();
+        }`;
+
+  if (!content.includes(searchStr)) {
+    console.error('[Patch Error] Could not find fallback else in Modal.js');
+    return;
+  }
+
+  content = content.replace(searchStr, replaceStr);
+  fs.writeFileSync(modalPath, content, 'utf8');
+  console.log('[Patch Success] Modal.js patched successfully.');
+}
+
 console.log('[Patch Start] Patching rn-tourguide...');
 patchSvgMask();
 patchConnectedStep();
+patchTourGuideProvider();
+patchModal();
 console.log('[Patch End] Done.');
